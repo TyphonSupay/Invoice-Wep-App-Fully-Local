@@ -799,29 +799,73 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .stat-card .stat-value{font-size:18px!important;line-height:1.2;}
   .stat-card .stat-label{font-size:11px;}
 
-  /* ========== ADMIN SIDEBAR (Dashboard/Invoices/Payments tabs) — better scroll ========== */
+  /* ========== PROFIT ANALYSIS FILTERS (card-header with inline flex+widths) ========== */
+  /* The Profit Analysis card has filters with inline width:180px / 150px — force full-width stack */
+  #tab-dashboard .card-header{flex-direction:column;align-items:stretch;gap:10px;padding:14px;}
+  #tab-dashboard .card-header>span{font-weight:700;font-size:15px;}
+  #tab-dashboard .card-header>div{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    width:100%;
+  }
+  #tab-dashboard .card-header>div>*{
+    width:100%!important;
+    max-width:100%!important;
+  }
+  #tab-dashboard .card-header input,
+  #tab-dashboard .card-header select{
+    font-size:16px!important;
+    padding:10px 12px;
+  }
+  #tab-dashboard .card-header .btn{min-height:42px;}
+
+  /* ========== BACKUP PAGE — stack the 2-column inline grid ========== */
+  #tab-backup>div{
+    display:block!important;
+    grid-template-columns:1fr!important;
+  }
+  #tab-backup>div>.card{margin-bottom:14px;}
+  #tab-backup .btn{width:100%;justify-content:center;min-height:44px;}
+
+  /* ========== GENERIC: any inline `display:grid;grid-template-columns:1fr 1fr;` should collapse ========== */
+  /* Using ^= (starts-with) so we don't accidentally match `1fr 1fr 1fr;` which contains the same substring */
+  [style^="display:grid;grid-template-columns:1fr 1fr;"]:not(#monthHighlight){
+    grid-template-columns:1fr!important;
+  }
+
+  /* ========== ADMIN SIDEBAR (sub-tabs) — ALL VISIBLE, no scroll, wrap grid ========== */
   .admin-sidebar{
-    position:sticky;
-    top:auto;
-    z-index:5;
+    position:static;
+    z-index:auto;
+    display:flex;
     flex-direction:row;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+    flex-wrap:wrap;
+    overflow:visible;
     padding:6px;
     gap:4px;
-    scroll-snap-type:x mandatory;
-    /* visual hint that this scrolls */
-    background:linear-gradient(90deg,var(--surface) 0%,var(--surface) 92%,rgba(0,0,0,0.05) 100%);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
   }
-  body.dark .admin-sidebar{background:linear-gradient(90deg,var(--surface) 0%,var(--surface) 92%,rgba(255,255,255,0.05) 100%);}
+  body.dark .admin-sidebar{background:var(--surface);}
   .admin-sidebar::-webkit-scrollbar{display:none;}
   .admin-sidebar .admin-tab{
-    flex-shrink:0;
-    padding:10px 14px;
-    font-size:13px;
-    scroll-snap-align:start;
-    min-height:40px;
+    flex:1 1 calc(25% - 4px);  /* 4 per row */
+    min-width:0;
+    padding:9px 2px;
+    font-size:11px;
+    font-weight:600;
+    text-align:center;
+    justify-content:center;
+    align-items:center;
+    gap:3px;
+    min-height:44px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    line-height:1.2;
   }
 
   /* ========== MONTH/CHART ROWS ========== */
