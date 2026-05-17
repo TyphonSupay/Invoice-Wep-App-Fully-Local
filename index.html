@@ -168,7 +168,7 @@ body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .nav-right{display:flex;gap:8px;align-items:center;}
 
 /* ===== LOGIN — Antigravity-style animated mesh ===== */
-#loginScreen{min-height:100vh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
+#loginScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
 /* Animated mesh gradient orbs */
 #loginScreen::before,#loginScreen::after{
   content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;
@@ -219,7 +219,7 @@ body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .demo-hint strong{color:#F97316;}
 
 /* ===== MODE SELECTION ===== */
-#modeScreen{min-height:100vh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
+#modeScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
 #modeScreen::before,#modeScreen::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;}
 #modeScreen::before{width:550px;height:550px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-150px;left:-100px;animation:meshMove 20s ease-in-out infinite;}
 #modeScreen::after{width:500px;height:500px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-100px;animation:meshMove 24s ease-in-out infinite reverse;}
@@ -615,28 +615,28 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     overflow:hidden;
   }
   .mode-card-container{
-    padding:20px 16px;
+    padding:24px 20px;
     max-width:100%;
     max-height:calc(100dvh - 32px);
     overflow:hidden;
   }
-  .mode-card-container h1{font-size:20px;margin-bottom:2px;}
-  .mode-card-container>p{font-size:12px;margin-bottom:14px;}
-  .mode-options{gap:8px;margin-bottom:14px;}
+  .mode-card-container h1{font-size:22px;margin-bottom:4px;}
+  .mode-card-container>p{font-size:13px;margin-bottom:18px;}
+  .mode-options{gap:10px;margin-bottom:18px;}
+  /* Restore the centered card design — icon centered above title, subtitle below */
   .mode-opt{
-    padding:12px 14px;
-    display:grid;
-    grid-template-columns:auto 1fr;
-    grid-template-areas:
-      "icon h3"
-      "icon p";
-    align-items:center;
-    gap:0 14px;
-    text-align:left;
+    padding:16px 14px;
+    display:block;
+    text-align:center;
   }
-  .mode-opt .icon{grid-area:icon;font-size:32px;margin-bottom:0;line-height:1;align-self:center;}
-  .mode-opt h3{grid-area:h3;font-size:14px;margin:0;align-self:end;}
-  .mode-opt p{grid-area:p;font-size:11px;margin:1px 0 0;align-self:start;}
+  .mode-opt .icon{
+    display:block;
+    font-size:34px;
+    margin:0 auto 6px;
+    line-height:1;
+  }
+  .mode-opt h3{font-size:15px;margin:0;}
+  .mode-opt p{font-size:11px;margin-top:3px;color:rgba(255,255,255,.5);}
 
   /* ========== INVOICE / QUOTATION DOCUMENT ========== */
   .invoice-doc{padding:18px 14px;min-height:auto;}
