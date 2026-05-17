@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+<meta name="theme-color" content="#F97316">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>A P Trading - Business System</title>
 <link rel="icon" href="logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -25,6 +28,7 @@
   --ease:cubic-bezier(.22,1,.36,1);
   --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
+html,body{max-width:100%;overflow-x:hidden;}
 body{font-family:'Inter','DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-feature-settings:'cv11','ss01';}
 /* Pure-black dark mode (was navy/blue) */
 body.dark{
@@ -503,12 +507,14 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 }
 @media(max-width:768px){
   .page{padding:14px;}
-  #navbar{padding:0 14px;height:64px;}
-  .nav-brand{font-size:17px;}
-  .nav-brand img{width:48px;height:48px;}
-  .nav-links{display:flex;gap:2px;overflow-x:auto;max-width:calc(100% - 200px);}
-  .nav-link{padding:7px 10px;font-size:13px;white-space:nowrap;}
-  .nav-link span{display:none;}
+  #navbar{padding:8px 12px;height:auto;min-height:60px;flex-wrap:wrap;gap:6px;}
+  .nav-brand{font-size:16px;gap:8px;flex-shrink:1;min-width:0;white-space:nowrap;overflow:hidden;}
+  .nav-brand img{width:38px;height:38px;flex-shrink:0;}
+  .nav-links{display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0;}
+  .nav-links::-webkit-scrollbar{display:none;height:0;}
+  .nav-link{padding:7px 12px;font-size:13px;white-space:nowrap;flex-shrink:0;}
+  .nav-right{flex-shrink:0;gap:6px;}
+  .nav-right .btn{padding:7px 10px;font-size:12px;}
   .invoice-doc{padding:22px 18px;min-height:auto;}
   .inv-top-row{flex-wrap:wrap;}
   .inv-logo,.inv-logo-placeholder{width:90px;height:90px;}
@@ -518,7 +524,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   /* Items table: scroll horizontally on phones */
   .items-table{font-size:12px;}
   .items-table th,.items-table td{padding:8px 5px;}
-  .invoices-table-wrap,.payment-table-wrap{margin:0 -14px;border-radius:0;border-left:none;border-right:none;}
+  .invoices-table-wrap,.payment-table-wrap{margin:0 -14px;border-radius:0;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;}
   .filters-bar{flex-direction:column;align-items:stretch;}
   .filters-bar .form-group,.filters-bar .form-control,.filters-bar select{width:100%!important;}
   .month-bar-row{grid-template-columns:50px 1fr 80px;gap:8px;font-size:12px;}
@@ -527,9 +533,14 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .stat-card .stat-value{font-size:20px!important;}
   /* Modal full-screen on phone */
   .modal{max-width:100%!important;border-radius:14px!important;}
-  /* Action bar: smaller padding */
-  .action-bar{padding:8px;gap:6px;}
+  /* Action bar: smaller padding + horizontal scroll if buttons overflow */
+  .action-bar{padding:8px;gap:6px;flex-wrap:wrap;}
   .action-bar .btn{padding:8px 12px;font-size:12px;}
+  /* Allow login & mode screens to scroll instead of cutting off */
+  #loginScreen,#modeScreen{align-items:flex-start;padding:24px 16px;min-height:100vh;overflow-y:auto;}
+  /* Toast — full width edge-to-edge */
+  #toast-container{bottom:12px;right:12px;left:12px;}
+  .toast{max-width:100%;}
 }
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr;}
@@ -542,8 +553,26 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .login-card{padding:36px 26px;}
   .login-logo,.login-logo-placeholder{width:110px;height:110px;}
   .login-card h1{font-size:28px;}
-  .mode-card-container{padding:32px 24px;}
-  .nav-right .btn{padding:7px 10px;font-size:12px;}
+  .mode-card-container{padding:28px 20px;}
+  .mode-card-container h1{font-size:24px;}
+  .mode-opt{padding:22px 14px;}
+  .mode-opt .icon{font-size:36px;}
+  .mode-opt h3{font-size:15px;}
+  /* Tighter navbar — make brand even smaller, give nav links breathing room */
+  #navbar{padding:6px 10px;}
+  .nav-brand{font-size:14px;gap:6px;}
+  .nav-brand img{width:34px;height:34px;}
+  .nav-link{padding:6px 10px;font-size:12px;}
+  .nav-right .btn{padding:6px 8px;font-size:11px;}
+}
+/* Extra-small phones (iPhone SE, etc.) — stack navbar onto two rows */
+@media(max-width:380px){
+  #navbar{padding:6px 8px;}
+  /* Brand + right buttons on row 1, nav-links wrap to row 2 full width */
+  .nav-links{order:3;width:100%;flex-basis:100%;padding:2px 0;justify-content:flex-start;}
+  .nav-brand{font-size:14px;}
+  /* Make sure brand text doesn't push right buttons off */
+  .nav-brand img{width:32px;height:32px;}
 }
 </style>
 </head>
