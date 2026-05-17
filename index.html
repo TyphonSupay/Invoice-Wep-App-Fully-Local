@@ -155,7 +155,9 @@ textarea.form-control{resize:vertical;min-height:80px;line-height:1.55;}
 /* ===== NAV BAR ===== */
 #navbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);backdrop-filter:saturate(180%) blur(10px);-webkit-backdrop-filter:saturate(180%) blur(10px);background:rgba(255,255,255,.85);}
 body.dark #navbar{background:rgba(10,10,10,.85);}
-.nav-brand{display:flex;align-items:center;gap:12px;font-family:'Inter',sans-serif;font-size:19px;font-weight:800;letter-spacing:-0.02em;color:var(--text);}
+.nav-brand{display:flex;align-items:center;gap:12px;font-family:'Inter',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:var(--text);cursor:pointer;user-select:none;-webkit-user-select:none;padding:4px 10px;border-radius:var(--radius);transition:background .2s var(--ease),transform .2s var(--ease);}
+.nav-brand:hover{background:var(--bg);}
+.nav-brand:active{transform:scale(.98);}
 .nav-brand img{width:60px;height:60px;object-fit:contain;transition:transform .4s var(--ease-spring);}
 .nav-brand:hover img{transform:scale(1.05) rotate(-3deg);}
 .nav-links{display:flex;gap:4px;}
@@ -527,7 +529,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .nav-brand{
     order:1;
     padding:10px 14px;
-    font-size:16px;
+    font-size:20px;
     gap:10px;
     white-space:nowrap;
     overflow:hidden;
@@ -535,7 +537,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     flex:1 1 auto;
     min-width:0;
   }
-  .nav-brand img{width:38px;height:38px;flex-shrink:0;}
+  .nav-brand img{width:40px;height:40px;flex-shrink:0;}
   .nav-right{
     order:2;
     padding:10px 14px;
@@ -973,8 +975,8 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 @media(max-width:430px){
   .page{padding:10px;}
   /* Hide brand text on tiny screens — keep only logo, save space for buttons */
-  .nav-brand{font-size:14px;}
-  .nav-brand img{width:34px;height:34px;}
+  .nav-brand{font-size:18px;}
+  .nav-brand img{width:36px;height:36px;}
   .nav-link{font-size:12px;padding:11px 2px;}
   .nav-right .btn{padding:6px 10px;font-size:11px;}
   .stats-grid{grid-template-columns:1fr;}
@@ -991,7 +993,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
    VERY SMALL — 360px and below
    ======================================================== */
 @media(max-width:360px){
-  .nav-brand{font-size:13px;}
+  .nav-brand{font-size:16px;}
   .nav-link{font-size:11px;padding:10px 2px;}
   .nav-right .btn{font-size:10px;padding:5px 8px;}
 }
@@ -1053,7 +1055,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 <div id="appWrapper">
   <!-- NAVBAR -->
   <nav id="navbar">
-    <div class="nav-brand">
+    <div class="nav-brand" onclick="goToModeSelect()" role="button" tabindex="0" title="Back to page selection">
       <img src="logo.png" alt="AP" onerror="this.style.display='none'">
       A P Trading
     </div>
@@ -1734,6 +1736,21 @@ function goToMode(){
   document.getElementById('modeScreen').classList.add('hidden');
   document.getElementById('appWrapper').style.display='block';
   navigate(selectedMode);
+}
+// Return from inside the app back to the page-selection screen.
+// Triggered when clicking the brand logo / "A P Trading" text in the navbar.
+function goToModeSelect(){
+  selectedMode='';
+  ['Invoice','Quotation','Admin'].forEach(m=>{
+    const el=document.getElementById('mode'+m);
+    if(el)el.classList.remove('active');
+  });
+  const btn=document.getElementById('modeGoBtn');
+  if(btn)btn.disabled=true;
+  document.getElementById('appWrapper').style.display='none';
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('modeScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
 }
 
 // ===================== NAVIGATION =====================
