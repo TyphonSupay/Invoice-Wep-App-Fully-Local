@@ -576,45 +576,65 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   }
   .nav-link:hover{transform:none;}
 
-  /* ========== LOGIN SCREEN — handle keyboard with dynamic viewport height ========== */
+  /* ========== LOGIN SCREEN — NO SCROLL, content fits on screen ========== */
   #loginScreen{
-    min-height:100vh;
+    height:100vh;
+    height:100dvh;
     min-height:100dvh;
-    align-items:flex-start;
-    padding:24px 16px 60px;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+    max-height:100dvh;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    overflow:hidden;
   }
   .login-card{
-    padding:32px 24px;
-    margin:auto;
+    padding:24px 22px;
+    margin:0 auto;
+    max-height:calc(100dvh - 32px);
+    overflow:hidden;
   }
-  .login-logo,.login-logo-placeholder{width:100px;height:100px;margin-bottom:16px;}
-  .login-card h1{font-size:26px;}
-  .login-card p.subtitle{font-size:13px;margin-bottom:24px;}
-  .login-card .form-control{font-size:16px;}  /* prevents iOS zoom-on-focus */
-  .btn-login{padding:14px;font-size:15px;min-height:48px;}
+  .login-logo,.login-logo-placeholder{width:80px;height:80px;margin-bottom:12px;}
+  .login-card h1{font-size:24px;margin-bottom:4px;}
+  .login-card p.subtitle{font-size:12px;margin-bottom:20px;}
+  .login-card .form-control{font-size:16px;padding:12px 14px;}  /* prevents iOS zoom-on-focus */
+  .login-card .form-group{margin-bottom:14px;}
+  .btn-login{padding:13px;font-size:15px;min-height:46px;}
+  .demo-hint{margin-top:14px;font-size:12px;}
 
-  /* ========== MODE SELECTION — fit all 3 cards on screen, allow scroll ========== */
+  /* ========== MODE SELECTION — NO SCROLL, all 3 cards fit ========== */
   #modeScreen{
-    min-height:100vh;
+    height:100vh;
+    height:100dvh;
     min-height:100dvh;
-    align-items:flex-start;
-    padding:20px 14px 40px;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+    max-height:100dvh;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    overflow:hidden;
   }
   .mode-card-container{
-    padding:24px 18px;
+    padding:20px 16px;
     max-width:100%;
+    max-height:calc(100dvh - 32px);
+    overflow:hidden;
   }
-  .mode-card-container h1{font-size:22px;margin-bottom:4px;}
-  .mode-card-container>p{font-size:13px;margin-bottom:18px;}
-  .mode-options{gap:10px;margin-bottom:18px;}
-  .mode-opt{padding:16px 14px;}
-  .mode-opt .icon{font-size:34px;margin-bottom:6px;}
-  .mode-opt h3{font-size:15px;}
-  .mode-opt p{font-size:12px;}
+  .mode-card-container h1{font-size:20px;margin-bottom:2px;}
+  .mode-card-container>p{font-size:12px;margin-bottom:14px;}
+  .mode-options{gap:8px;margin-bottom:14px;}
+  .mode-opt{
+    padding:12px 14px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-areas:
+      "icon h3"
+      "icon p";
+    align-items:center;
+    gap:0 14px;
+    text-align:left;
+  }
+  .mode-opt .icon{grid-area:icon;font-size:32px;margin-bottom:0;line-height:1;align-self:center;}
+  .mode-opt h3{grid-area:h3;font-size:14px;margin:0;align-self:end;}
+  .mode-opt p{grid-area:p;font-size:11px;margin:1px 0 0;align-self:start;}
 
   /* ========== INVOICE / QUOTATION DOCUMENT ========== */
   .invoice-doc{padding:18px 14px;min-height:auto;}
@@ -808,17 +828,36 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     flex-direction:column!important;
     gap:8px!important;
     width:100%;
+    box-sizing:border-box;
   }
   #tab-dashboard .card-header>div>*{
     width:100%!important;
     max-width:100%!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+  }
+  /* Force CSS styling on date/month inputs — Android Chrome's native styling
+     ignores border-radius and makes the right edge look "flat" (no curve).
+     Note: don't apply to <select> — that would hide the dropdown arrow. */
+  #tab-dashboard .card-header input[type="month"],
+  #tab-dashboard .card-header input[type="date"],
+  #tab-dashboard .card-header input[type="text"],
+  #tab-dashboard .card-header input[type="number"]{
+    -webkit-appearance:none!important;
+    -moz-appearance:none!important;
+    appearance:none!important;
   }
   #tab-dashboard .card-header input,
   #tab-dashboard .card-header select{
     font-size:16px!important;
-    padding:10px 12px;
+    padding:11px 14px!important;
+    border:1.5px solid var(--border)!important;
+    border-radius:var(--radius)!important;
+    background:var(--surface)!important;
+    color:var(--text)!important;
+    min-height:44px;
   }
-  #tab-dashboard .card-header .btn{min-height:42px;}
+  #tab-dashboard .card-header .btn{min-height:44px;border-radius:var(--radius);}
 
   /* ========== BACKUP PAGE — stack the 2-column inline grid ========== */
   #tab-backup>div{
