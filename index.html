@@ -492,7 +492,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 .action-bar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
 .action-bar .btn{margin:0;}
 
-/* ===== RESPONSIVE — Phone & Tablet (change #16) ===== */
+/* ===== RESPONSIVE — Phone & Tablet (REBUILT for iPhone 16 Pro & all phones) ===== */
 @media(max-width:1024px){
   .admin-layout{grid-template-columns:1fr;gap:16px;}
   .admin-sidebar{position:static;flex-direction:row;overflow-x:auto;max-height:none;padding:6px;}
@@ -505,74 +505,412 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .invoice-doc{padding:28px 24px;}
   .stats-grid{grid-template-columns:1fr 1fr;}
 }
+
+/* ========================================================
+   MOBILE — 768px and below — TWO-ROW NAVBAR + CARD ITEMS
+   ======================================================== */
 @media(max-width:768px){
-  .page{padding:14px;}
-  #navbar{padding:8px 12px;height:auto;min-height:60px;flex-wrap:wrap;gap:6px;}
-  .nav-brand{font-size:16px;gap:8px;flex-shrink:1;min-width:0;white-space:nowrap;overflow:hidden;}
+  .page{padding:12px;padding-bottom:24px;}
+
+  /* ========== NAVBAR: Two-row layout — NO horizontal scrolling needed ========== */
+  #navbar{
+    padding:0;
+    height:auto;
+    min-height:auto;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:stretch;
+    position:sticky;
+    top:0;
+  }
+  /* Row 1: brand (left) + right buttons (right) */
+  .nav-brand{
+    order:1;
+    padding:10px 14px;
+    font-size:16px;
+    gap:10px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    flex:1 1 auto;
+    min-width:0;
+  }
   .nav-brand img{width:38px;height:38px;flex-shrink:0;}
-  .nav-links{display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0;}
-  .nav-links::-webkit-scrollbar{display:none;height:0;}
-  .nav-link{padding:7px 12px;font-size:13px;white-space:nowrap;flex-shrink:0;}
-  .nav-right{flex-shrink:0;gap:6px;}
-  .nav-right .btn{padding:7px 10px;font-size:12px;}
-  .invoice-doc{padding:22px 18px;min-height:auto;}
-  .inv-top-row{flex-wrap:wrap;}
-  .inv-logo,.inv-logo-placeholder{width:90px;height:90px;}
-  .inv-meta{min-width:180px;}
-  .inv-meta .doc-type{font-size:26px;}
-  .inv-company-block h1{font-size:26px;}
-  /* Items table: scroll horizontally on phones */
-  .items-table{font-size:12px;}
-  .items-table th,.items-table td{padding:8px 5px;}
-  .invoices-table-wrap,.payment-table-wrap{margin:0 -14px;border-radius:0;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .filters-bar{flex-direction:column;align-items:stretch;}
-  .filters-bar .form-group,.filters-bar .form-control,.filters-bar select{width:100%!important;}
-  .month-bar-row{grid-template-columns:50px 1fr 80px;gap:8px;font-size:12px;}
-  .month-bar-row .month-val{font-size:12px;}
-  .stat-card{padding:18px 16px;}
-  .stat-card .stat-value{font-size:20px!important;}
-  /* Modal full-screen on phone */
-  .modal{max-width:100%!important;border-radius:14px!important;}
-  /* Action bar: smaller padding + horizontal scroll if buttons overflow */
-  .action-bar{padding:8px;gap:6px;flex-wrap:wrap;}
-  .action-bar .btn{padding:8px 12px;font-size:12px;}
-  /* Allow login & mode screens to scroll instead of cutting off */
-  #loginScreen,#modeScreen{align-items:flex-start;padding:24px 16px;min-height:100vh;overflow-y:auto;}
-  /* Toast — full width edge-to-edge */
-  #toast-container{bottom:12px;right:12px;left:12px;}
-  .toast{max-width:100%;}
-}
-@media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr;}
-  .payment-summary{grid-template-columns:1fr 1fr;}
-  .customers-grid{grid-template-columns:1fr;}
-  .invoice-doc{padding:18px 14px;}
-  .inv-meta{min-width:140px;}
-  .inv-meta .doc-type{font-size:22px;}
-  .inv-company-block h1{font-size:22px;}
-  .login-card{padding:36px 26px;}
-  .login-logo,.login-logo-placeholder{width:110px;height:110px;}
-  .login-card h1{font-size:28px;}
-  .mode-card-container{padding:28px 20px;}
-  .mode-card-container h1{font-size:24px;}
-  .mode-opt{padding:22px 14px;}
-  .mode-opt .icon{font-size:36px;}
+  .nav-right{
+    order:2;
+    padding:10px 14px;
+    flex:0 0 auto;
+    flex-shrink:0;
+    gap:6px;
+  }
+  .nav-right .btn{padding:7px 12px;font-size:12px;min-height:36px;}
+  /* Row 2: nav-links span the FULL width — 3 equal tabs, no scroll */
+  .nav-links{
+    order:3;
+    width:100%;
+    flex-basis:100%;
+    display:flex;
+    gap:0;
+    border-top:1px solid var(--border);
+    background:var(--bg);
+    padding:0;
+    margin:0;
+    overflow:visible;
+  }
+  .nav-link{
+    flex:1 1 0;
+    min-width:0;
+    padding:12px 4px;
+    font-size:13px;
+    font-weight:600;
+    border-radius:0;
+    text-align:center;
+    justify-content:center;
+    white-space:nowrap;
+    border-bottom:3px solid transparent;
+  }
+  .nav-link.active{
+    background:var(--orange-light);
+    color:var(--orange-dark);
+    border-bottom-color:var(--orange);
+  }
+  .nav-link:hover{transform:none;}
+
+  /* ========== LOGIN SCREEN — handle keyboard with dynamic viewport height ========== */
+  #loginScreen{
+    min-height:100vh;
+    min-height:100dvh;
+    align-items:flex-start;
+    padding:24px 16px 60px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .login-card{
+    padding:32px 24px;
+    margin:auto;
+  }
+  .login-logo,.login-logo-placeholder{width:100px;height:100px;margin-bottom:16px;}
+  .login-card h1{font-size:26px;}
+  .login-card p.subtitle{font-size:13px;margin-bottom:24px;}
+  .login-card .form-control{font-size:16px;}  /* prevents iOS zoom-on-focus */
+  .btn-login{padding:14px;font-size:15px;min-height:48px;}
+
+  /* ========== MODE SELECTION — fit all 3 cards on screen, allow scroll ========== */
+  #modeScreen{
+    min-height:100vh;
+    min-height:100dvh;
+    align-items:flex-start;
+    padding:20px 14px 40px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .mode-card-container{
+    padding:24px 18px;
+    max-width:100%;
+  }
+  .mode-card-container h1{font-size:22px;margin-bottom:4px;}
+  .mode-card-container>p{font-size:13px;margin-bottom:18px;}
+  .mode-options{gap:10px;margin-bottom:18px;}
+  .mode-opt{padding:16px 14px;}
+  .mode-opt .icon{font-size:34px;margin-bottom:6px;}
   .mode-opt h3{font-size:15px;}
-  /* Tighter navbar — make brand even smaller, give nav links breathing room */
-  #navbar{padding:6px 10px;}
-  .nav-brand{font-size:14px;gap:6px;}
-  .nav-brand img{width:34px;height:34px;}
-  .nav-link{padding:6px 10px;font-size:12px;}
-  .nav-right .btn{padding:6px 8px;font-size:11px;}
+  .mode-opt p{font-size:12px;}
+
+  /* ========== INVOICE / QUOTATION DOCUMENT ========== */
+  .invoice-doc{padding:18px 14px;min-height:auto;}
+  .inv-top-row{flex-wrap:wrap;gap:12px;}
+  .inv-logo-wrap{flex:1 1 auto;}
+  .inv-logo,.inv-logo-placeholder{width:70px;height:70px;}
+  .inv-meta{min-width:0;flex:1 1 auto;text-align:right;}
+  .inv-meta .doc-type{font-size:22px;margin-bottom:4px;padding-bottom:4px;}
+  .inv-meta input{width:auto!important;max-width:140px;font-size:16px!important;}
+  .inv-company-block{margin-bottom:16px;padding-bottom:12px;}
+  .inv-company-block h1{font-size:22px;}
+  .inv-company-block p{font-size:12px;}
+
+  /* ========== ITEMS TABLE → CARD LAYOUT (this fixes hidden item names) ========== */
+  .items-table{display:block;width:100%;}
+  .items-table thead{display:none;}  /* hide header on mobile */
+  .items-table tbody{display:block;width:100%;}
+  .items-table tr{
+    display:grid;
+    grid-template-columns:1fr 36px;
+    grid-template-areas:
+      "item   del"
+      "qty    qty"
+      "price  price"
+      "total  total";
+    gap:8px 6px;
+    padding:12px;
+    margin-bottom:10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--bg);
+  }
+  body.dark .items-table tr{background:#0F0F0F;}
+  .items-table td{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0;
+    border:none;
+    font-size:13px;
+  }
+  .items-table td::before{
+    color:var(--text-muted);
+    font-weight:600;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    min-width:68px;
+    flex-shrink:0;
+  }
+  .items-table td:nth-child(1){grid-area:item;}
+  .items-table td:nth-child(1)::before{content:"Item";}
+  .items-table td:nth-child(2){grid-area:qty;}
+  .items-table td:nth-child(2)::before{content:"Qty";}
+  .items-table td:nth-child(3){grid-area:price;}
+  .items-table td:nth-child(3)::before{content:"Unit Price";}
+  .items-table td:nth-child(4){grid-area:total;justify-content:flex-end;font-weight:700;font-size:15px;}
+  .items-table td:nth-child(4)::before{content:"Total";margin-right:auto;font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;}
+  .items-table td:nth-child(5){grid-area:del;justify-content:center;align-self:start;}
+  .items-table td:nth-child(5)::before{content:"";display:none;}
+  .items-table input,.items-table select{
+    width:100%!important;
+    flex:1;
+    font-size:16px!important;  /* prevent iOS zoom */
+    padding:9px 10px;
+    box-sizing:border-box;
+  }
+  .items-table input[type=number]{text-align:left!important;}
+  /* Override the inline-styled wrapper div so the item-select fills width */
+  .items-table td>div{width:100%!important;}
+
+  /* Empty-state rows (single TD with colspan) — show as centered message, not card */
+  .invoices-table tr:has(td[colspan]),.payment-table tr:has(td[colspan]){
+    display:block;
+    padding:0;
+    margin:0;
+    background:transparent;
+    border:none;
+    box-shadow:none;
+    grid-template-columns:none;
+  }
+  .invoices-table td[colspan],.payment-table td[colspan]{
+    display:block;
+    text-align:center;
+    padding:24px 12px;
+    color:var(--text-muted);
+    font-weight:500;
+  }
+  .invoices-table td[colspan]::before,.payment-table td[colspan]::before{display:none;}
+
+  /* ========== LIST TABLES (saved invoices, payments) → also cards ========== */
+  .invoices-table-wrap,.payment-table-wrap{
+    margin:0;
+    border-radius:var(--radius-lg);
+    overflow:visible;
+    background:transparent;
+    border:none;
+    box-shadow:none;
+  }
+  .invoices-table,.payment-table{display:block;width:100%;}
+  .invoices-table thead,.payment-table thead{display:none;}
+  .invoices-table tbody,.payment-table tbody{display:block;}
+  .invoices-table tr,.payment-table tr{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 10px;
+    padding:14px;
+    margin-bottom:10px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--surface);
+    box-shadow:var(--shadow-sm);
+  }
+  .invoices-table td,.payment-table td{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+    padding:0;
+    border:none;
+    font-size:14px;
+    font-weight:600;
+    overflow:hidden;
+    word-break:break-word;
+  }
+  .invoices-table td::before,.payment-table td::before{
+    color:var(--text-muted);
+    font-weight:600;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+  }
+  /* Saved invoices columns: # | Customer | Date | Amount | Paid | Due | Status | Actions */
+  #tab-invoices .invoices-table td:nth-child(1)::before{content:"#";}
+  #tab-invoices .invoices-table td:nth-child(2)::before{content:"Customer";}
+  #tab-invoices .invoices-table td:nth-child(3)::before{content:"Date";}
+  #tab-invoices .invoices-table td:nth-child(4)::before{content:"Amount";}
+  #tab-invoices .invoices-table td:nth-child(5)::before{content:"Paid";}
+  #tab-invoices .invoices-table td:nth-child(6)::before{content:"Due";}
+  #tab-invoices .invoices-table td:nth-child(7)::before{content:"Status";}
+  /* Quotations columns: # | Customer | Date | Valid Until | Amount | Actions */
+  #tab-quotations .invoices-table td:nth-child(1)::before{content:"#";}
+  #tab-quotations .invoices-table td:nth-child(2)::before{content:"Customer";}
+  #tab-quotations .invoices-table td:nth-child(3)::before{content:"Date";}
+  #tab-quotations .invoices-table td:nth-child(4)::before{content:"Valid Until";}
+  #tab-quotations .invoices-table td:nth-child(5)::before{content:"Amount";}
+  /* Payments columns: Invoice# | Customer | Date | Total | Paid | Due | Progress | Status | Actions */
+  .payment-table td:nth-child(1)::before{content:"Invoice #";}
+  .payment-table td:nth-child(2)::before{content:"Customer";}
+  .payment-table td:nth-child(3)::before{content:"Date";}
+  .payment-table td:nth-child(4)::before{content:"Total";}
+  .payment-table td:nth-child(5)::before{content:"Paid";}
+  .payment-table td:nth-child(6)::before{content:"Due";}
+  .payment-table td:nth-child(7)::before{content:"Progress";}
+  .payment-table td:nth-child(8)::before{content:"Status";}
+  /* Last cell (Actions) — full width row */
+  .invoices-table td:last-child,.payment-table td:last-child{
+    grid-column:1/-1;
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap:6px;
+    padding-top:10px;
+    border-top:1px solid var(--border);
+    margin-top:4px;
+  }
+  .invoices-table td:last-child::before,.payment-table td:last-child::before{display:none;}
+  .invoices-table td:last-child .btn,.payment-table td:last-child .btn{
+    padding:7px 10px;
+    font-size:11px;
+    flex:1 1 auto;
+  }
+
+  /* ========== FILTERS BAR ========== */
+  .filters-bar{flex-direction:column;align-items:stretch;gap:10px;}
+  .filters-bar .form-group,.filters-bar .form-control,.filters-bar select{width:100%!important;}
+  .filters-bar input,.filters-bar select{font-size:16px;}
+
+  /* ========== STATS GRID (dashboard figures) ========== */
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-card{padding:14px 12px;}
+  .stat-card .stat-icon{width:38px;height:38px;font-size:18px;margin-bottom:8px;}
+  .stat-card .stat-value{font-size:18px!important;line-height:1.2;}
+  .stat-card .stat-label{font-size:11px;}
+
+  /* ========== ADMIN SIDEBAR (Dashboard/Invoices/Payments tabs) — better scroll ========== */
+  .admin-sidebar{
+    position:sticky;
+    top:auto;
+    z-index:5;
+    flex-direction:row;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:6px;
+    gap:4px;
+    scroll-snap-type:x mandatory;
+    /* visual hint that this scrolls */
+    background:linear-gradient(90deg,var(--surface) 0%,var(--surface) 92%,rgba(0,0,0,0.05) 100%);
+  }
+  body.dark .admin-sidebar{background:linear-gradient(90deg,var(--surface) 0%,var(--surface) 92%,rgba(255,255,255,0.05) 100%);}
+  .admin-sidebar::-webkit-scrollbar{display:none;}
+  .admin-sidebar .admin-tab{
+    flex-shrink:0;
+    padding:10px 14px;
+    font-size:13px;
+    scroll-snap-align:start;
+    min-height:40px;
+  }
+
+  /* ========== MONTH/CHART ROWS ========== */
+  .month-bar-row{grid-template-columns:46px 1fr 70px;gap:6px;font-size:11px;}
+  .month-bar-row .month-val{font-size:11px;}
+
+  /* ========== HIGHLIGHT CARDS (Last/This Month — uses #monthHighlight with inline grid) ========== */
+  #monthHighlight{grid-template-columns:1fr!important;gap:10px!important;}
+  #monthHighlight .card-header{flex-wrap:wrap;gap:6px;padding:10px 12px;}
+  #monthHighlight .card-header span{font-size:13px!important;}
+  #monthHighlight .card-body{padding:14px 10px!important;gap:6px!important;}
+  #monthHighlight .card-body>div>div:first-child{font-size:14px!important;}
+  #monthHighlight .card-body>div>div:last-child{font-size:10px!important;}
+  /* Generic highlight-cards class (kept for safety) */
+  .highlight-cards{grid-template-columns:1fr!important;gap:10px;}
+
+  /* ========== PROFIT ANALYSIS GRID ========== */
+  #profitAnalysisBody>div{grid-template-columns:1fr 1fr!important;gap:14px!important;}
+
+  /* ========== MODAL ========== */
+  .modal-overlay{padding:10px;}
+  .modal{max-width:100%!important;width:100%!important;border-radius:14px!important;max-height:92vh;}
+  .modal-header{padding:14px 16px;}
+  .modal-header h3{font-size:16px;}
+  .modal-body{padding:14px 16px;}
+
+  /* ========== ACTION BAR ========== */
+  .action-bar{padding:8px;gap:6px;flex-wrap:wrap;}
+  .action-bar .btn{padding:9px 12px;font-size:12px;flex:1 1 auto;min-height:40px;}
+
+  /* ========== ALL INPUTS — prevent iOS zoom on focus ========== */
+  input,select,textarea{font-size:16px!important;}
+  .form-control{font-size:16px;}
+
+  /* ========== TOAST ========== */
+  #toast-container{bottom:14px;right:12px;left:12px;}
+  .toast{max-width:100%;font-size:13px;}
+
+  /* ========== TOTALS BOX ========== */
+  .totals-box{width:100%;max-width:100%;}
+  .total-row,.grand-row{font-size:14px;}
+  .grand-row{font-size:16px;}
+  .discount-ctrl{flex-wrap:nowrap;}
+  .discount-ctrl input{width:80px!important;}
+
+  /* ========== PAGE HEADERS ========== */
+  .page-header h2{font-size:22px;}
+  .page-header p{font-size:13px;}
+
+  /* ========== CUSTOMERS GRID ========== */
+  .customers-grid{grid-template-columns:1fr;gap:10px;}
+
+  /* ========== TABLE WRAPPERS — empty state messages ========== */
+  .invoices-table tbody:empty::after,.payment-table tbody:empty::after{
+    content:"No records found.";
+    display:block;
+    text-align:center;
+    padding:30px;
+    color:var(--text-muted);
+  }
 }
-/* Extra-small phones (iPhone SE, etc.) — stack navbar onto two rows */
-@media(max-width:380px){
-  #navbar{padding:6px 8px;}
-  /* Brand + right buttons on row 1, nav-links wrap to row 2 full width */
-  .nav-links{order:3;width:100%;flex-basis:100%;padding:2px 0;justify-content:flex-start;}
+
+/* ========================================================
+   EXTRA SMALL — 430px and below (iPhone 16 Pro = 393px CSS)
+   ======================================================== */
+@media(max-width:430px){
+  .page{padding:10px;}
+  /* Hide brand text on tiny screens — keep only logo, save space for buttons */
   .nav-brand{font-size:14px;}
-  /* Make sure brand text doesn't push right buttons off */
-  .nav-brand img{width:32px;height:32px;}
+  .nav-brand img{width:34px;height:34px;}
+  .nav-link{font-size:12px;padding:11px 2px;}
+  .nav-right .btn{padding:6px 10px;font-size:11px;}
+  .stats-grid{grid-template-columns:1fr;}
+  .stat-card .stat-value{font-size:22px!important;}
+  .stat-card{padding:18px 16px;}
+  #monthHighlight .card-body{grid-template-columns:1fr 1fr 1fr!important;}
+  #profitAnalysisBody>div{grid-template-columns:1fr 1fr!important;}
+  .inv-logo,.inv-logo-placeholder{width:60px;height:60px;}
+  .inv-meta .doc-type{font-size:20px;}
+  .inv-company-block h1{font-size:20px;}
+}
+
+/* ========================================================
+   VERY SMALL — 360px and below
+   ======================================================== */
+@media(max-width:360px){
+  .nav-brand{font-size:13px;}
+  .nav-link{font-size:11px;padding:10px 2px;}
+  .nav-right .btn{font-size:10px;padding:5px 8px;}
 }
 </style>
 </head>
