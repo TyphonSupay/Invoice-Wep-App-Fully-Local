@@ -783,6 +783,21 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   #tab-quotations .invoices-table td:nth-child(3)::before{content:"Date";}
   #tab-quotations .invoices-table td:nth-child(4)::before{content:"Valid Until";}
   #tab-quotations .invoices-table td:nth-child(5)::before{content:"Amount";}
+  /* Item Report columns: Item | Qty Sold | Revenue | Cost | Profit | Margin */
+  #tab-items .invoices-table td:nth-child(1)::before{content:"Item";}
+  #tab-items .invoices-table td:nth-child(2)::before{content:"Qty Sold";}
+  #tab-items .invoices-table td:nth-child(3)::before{content:"Revenue";}
+  #tab-items .invoices-table td:nth-child(4)::before{content:"Cost";}
+  #tab-items .invoices-table td:nth-child(5)::before{content:"Profit";}
+  #tab-items .invoices-table td:nth-child(6)::before{content:"Margin";}
+  /* Item Report has no Actions column → last cell should NOT span full width */
+  #tab-items .invoices-table td:last-child{
+    grid-column:auto!important;
+    border-top:none!important;
+    padding-top:0!important;
+    margin-top:0!important;
+  }
+  #tab-items .invoices-table td:last-child::before{display:flex!important;content:"Margin"!important;}
   /* Payments columns: Invoice# | Customer | Date | Total | Paid | Due | Progress | Status | Actions */
   .payment-table td:nth-child(1)::before{content:"Invoice #";}
   .payment-table td:nth-child(2)::before{content:"Customer";}
@@ -996,6 +1011,149 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .nav-brand{font-size:16px;}
   .nav-link{font-size:11px;padding:10px 2px;}
   .nav-right .btn{font-size:10px;padding:5px 8px;}
+}
+
+/* ============================================================
+   MOBILE-PRINT OVERRIDES — placed LAST so they win the cascade
+   when both @media print and @media(max-width:768px) are active
+   (i.e. when printing from a phone). Restores professional
+   invoice layout matching the desktop print output.
+   ============================================================ */
+@media print{
+  /* ---- FIX A: hide the delete-button column. The TDs carry
+     class="no-print" but our .items-table td rule below has
+     higher specificity than .no-print, so we restate it here
+     with matching specificity to ensure no-print wins. ---- */
+  .items-table th.no-print,
+  .items-table td.no-print{display:none!important;}
+
+  /* ---- FIX B: items table — restore real table layout ---- */
+  .items-table{
+    display:table!important;
+    width:100%!important;
+    border-collapse:collapse!important;
+    margin-bottom:16px!important;
+    table-layout:auto!important;
+  }
+  .items-table thead{display:table-header-group!important;}
+  .items-table tbody{display:table-row-group!important;}
+  .items-table tr{
+    display:table-row!important;
+    grid-template-columns:none!important;
+    grid-template-areas:none!important;
+    gap:0!important;
+    padding:0!important;
+    margin:0!important;
+    border:none!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  .items-table th,
+  .items-table td{
+    display:table-cell!important;
+    padding:11px 8px!important;
+    vertical-align:middle!important;
+    font-size:13px!important;
+    color:#000!important;
+    gap:0!important;
+  }
+  .items-table th{
+    text-align:left!important;
+    font-weight:700!important;
+    background:#F8F9FB!important;
+    border-bottom:1.5px solid #CBD5E1!important;
+  }
+  .items-table td{
+    border:none!important;
+    border-bottom:1px solid #E5E7EB!important;
+  }
+  /* Kill mobile pseudo-labels ("Item:", "Qty:" etc.) */
+  .items-table td::before,
+  .items-table th::before{display:none!important;content:""!important;}
+  /* Column widths + alignment applied to BOTH th and td so header lines up with values */
+  .items-table th:nth-child(1),.items-table td:nth-child(1){text-align:left!important;}
+  .items-table th:nth-child(2),.items-table td:nth-child(2){text-align:center!important;width:110px!important;}
+  .items-table th:nth-child(3),.items-table td:nth-child(3){text-align:right!important;width:140px!important;padding-right:28px!important;}
+  .items-table th:nth-child(4),.items-table td:nth-child(4){text-align:right!important;width:130px!important;font-weight:700!important;}
+
+  /* ---- FIX C: inputs inside cells render as plain inline text,
+     inheriting cell alignment. Selector includes [type=number]
+     specifically so we beat the mobile rule
+     ".items-table input[type=number]{text-align:left!important}"
+     which has specificity (0,0,2,1); ours is (0,0,2,2). ---- */
+  .items-table td input,
+  .items-table td select,
+  .items-table td input[type=number]{
+    width:auto!important;
+    max-width:100%!important;
+    display:inline-block!important;
+    text-align:inherit!important;
+    font-size:13px!important;
+    padding:0!important;
+    border:none!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  /* Explicit per-column text-align inside inputs (belt-and-braces) */
+  .items-table td:nth-child(2) input,
+  .items-table td:nth-child(2) select{text-align:center!important;}
+  .items-table td:nth-child(3) input{text-align:right!important;}
+
+  /* ---- FIX D: totals — right-aligned 300px box (not full-width) ---- */
+  .inv-totals{display:flex!important;justify-content:flex-end!important;margin:24px 0!important;}
+  .totals-box{width:300px!important;max-width:300px!important;}
+  .total-row{font-size:14px!important;padding:6px 0!important;}
+  .grand-row{font-size:18px!important;padding:10px 0 4px!important;}
+
+  /* ---- FIX E: full-size logo (mobile shrinks to 70px) ---- */
+  .inv-logo,.inv-logo-placeholder{width:135px!important;height:135px!important;}
+
+  /* ---- FIX F: header row keeps logo+INVOICE on one row ---- */
+  .inv-top-row{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:space-between!important;
+    align-items:flex-start!important;
+    gap:16px!important;
+  }
+
+  /* ---- FIX G: shorten the line under "INVOICE".
+     Mobile sets .inv-meta{flex:1 1 auto} so it stretches and the
+     doc-type underline (display:block) stretches with it. We pin
+     inv-meta to size-by-content so the underline matches the
+     Invoice/Date rows below it. ---- */
+  .inv-meta{
+    flex:0 0 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    text-align:right!important;
+  }
+  .inv-meta .doc-type{
+    font-size:36px!important;
+    margin-bottom:8px!important;
+    padding-bottom:8px!important;
+    display:block!important;
+    text-align:right!important;
+  }
+
+  /* ---- FIX H: align "Invoice:" and "Date:" rows.
+     Right-align both label and value, give the value column a
+     fixed min-width — this makes the right edges of values line
+     up cleanly, and the colons end up at consistent positions. ---- */
+  .inv-meta-row{
+    display:grid!important;
+    grid-template-columns:auto auto!important;
+    gap:4px 8px!important;
+    justify-content:end!important;
+    align-items:baseline!important;
+  }
+  .inv-meta-row strong{text-align:right!important;font-weight:700!important;}
+  .inv-meta-row .meta-val{text-align:right!important;min-width:130px!important;}
+  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;}
+
+  /* Company name block */
+  .inv-company-block h1{font-size:34px!important;}
+  .inv-company-block p{font-size:13px!important;}
 }
 </style>
 </head>
@@ -1347,6 +1505,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
         <button class="admin-tab" onclick="switchAdminTab('customers',this)">👥 Customers</button>
         <button class="admin-tab" onclick="switchAdminTab('payments',this)">💳 Payments</button>
         <button class="admin-tab" onclick="switchAdminTab('expenses',this)">💸 Expenses</button>
+        <button class="admin-tab" onclick="switchAdminTab('items',this)">📦 Item Report</button>
         <button class="admin-tab" onclick="switchAdminTab('backup',this)">🗄️ Backup</button>
       </div>
       <div class="admin-content">
@@ -1463,6 +1622,43 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
         </div>
         <div id="expSummaryCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;"></div>
         <div class="expense-list" id="expenseList"></div>
+      </div>
+
+      <!-- Item Report -->
+      <div id="tab-items" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <span style="font-weight:600;">📦 Item Sales & Profit Report</span>
+          <button class="btn btn-ghost btn-sm" onclick="printItemReport()">🖨️ Print Report</button>
+        </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header">
+            <span style="font-weight:600;">Filters</span>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <input class="form-control" type="date" id="itemFilterFrom" onchange="renderItemReport()" style="width:150px;" title="From date">
+              <input class="form-control" type="date" id="itemFilterTo" onchange="renderItemReport()" style="width:150px;" title="To date">
+              <button class="btn btn-ghost btn-sm" onclick="clearItemFilters()">Clear</button>
+            </div>
+          </div>
+          <div class="card-body" id="itemReportSummary"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span style="font-weight:600;">Per-Item Breakdown</span><span style="font-size:12px;color:var(--text-muted);">Sorted by profit (highest first)</span></div>
+          <div class="invoices-table-wrap">
+            <table class="invoices-table" id="itemReportTable">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th style="text-align:center;">Qty Sold</th>
+                  <th style="text-align:right;">Revenue</th>
+                  <th style="text-align:right;">Cost</th>
+                  <th style="text-align:right;">Profit</th>
+                  <th style="text-align:right;">Margin</th>
+                </tr>
+              </thead>
+              <tbody id="itemReportBody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- Backup -->
@@ -1650,7 +1846,7 @@ let _editingInvId=null,_editingQtnId=null;
 // NEW: dirty state — true when user has unsaved changes. Save button visible only when dirty.
 let _invDirty=false,_qtnDirty=false;
 
-const ITEM_OPTIONS=['Safety Jackets','Canvas Shoes','Ratchet Helmet','Safety Gloves','Reflective Tape','Other'];
+const ITEM_OPTIONS=['Safety Helmet','Safety Jacket','Safety Gloves','Ratchet','Pillows','Traveling Mattress','Other'];
 
 // ===================== INIT =====================
 window.onload=()=>{
@@ -1805,6 +2001,14 @@ function addItem(type){
 function buildItemRow(item,type){
   const tr=document.createElement('tr');
   tr.dataset.id=item.id;
+
+  // Safety: if a saved item's name no longer matches any dropdown option
+  // (e.g. after the ITEM_OPTIONS list was changed), show it in custom-text
+  // mode so the original name is preserved instead of silently re-mapping
+  // to the first option.
+  if(!item.isCustom && item.name && !ITEM_OPTIONS.includes(item.name)){
+    item.isCustom=true;
+  }
 
   const nameTd=document.createElement('td');
   const wrapper=document.createElement('div');
@@ -3170,6 +3374,110 @@ function populateCustomerFilters(){
   });
 }
 
+// ===================== ITEM REPORT =====================
+// Aggregates qty sold, revenue, cost, and profit per item across all invoices.
+// Cost uses the buyPrice saved with each invoice line item, so historical
+// invoices keep using whatever buy price was set at the time they were saved.
+function renderItemReport(){
+  const fromF=document.getElementById('itemFilterFrom')?.value||'';
+  const toF=document.getElementById('itemFilterTo')?.value||'';
+  const invoices=DB.get('invoices')||[];
+
+  let filtered=invoices;
+  if(fromF)filtered=filtered.filter(i=>i.date>=fromF);
+  if(toF)filtered=filtered.filter(i=>i.date<=toF);
+
+  // Aggregate by item name (case-insensitive key, original-case display)
+  const agg={};
+  filtered.forEach(inv=>{
+    (inv.items||[]).forEach(it=>{
+      const display=(it.name||'(unnamed)').trim()||'(unnamed)';
+      const key=display.toLowerCase();
+      if(!agg[key])agg[key]={name:display,qty:0,revenue:0,cost:0,invoices:0};
+      agg[key].qty+=Number(it.qty)||0;
+      agg[key].revenue+=(Number(it.qty)||0)*(Number(it.price)||0);
+      agg[key].cost+=(Number(it.qty)||0)*(Number(it.buyPrice)||0);
+    });
+  });
+
+  const rows=Object.values(agg).map(d=>({
+    name:d.name,
+    qty:d.qty,
+    revenue:d.revenue,
+    cost:d.cost,
+    profit:d.revenue-d.cost,
+    margin:d.revenue>0?((d.revenue-d.cost)/d.revenue)*100:0
+  })).sort((a,b)=>b.profit-a.profit);
+
+  const totalQty=rows.reduce((s,r)=>s+r.qty,0);
+  const totalRev=rows.reduce((s,r)=>s+r.revenue,0);
+  const totalCost=rows.reduce((s,r)=>s+r.cost,0);
+  const totalProfit=totalRev-totalCost;
+
+  const summary=document.getElementById('itemReportSummary');
+  if(summary){
+    summary.innerHTML=`
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
+        <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--blue-dark);">${totalQty.toLocaleString()}</div><div style="font-size:13px;color:var(--text-muted);">Total Units Sold</div></div>
+        <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--orange-dark);">${fmtRs(totalRev)}</div><div style="font-size:13px;color:var(--text-muted);">Total Revenue</div></div>
+        <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--purple-dark);">${fmtRs(totalCost)}</div><div style="font-size:13px;color:var(--text-muted);">Total Cost of Goods</div></div>
+        <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:${totalProfit>=0?'var(--green-dark)':'var(--red-dark)'};">${fmtRs(totalProfit)}</div><div style="font-size:13px;color:var(--text-muted);">Total Gross Profit</div></div>
+      </div>`;
+  }
+
+  const body=document.getElementById('itemReportBody');
+  if(!body)return;
+  if(rows.length===0){
+    body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);">No items found for the selected period.</td></tr>';
+    return;
+  }
+  body.innerHTML=rows.map(r=>`
+    <tr>
+      <td style="font-weight:600;">${escapeHtml(r.name)}</td>
+      <td style="text-align:center;">${r.qty.toLocaleString()}</td>
+      <td style="text-align:right;">${fmtRs(r.revenue)}</td>
+      <td style="text-align:right;">${fmtRs(r.cost)}</td>
+      <td style="text-align:right;font-weight:700;color:${r.profit>=0?'var(--green-dark)':'var(--red-dark)'};">${fmtRs(r.profit)}</td>
+      <td style="text-align:right;">${r.margin.toFixed(1)}%</td>
+    </tr>`).join('');
+}
+
+function clearItemFilters(){
+  const f=document.getElementById('itemFilterFrom');if(f)f.value='';
+  const t=document.getElementById('itemFilterTo');if(t)t.value='';
+  renderItemReport();
+}
+
+// Print just the item report (filters + summary + table) in a clean window
+function printItemReport(){
+  const fromF=document.getElementById('itemFilterFrom')?.value||'';
+  const toF=document.getElementById('itemFilterTo')?.value||'';
+  const summaryHTML=document.getElementById('itemReportSummary')?.innerHTML||'';
+  const tableHTML=document.getElementById('itemReportTable')?.outerHTML||'';
+  const period=(fromF||toF)?`${fromF||'(start)'} → ${toF||'(today)'}`:'All time';
+  const win=window.open('','_blank','width=900,height=700');
+  if(!win){toast('Please allow pop-ups to print the report.','error');return;}
+  win.document.write(`<!DOCTYPE html><html><head><title>Item Sales & Profit Report</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:'Inter','DM Sans',-apple-system,sans-serif;padding:24px;color:#000;background:#fff;}
+      h1{font-size:22px;margin-bottom:4px;letter-spacing:-0.02em;}
+      .meta{color:#525252;font-size:13px;margin-bottom:20px;}
+      .summary{margin-bottom:20px;padding:14px;border:1px solid #E5E7EB;border-radius:8px;}
+      table{width:100%;border-collapse:collapse;font-size:13px;}
+      th{padding:10px 8px;text-align:left;font-weight:700;background:#F8F9FB;border-bottom:1.5px solid #CBD5E1;}
+      td{padding:10px 8px;border-bottom:1px solid #E5E7EB;}
+      @media print{@page{size:A4;margin:10mm;}}
+    </style></head><body>
+    <h1>📦 Item Sales & Profit Report — A P Trading</h1>
+    <div class="meta">Period: ${period} &nbsp;·&nbsp; Generated: ${new Date().toLocaleString()}</div>
+    <div class="summary">${summaryHTML}</div>
+    ${tableHTML}
+    </body></html>`);
+  win.document.close();
+  setTimeout(()=>{win.focus();win.print();},250);
+}
+
 // FIX #12: switchAdminTab accepts btn element directly — no deprecated window.event
 function switchAdminTab(tab,btn){
   document.querySelectorAll('[id^=tab-]').forEach(t=>t.classList.add('hidden'));
@@ -3182,6 +3490,7 @@ function switchAdminTab(tab,btn){
   if(tab==='customers')renderCustomers();
   if(tab==='payments'){renderPayments();populateCustomerFilters();}
   if(tab==='expenses')renderExpenses();
+  if(tab==='items')renderItemReport();
 }
 
 // ===================== BACKUP =====================
