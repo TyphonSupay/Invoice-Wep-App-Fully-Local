@@ -1628,21 +1628,31 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
       <div id="tab-items" class="hidden">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
           <span style="font-weight:600;">📦 Item Sales & Profit Report</span>
-          <button class="btn btn-ghost btn-sm" onclick="printItemReport()">🖨️ Print Report</button>
         </div>
         <div class="card" style="margin-bottom:16px;">
           <div class="card-header">
             <span style="font-weight:600;">Filters</span>
-            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="applyItemDatePreset('thisMonth')">This Month</button>
+              <button class="btn btn-ghost btn-sm" onclick="applyItemDatePreset('lastMonth')">Last Month</button>
+              <button class="btn btn-ghost btn-sm" onclick="applyItemDatePreset('last30')">Last 30 Days</button>
+              <button class="btn btn-ghost btn-sm" onclick="applyItemDatePreset('thisYear')">This Year</button>
+              <button class="btn btn-ghost btn-sm" onclick="applyItemDatePreset('all')">All Time</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding-bottom:12px;">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+              <label style="font-size:12px;color:var(--text-muted);font-weight:600;">Custom range:</label>
               <input class="form-control" type="date" id="itemFilterFrom" onchange="renderItemReport()" style="width:150px;" title="From date">
               <input class="form-control" type="date" id="itemFilterTo" onchange="renderItemReport()" style="width:150px;" title="To date">
               <button class="btn btn-ghost btn-sm" onclick="clearItemFilters()">Clear</button>
+              <span id="itemRangeLabel" style="margin-left:auto;font-size:12px;color:var(--text-muted);"></span>
             </div>
+            <div id="itemReportSummary"></div>
           </div>
-          <div class="card-body" id="itemReportSummary"></div>
         </div>
         <div class="card">
-          <div class="card-header"><span style="font-weight:600;">Per-Item Breakdown</span><span style="font-size:12px;color:var(--text-muted);">Sorted by profit (highest first)</span></div>
+          <div class="card-header"><span style="font-weight:600;">Per-Item Breakdown</span><span style="font-size:12px;color:var(--text-muted);">Ranked by profit</span></div>
           <div class="invoices-table-wrap">
             <table class="invoices-table" id="itemReportTable">
               <thead>
@@ -3393,7 +3403,7 @@ function renderItemReport(){
     (inv.items||[]).forEach(it=>{
       const display=(it.name||'(unnamed)').trim()||'(unnamed)';
       const key=display.toLowerCase();
-      if(!agg[key])agg[key]={name:display,qty:0,revenue:0,cost:0,invoices:0};
+      if(!agg[key])agg[key]={name:display,qty:0,revenue:0,cost:0};
       agg[key].qty+=Number(it.qty)||0;
       agg[key].revenue+=(Number(it.qty)||0)*(Number(it.price)||0);
       agg[key].cost+=(Number(it.qty)||0)*(Number(it.buyPrice)||0);
@@ -3414,6 +3424,15 @@ function renderItemReport(){
   const totalCost=rows.reduce((s,r)=>s+r.cost,0);
   const totalProfit=totalRev-totalCost;
 
+  // Human-friendly range label
+  const lbl=document.getElementById('itemRangeLabel');
+  if(lbl){
+    if(fromF&&toF)lbl.textContent=`Showing ${fromF} → ${toF}`;
+    else if(fromF)lbl.textContent=`Showing from ${fromF}`;
+    else if(toF)lbl.textContent=`Showing until ${toF}`;
+    else lbl.textContent='Showing all time';
+  }
+
   const summary=document.getElementById('itemReportSummary');
   if(summary){
     summary.innerHTML=`
@@ -3431,9 +3450,16 @@ function renderItemReport(){
     body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);">No items found for the selected period.</td></tr>';
     return;
   }
-  body.innerHTML=rows.map(r=>`
+  // Rank labels: medals for top 3, "#N" for the rest
+  const rankBadge=idx=>{
+    if(idx===0)return '<span style="font-size:16px;margin-right:4px;" title="Top profit">🥇</span>';
+    if(idx===1)return '<span style="font-size:16px;margin-right:4px;" title="2nd best">🥈</span>';
+    if(idx===2)return '<span style="font-size:16px;margin-right:4px;" title="3rd best">🥉</span>';
+    return `<span style="display:inline-block;min-width:24px;color:var(--text-muted);font-weight:500;font-size:12px;margin-right:4px;">#${idx+1}</span>`;
+  };
+  body.innerHTML=rows.map((r,idx)=>`
     <tr>
-      <td style="font-weight:600;">${escapeHtml(r.name)}</td>
+      <td style="font-weight:600;">${rankBadge(idx)}${escapeHtml(r.name)}</td>
       <td style="text-align:center;">${r.qty.toLocaleString()}</td>
       <td style="text-align:right;">${fmtRs(r.revenue)}</td>
       <td style="text-align:right;">${fmtRs(r.cost)}</td>
@@ -3448,34 +3474,32 @@ function clearItemFilters(){
   renderItemReport();
 }
 
-// Print just the item report (filters + summary + table) in a clean window
-function printItemReport(){
-  const fromF=document.getElementById('itemFilterFrom')?.value||'';
-  const toF=document.getElementById('itemFilterTo')?.value||'';
-  const summaryHTML=document.getElementById('itemReportSummary')?.innerHTML||'';
-  const tableHTML=document.getElementById('itemReportTable')?.outerHTML||'';
-  const period=(fromF||toF)?`${fromF||'(start)'} → ${toF||'(today)'}`:'All time';
-  const win=window.open('','_blank','width=900,height=700');
-  if(!win){toast('Please allow pop-ups to print the report.','error');return;}
-  win.document.write(`<!DOCTYPE html><html><head><title>Item Sales & Profit Report</title>
-    <style>
-      *{box-sizing:border-box;margin:0;padding:0;}
-      body{font-family:'Inter','DM Sans',-apple-system,sans-serif;padding:24px;color:#000;background:#fff;}
-      h1{font-size:22px;margin-bottom:4px;letter-spacing:-0.02em;}
-      .meta{color:#525252;font-size:13px;margin-bottom:20px;}
-      .summary{margin-bottom:20px;padding:14px;border:1px solid #E5E7EB;border-radius:8px;}
-      table{width:100%;border-collapse:collapse;font-size:13px;}
-      th{padding:10px 8px;text-align:left;font-weight:700;background:#F8F9FB;border-bottom:1.5px solid #CBD5E1;}
-      td{padding:10px 8px;border-bottom:1px solid #E5E7EB;}
-      @media print{@page{size:A4;margin:10mm;}}
-    </style></head><body>
-    <h1>📦 Item Sales & Profit Report — A P Trading</h1>
-    <div class="meta">Period: ${period} &nbsp;·&nbsp; Generated: ${new Date().toLocaleString()}</div>
-    <div class="summary">${summaryHTML}</div>
-    ${tableHTML}
-    </body></html>`);
-  win.document.close();
-  setTimeout(()=>{win.focus();win.print();},250);
+// Quick-pick date ranges. Sets the from/to inputs and re-renders.
+function applyItemDatePreset(preset){
+  const fromInput=document.getElementById('itemFilterFrom');
+  const toInput=document.getElementById('itemFilterTo');
+  if(!fromInput||!toInput)return;
+  const today=new Date();
+  const fmt=d=>d.toISOString().split('T')[0];
+  let from='',to='';
+  if(preset==='thisMonth'){
+    from=fmt(new Date(today.getFullYear(),today.getMonth(),1));
+    to=fmt(today);
+  }else if(preset==='lastMonth'){
+    from=fmt(new Date(today.getFullYear(),today.getMonth()-1,1));
+    to=fmt(new Date(today.getFullYear(),today.getMonth(),0)); // day 0 of this month = last day of previous month
+  }else if(preset==='last30'){
+    const past=new Date(today);past.setDate(past.getDate()-29);
+    from=fmt(past);to=fmt(today);
+  }else if(preset==='thisYear'){
+    from=fmt(new Date(today.getFullYear(),0,1));
+    to=fmt(today);
+  }else if(preset==='all'){
+    from='';to='';
+  }
+  fromInput.value=from;
+  toInput.value=to;
+  renderItemReport();
 }
 
 // FIX #12: switchAdminTab accepts btn element directly — no deprecated window.event
