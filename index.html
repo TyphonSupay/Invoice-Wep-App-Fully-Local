@@ -58,8 +58,19 @@ input,select,textarea,button{font-family:'Inter','DM Sans',sans-serif;}
 @keyframes shimmer{0%{background-position:-1000px 0;}100%{background-position:1000px 0;}}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-@keyframes meshMove{0%{transform:translate(0,0) rotate(0);}33%{transform:translate(30px,-30px) rotate(120deg);}66%{transform:translate(-20px,20px) rotate(240deg);}100%{transform:translate(0,0) rotate(360deg);}}
+@keyframes meshMove{0%{transform:translate(0,0) rotate(0) scale(1);}25%{transform:translate(40px,-30px) rotate(90deg) scale(1.1);}50%{transform:translate(30px,30px) rotate(180deg) scale(.95);}75%{transform:translate(-30px,20px) rotate(270deg) scale(1.05);}100%{transform:translate(0,0) rotate(360deg) scale(1);}}
 @keyframes spin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.55;}50%{transform:scale(1.15);opacity:.75;}}
+@keyframes orbDrift1{0%{transform:translate(0,0) scale(1);}25%{transform:translate(80px,-60px) scale(1.15);}50%{transform:translate(120px,40px) scale(.9);}75%{transform:translate(-40px,80px) scale(1.1);}100%{transform:translate(0,0) scale(1);}}
+@keyframes orbDrift2{0%{transform:translate(0,0) scale(1);}33%{transform:translate(-80px,40px) scale(.9);}66%{transform:translate(60px,-50px) scale(1.2);}100%{transform:translate(0,0) scale(1);}}
+@keyframes orbDrift3{0%{transform:translate(0,0) scale(1);}50%{transform:translate(-100px,-80px) scale(1.25);}100%{transform:translate(0,0) scale(1);}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(.5);}50%{opacity:1;transform:scale(1);}}
+@keyframes glowPulse{0%,100%{box-shadow:0 8px 24px rgba(249,115,22,.35),0 0 0 0 rgba(249,115,22,.4);}50%{box-shadow:0 12px 32px rgba(249,115,22,.5),0 0 0 8px rgba(249,115,22,0);}}
+@keyframes shimmerLine{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}}
+@keyframes textGlow{0%,100%{text-shadow:0 0 0 rgba(255,255,255,0);}50%{text-shadow:0 0 20px rgba(255,255,255,.3);}}
+@keyframes slideUpStagger{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes cardLift{from{opacity:0;transform:translateY(20px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes auroraShift{0%{filter:hue-rotate(0deg) blur(80px);}100%{filter:hue-rotate(360deg) blur(80px);}}
 .anim-fade{animation:fadeUp .5s var(--ease) both;}
 .anim-stagger>*{animation:fadeUp .5s var(--ease) both;}
 .anim-stagger>*:nth-child(1){animation-delay:.05s;}
@@ -167,30 +178,46 @@ body.dark #navbar{background:rgba(10,10,10,.85);}
 body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .nav-right{display:flex;gap:8px;align-items:center;}
 
-/* ===== LOGIN — Antigravity-style animated mesh ===== */
+/* ===== LOGIN — Antigravity-style animated mesh with interactive parallax ===== */
 #loginScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
-/* Animated mesh gradient orbs */
+/* Animated mesh gradient orbs — using will-change for smooth GPU acceleration */
 #loginScreen::before,#loginScreen::after{
-  content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;
+  content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;will-change:transform;
 }
 #loginScreen::before{
   width:600px;height:600px;
   background:radial-gradient(circle,#F97316 0%,#EA580C 40%,transparent 70%);
   top:-200px;left:-100px;
-  animation:meshMove 18s ease-in-out infinite;
+  animation:orbDrift1 18s ease-in-out infinite;
 }
 #loginScreen::after{
   width:550px;height:550px;
   background:radial-gradient(circle,#8B5CF6 0%,#6D28D9 40%,transparent 70%);
   bottom:-150px;right:-100px;
-  animation:meshMove 22s ease-in-out infinite reverse;
+  animation:orbDrift2 22s ease-in-out infinite;
 }
-/* Extra orb in middle */
+/* Multiple drifting orbs for richer interactive feel */
 .login-orb-blue{position:absolute;width:480px;height:480px;border-radius:50%;filter:blur(90px);opacity:.4;
   background:radial-gradient(circle,#3B82F6 0%,#1E40AF 40%,transparent 70%);
-  top:30%;left:40%;animation:meshMove 25s ease-in-out infinite;pointer-events:none;}
+  top:30%;left:40%;animation:orbDrift3 25s ease-in-out infinite;pointer-events:none;will-change:transform;}
+.login-orb-pink{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(85px);opacity:.35;
+  background:radial-gradient(circle,#EC4899 0%,#BE185D 40%,transparent 70%);
+  top:60%;left:10%;animation:orbDrift1 28s ease-in-out infinite reverse;pointer-events:none;will-change:transform;}
+.login-orb-cyan{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(85px);opacity:.32;
+  background:radial-gradient(circle,#06B6D4 0%,#0E7490 40%,transparent 70%);
+  top:10%;right:15%;animation:orbDrift2 32s ease-in-out infinite;pointer-events:none;will-change:transform;}
+
+/* Mouse-parallax wrapper — orbs respond to cursor movement */
+.login-parallax{position:absolute;inset:0;pointer-events:none;transition:transform .8s cubic-bezier(.22,1,.36,1);will-change:transform;}
+
+/* Floating sparkle particles */
+.login-sparkle{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 10px rgba(255,255,255,.8);pointer-events:none;animation:sparkle 3s ease-in-out infinite;}
+
 /* Subtle grain overlay */
 .login-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;pointer-events:none;}
+
+/* Aurora light streaks at top */
+.login-aurora{position:absolute;top:0;left:0;right:0;height:200px;pointer-events:none;background:linear-gradient(180deg,rgba(249,115,22,.15) 0%,transparent 100%);filter:blur(20px);}
 
 .login-card{
   position:relative;z-index:2;
@@ -200,38 +227,73 @@ body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
   border:1px solid rgba(255,255,255,.08);
   padding:56px 48px;border-radius:24px;width:100%;max-width:440px;
   box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03) inset;
-  animation:fadeUp .8s var(--ease) both;
+  animation:cardLift 1s var(--ease) both;
+  transform-style:preserve-3d;
+  transition:transform .3s var(--ease);
 }
-.login-logo{width:140px;height:140px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;animation:float 6s ease-in-out infinite;}
+/* Subtle shimmer line across the card on initial reveal */
+.login-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),rgba(139,92,246,.6),transparent);
+  animation:shimmerLine 3s ease-in-out infinite;
+  pointer-events:none;
+}
+.login-logo{width:140px;height:140px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;animation:float 6s ease-in-out infinite;position:relative;}
+.login-logo::after{
+  content:'';position:absolute;inset:-20px;border-radius:50%;
+  background:radial-gradient(circle,rgba(249,115,22,.3) 0%,transparent 70%);
+  filter:blur(20px);z-index:-1;animation:breathe 4s ease-in-out infinite;
+}
 .login-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(249,115,22,.4));}
 .login-logo-placeholder{width:140px;height:140px;background:linear-gradient(135deg,#F97316,#EA580C);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:34px;color:#fff;margin:0 auto 24px;box-shadow:0 16px 48px rgba(249,115,22,.5);animation:float 6s ease-in-out infinite;}
-.login-card h1{text-align:center;font-size:36px;font-weight:800;letter-spacing:-0.03em;color:#fff;margin-bottom:6px;animation:fadeUp .8s var(--ease) .15s both;}
-.login-card p.subtitle{text-align:center;color:rgba(255,255,255,.6);font-size:14px;margin-bottom:36px;animation:fadeUp .8s var(--ease) .25s both;}
-.login-card .form-group{animation:fadeUp .8s var(--ease) .35s both;}
+.login-card h1{text-align:center;font-size:36px;font-weight:800;letter-spacing:-0.03em;color:#fff;margin-bottom:6px;animation:slideUpStagger .8s var(--ease) .15s both;background:linear-gradient(135deg,#fff 0%,#FFAB66 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:slideUpStagger .8s var(--ease) .15s both,gradientShift 5s ease-in-out infinite;}
+.login-card p.subtitle{text-align:center;color:rgba(255,255,255,.6);font-size:14px;margin-bottom:36px;animation:slideUpStagger .8s var(--ease) .25s both;}
+.login-card .form-group{animation:slideUpStagger .8s var(--ease) .35s both;}
 .login-card .form-group label{color:rgba(255,255,255,.7);}
-.login-card .form-control{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;padding:13px 16px;border-radius:12px;font-size:15px;}
+.login-card .form-control{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;padding:13px 16px;border-radius:12px;font-size:15px;transition:all .3s var(--ease);}
 .login-card .form-control::placeholder{color:rgba(255,255,255,.35);}
-.login-card .form-control:focus{border-color:rgba(249,115,22,.6);background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(249,115,22,.15);}
-.btn-login{width:100%;justify-content:center;padding:14px;font-size:15px;border-radius:12px;animation:fadeUp .8s var(--ease) .45s both;background:linear-gradient(135deg,#F97316,#EA580C);box-shadow:0 8px 24px rgba(249,115,22,.35);}
-.btn-login:hover{box-shadow:0 12px 32px rgba(249,115,22,.5);}
+.login-card .form-control:focus{border-color:rgba(249,115,22,.6);background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(249,115,22,.15),0 0 20px rgba(249,115,22,.2);transform:translateY(-1px);}
+.btn-login{width:100%;justify-content:center;padding:14px;font-size:15px;border-radius:12px;animation:slideUpStagger .8s var(--ease) .45s both,glowPulse 3s ease-in-out infinite 1s;background:linear-gradient(135deg,#F97316,#EA580C);box-shadow:0 8px 24px rgba(249,115,22,.35);position:relative;overflow:hidden;}
+.btn-login::after{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transition:left .6s var(--ease);
+}
+.btn-login:hover::after{left:100%;}
+.btn-login:hover{box-shadow:0 12px 32px rgba(249,115,22,.5);transform:translateY(-2px);}
 .login-card.shake{animation:shake .4s ease;}
-.demo-hint{text-align:center;margin-top:18px;font-size:13px;color:rgba(255,255,255,.4);animation:fadeUp .8s var(--ease) .55s both;}
+.demo-hint{text-align:center;margin-top:18px;font-size:13px;color:rgba(255,255,255,.4);animation:slideUpStagger .8s var(--ease) .55s both;}
 .demo-hint strong{color:#F97316;}
 
 /* ===== MODE SELECTION ===== */
 #modeScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
-#modeScreen::before,#modeScreen::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;}
-#modeScreen::before{width:550px;height:550px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-150px;left:-100px;animation:meshMove 20s ease-in-out infinite;}
-#modeScreen::after{width:500px;height:500px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-100px;animation:meshMove 24s ease-in-out infinite reverse;}
-.mode-card-container{position:relative;z-index:2;background:rgba(10,10,10,.7);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);padding:48px;border-radius:24px;width:100%;max-width:600px;box-shadow:0 32px 80px rgba(0,0,0,.6);animation:fadeUp .7s var(--ease) both;text-align:center;color:#fff;}
-.mode-card-container h1{font-size:30px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;color:#fff;}
+#modeScreen::before,#modeScreen::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;will-change:transform;}
+#modeScreen::before{width:550px;height:550px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-150px;left:-100px;animation:orbDrift1 20s ease-in-out infinite;}
+#modeScreen::after{width:500px;height:500px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-100px;animation:orbDrift2 24s ease-in-out infinite;}
+.mode-orb-extra{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(85px);opacity:.35;
+  background:radial-gradient(circle,#8B5CF6 0%,transparent 70%);
+  top:40%;left:50%;animation:orbDrift3 28s ease-in-out infinite;pointer-events:none;will-change:transform;}
+.mode-card-container{position:relative;z-index:2;background:rgba(10,10,10,.7);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);padding:48px;border-radius:24px;width:100%;max-width:600px;box-shadow:0 32px 80px rgba(0,0,0,.6);animation:cardLift .9s var(--ease) both;text-align:center;color:#fff;}
+.mode-card-container::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),rgba(59,130,246,.6),transparent);
+  animation:shimmerLine 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.mode-card-container h1{font-size:30px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;color:#fff;background:linear-gradient(135deg,#fff 0%,#FFAB66 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 6s ease-in-out infinite;}
 .mode-card-container>p{color:rgba(255,255,255,.6);margin-bottom:32px;}
 .mode-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;}
-.mode-opt{padding:28px 16px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;cursor:pointer;transition:all .3s var(--ease);text-align:center;color:#fff;}
-.mode-opt:hover{border-color:rgba(249,115,22,.5);background:rgba(255,255,255,.07);transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.4);}
-.mode-opt.active{border-color:#F97316;background:rgba(249,115,22,.12);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
-.mode-opt .icon{font-size:40px;margin-bottom:12px;transition:transform .3s var(--ease-spring);display:block;}
-.mode-opt:hover .icon{transform:scale(1.15) rotate(-5deg);}
+.mode-opt{padding:28px 16px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;cursor:pointer;transition:all .35s var(--ease);text-align:center;color:#fff;position:relative;overflow:hidden;}
+.mode-opt::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(249,115,22,.1) 0%,transparent 50%);
+  opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
+}
+.mode-opt:hover{border-color:rgba(249,115,22,.5);background:rgba(255,255,255,.07);transform:translateY(-6px) scale(1.02);box-shadow:0 16px 36px rgba(0,0,0,.5),0 0 30px rgba(249,115,22,.15);}
+.mode-opt:hover::before{opacity:1;}
+.mode-opt.active{border-color:#F97316;background:rgba(249,115,22,.12);box-shadow:0 0 0 3px rgba(249,115,22,.15),0 8px 24px rgba(249,115,22,.2);}
+.mode-opt .icon{font-size:40px;margin-bottom:12px;transition:transform .4s var(--ease-spring);display:block;}
+.mode-opt:hover .icon{transform:scale(1.2) rotate(-8deg);}
 .mode-opt h3{font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.01em;}
 .mode-opt p{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;}
 
@@ -314,9 +376,9 @@ body.dark .items-table th{color:#fff;background:#0F0F0F;border-bottom-color:#374
 .discount-ctrl select{width:60px;}
 
 /* Notes/Terms on doc */
-.inv-notes{padding:14px 16px;background:var(--bg);border-radius:var(--radius);margin-bottom:16px;font-size:13px;border-left:3px solid var(--orange);animation:fadeUp .4s var(--ease) both;}
+.inv-notes{padding:14px 16px;background:var(--bg);border-radius:var(--radius);margin-bottom:16px;font-size:13px;border-left:3px solid var(--orange);animation:fadeUp .4s var(--ease) both;word-wrap:break-word;overflow-wrap:break-word;}
 .inv-notes strong{display:block;margin-bottom:6px;color:var(--text);font-weight:700;}
-.inv-notes p{color:var(--text-muted);white-space:pre-line;line-height:1.6;}
+.inv-notes p{color:var(--text-muted);white-space:pre-wrap;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 
 /* Footer */
 .inv-footer{border-top:1px solid var(--border);padding-top:14px;text-align:center;font-size:12px;color:var(--text-muted);margin-top:auto;}
@@ -347,13 +409,82 @@ body.dark .items-table th{color:#fff;background:#0F0F0F;border-bottom-color:#374
 .profit-row{background:var(--green-light);font-weight:600;color:var(--green-dark);}
 
 /* ===== ADMIN PAGE ===== */
-.admin-layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:24px;}
+.admin-layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:24px;position:relative;z-index:1;}
 .admin-sidebar{position:sticky;top:88px;align-self:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:8px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 100px);overflow-y:auto;}
-.admin-sidebar .admin-tab{padding:11px 14px;background:transparent;border:none;cursor:pointer;font-size:14px;font-weight:500;color:var(--text-muted);border-radius:var(--radius);transition:all .25s var(--ease);display:flex;align-items:center;gap:10px;text-align:left;width:100%;justify-content:flex-start;}
-.admin-sidebar .admin-tab:hover{background:var(--bg);color:var(--text);transform:translateX(2px);}
+.admin-sidebar .admin-tab{padding:11px 14px;background:transparent;border:none;cursor:pointer;font-size:14px;font-weight:500;color:var(--text-muted);border-radius:var(--radius);transition:all .25s var(--ease);display:flex;align-items:center;gap:10px;text-align:left;width:100%;justify-content:flex-start;position:relative;overflow:hidden;}
+.admin-sidebar .admin-tab::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:0;background:var(--orange);border-radius:0 3px 3px 0;
+  transition:height .3s var(--ease);
+}
+.admin-sidebar .admin-tab:hover{background:var(--bg);color:var(--text);transform:translateX(3px);}
+.admin-sidebar .admin-tab:hover::before{height:60%;}
 .admin-sidebar .admin-tab.active{background:var(--orange-light);color:var(--orange-dark);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.admin-sidebar .admin-tab.active::before{height:60%;}
 body.dark .admin-sidebar .admin-tab.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .admin-content{min-width:0;}
+
+/* ====== Admin themed background (toggleable) ====== */
+#adminPage{position:relative;}
+/* Background mesh orbs — hidden by default, shown when body.admin-themed */
+.admin-bg-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0;transition:opacity .8s var(--ease);will-change:transform;}
+body.admin-themed #adminPage .admin-bg-orb{opacity:.25;}
+body.dark.admin-themed #adminPage .admin-bg-orb{opacity:.35;}
+.admin-bg-orb.orb1{width:600px;height:600px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-200px;left:-150px;}
+.admin-bg-orb.orb2{width:550px;height:550px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-150px;}
+.admin-bg-orb.orb3{width:480px;height:480px;background:radial-gradient(circle,#8B5CF6 0%,transparent 70%);top:40%;left:40%;}
+/* When animations are on AND theme is on, orbs drift */
+body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb1{animation:orbDrift1 22s ease-in-out infinite;}
+body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb2{animation:orbDrift2 26s ease-in-out infinite;}
+body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb3{animation:orbDrift3 30s ease-in-out infinite;}
+/* When admin-themed: surfaces become slightly translucent so orbs show through */
+body.admin-themed #adminPage .card,
+body.admin-themed #adminPage .stat-card,
+body.admin-themed #adminPage .month-chart-wrap,
+body.admin-themed #adminPage .customer-card,
+body.admin-themed #adminPage .expense-item,
+body.admin-themed #adminPage .admin-sidebar,
+body.admin-themed #adminPage .invoices-table-wrap,
+body.admin-themed #adminPage .payment-table-wrap{
+  background:rgba(255,255,255,.78);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+}
+body.admin-themed.dark #adminPage .card,
+body.admin-themed.dark #adminPage .stat-card,
+body.admin-themed.dark #adminPage .month-chart-wrap,
+body.admin-themed.dark #adminPage .customer-card,
+body.admin-themed.dark #adminPage .expense-item,
+body.admin-themed.dark #adminPage .admin-sidebar,
+body.admin-themed.dark #adminPage .invoices-table-wrap,
+body.admin-themed.dark #adminPage .payment-table-wrap{
+  background:rgba(10,10,10,.72);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+}
+
+/* ====== Admin animations (toggleable) ====== */
+/* When admin-animated: cards have lift animation, smoother hover */
+body.admin-animated #adminPage .stat-card{animation:cardLift .6s var(--ease) both;}
+body.admin-animated #adminPage .stat-card:nth-child(1){animation-delay:.05s;}
+body.admin-animated #adminPage .stat-card:nth-child(2){animation-delay:.1s;}
+body.admin-animated #adminPage .stat-card:nth-child(3){animation-delay:.15s;}
+body.admin-animated #adminPage .stat-card:nth-child(4){animation-delay:.2s;}
+body.admin-animated #adminPage .stat-card:nth-child(5){animation-delay:.25s;}
+body.admin-animated #adminPage .stat-card:nth-child(6){animation-delay:.3s;}
+body.admin-animated #adminPage .stat-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--shadow-lg);}
+body.admin-animated #adminPage .stat-card .stat-icon{transition:transform .4s var(--ease-spring);}
+body.admin-animated #adminPage .stat-card:hover .stat-icon{transform:scale(1.15) rotate(-5deg);}
+body.admin-animated #adminPage .card{animation:cardLift .5s var(--ease) both;}
+body.admin-animated #adminPage .month-chart-wrap{animation:cardLift .6s var(--ease) both;}
+body.admin-animated #adminPage .customer-card:hover{transform:translateY(-6px) scale(1.02);}
+body.admin-animated #adminPage .invoices-table tr:hover td,
+body.admin-animated #adminPage .payment-table tr:hover td{background:var(--bg);transform:scale(1.005);}
+body.admin-animated #adminPage .month-bar-inner{animation:shimmer 3s ease-in-out infinite;background-size:200% 100%!important;}
+
+/* Mode-toggle pill buttons in navbar */
+.mode-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--radius);background:transparent;border:1.5px solid var(--border);cursor:pointer;font-size:12px;font-weight:600;color:var(--text-muted);transition:all .25s var(--ease);}
+.mode-toggle:hover{border-color:var(--text-light);color:var(--text);transform:translateY(-1px);}
+.mode-toggle.on{background:var(--orange-light);border-color:var(--orange);color:var(--orange-dark);box-shadow:0 1px 2px rgba(249,115,22,.15);}
+body.dark .mode-toggle.on{background:rgba(249,115,22,.15);color:#FFAB66;}
+.mode-toggle .dot{width:8px;height:8px;border-radius:50%;background:var(--text-light);transition:all .25s var(--ease);}
+.mode-toggle.on .dot{background:var(--orange);box-shadow:0 0 8px rgba(249,115,22,.5);}
 
 /* Dashboard */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
@@ -455,26 +586,43 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   input[type="date"]::-webkit-inner-spin-button,
   input[type="date"]::-webkit-clear-button{display:none!important;-webkit-appearance:none!important;}
   input[type=date]{-webkit-appearance:none;-moz-appearance:textfield;appearance:textfield;}
-  /* Force big logo in print (overrides input/* reset) */
-  .inv-logo{width:135px!important;height:135px!important;}
-  .inv-logo-placeholder{width:135px!important;height:135px!important;}
+  /* Force professional logo size in print (smaller, neater) */
+  .inv-logo{width:95px!important;height:95px!important;}
+  .inv-logo-placeholder{width:95px!important;height:95px!important;font-size:20px!important;}
   /* Meta layout in print: keep grid alignment between Invoice/Date labels */
-  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:4px 12px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;}
-  .inv-meta-row .meta-val{text-align:left!important;}
-  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;}
-  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;}
-  .inv-company-block{border-bottom-color:#000!important;}
-  .inv-company-block h1{color:#000!important;}
-  .inv-company-block p{color:#525252!important;}
-  /* Customer details box keep its border in print */
-  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;}
+  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:3px 10px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:11px!important;}
+  .inv-meta-row strong{font-size:11px!important;}
+  .inv-meta-row .meta-val{text-align:left!important;font-size:11px!important;}
+  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:11px!important;}
+  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:24px!important;margin-bottom:6px!important;padding-bottom:6px!important;}
+  .inv-company-block{border-bottom-color:#000!important;padding-bottom:10px!important;margin-bottom:16px!important;}
+  .inv-company-block h1{color:#000!important;font-size:20px!important;margin-bottom:2px!important;}
+  .inv-company-block p{color:#525252!important;font-size:10px!important;}
+  /* Customer details box keep its border in print — smaller font */
+  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:10px 14px!important;margin-bottom:16px!important;font-size:11px!important;}
   .inv-customer strong.cust-title,.inv-customer span{color:#000!important;}
-  /* Items table — keep header background visible in print, no animations */
-  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .items-table td{color:#000!important;}
-  /* Footer line stays */
-  .inv-footer{border-top:1px solid #94A3B8!important;color:#525252!important;}
-  .inv-footer p:first-child{color:#000!important;}
+  .inv-customer strong.cust-title{font-size:12px!important;margin-bottom:5px!important;}
+  .inv-customer span{font-size:11px!important;margin-bottom:2px!important;}
+  /* Items table — keep header background visible in print, no animations, professional size */
+  .items-table{font-size:11px!important;margin-bottom:12px!important;}
+  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:11px!important;padding:8px 6px!important;}
+  .items-table td{color:#000!important;font-size:11px!important;padding:7px 6px!important;}
+  .items-table input,.items-table select{font-size:11px!important;}
+  /* Totals — professional size */
+  .inv-totals{margin:16px 0!important;}
+  .total-row{font-size:11px!important;padding:4px 0!important;}
+  .grand-row{font-size:13px!important;padding:7px 0 3px!important;margin-top:4px!important;}
+  /* Notes/Terms — smaller in print with proper wrapping */
+  .inv-notes{padding:10px 12px!important;margin-bottom:12px!important;font-size:10.5px!important;}
+  .inv-notes strong{font-size:11px!important;margin-bottom:4px!important;}
+  .inv-notes p{font-size:10.5px!important;line-height:1.5!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
+  /* Footer line stays — small professional size */
+  .inv-footer{border-top:1px solid #94A3B8!important;color:#525252!important;padding-top:10px!important;font-size:9.5px!important;}
+  .inv-footer p:first-child{color:#000!important;font-size:10px!important;}
+  .inv-footer p{margin-bottom:2px!important;}
+  .inv-footer .powered-by{font-size:9px!important;margin-top:4px!important;}
+  /* Invoice document — reduce padding for print */
+  .invoice-doc{padding:18mm 14mm!important;}
   /* Disable all transitions in print */
   *{transition:none!important;animation:none!important;}
   /* Totals stay black */
@@ -1051,9 +1199,9 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .items-table th,
   .items-table td{
     display:table-cell!important;
-    padding:11px 8px!important;
+    padding:7px 6px!important;
     vertical-align:middle!important;
-    font-size:13px!important;
+    font-size:11px!important;
     color:#000!important;
     gap:0!important;
   }
@@ -1062,10 +1210,12 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     font-weight:700!important;
     background:#F8F9FB!important;
     border-bottom:1.5px solid #CBD5E1!important;
+    font-size:11px!important;
   }
   .items-table td{
     border:none!important;
     border-bottom:1px solid #E5E7EB!important;
+    font-size:11px!important;
   }
   /* Kill mobile pseudo-labels ("Item:", "Qty:" etc.) */
   .items-table td::before,
@@ -1076,6 +1226,9 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .items-table th:nth-child(3),.items-table td:nth-child(3){text-align:right!important;width:140px!important;padding-right:28px!important;}
   .items-table th:nth-child(4),.items-table td:nth-child(4){text-align:right!important;width:130px!important;font-weight:700!important;}
 
+  /* When custom item input is used in print, ↻ button has .no-print so it hides;
+     ensure the input fills the cell cleanly */
+  .items-table td input[placeholder="Item name"]{width:100%!important;text-align:left!important;}
   /* ---- FIX C: inputs inside cells render as plain inline text,
      inheriting cell alignment. Selector includes [type=number]
      specifically so we beat the mobile rule
@@ -1088,7 +1241,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     max-width:100%!important;
     display:inline-block!important;
     text-align:inherit!important;
-    font-size:13px!important;
+    font-size:11px!important;
     padding:0!important;
     border:none!important;
     background:transparent!important;
@@ -1099,14 +1252,15 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .items-table td:nth-child(2) select{text-align:center!important;}
   .items-table td:nth-child(3) input{text-align:right!important;}
 
-  /* ---- FIX D: totals — right-aligned 300px box (not full-width) ---- */
-  .inv-totals{display:flex!important;justify-content:flex-end!important;margin:24px 0!important;}
-  .totals-box{width:300px!important;max-width:300px!important;}
-  .total-row{font-size:14px!important;padding:6px 0!important;}
-  .grand-row{font-size:18px!important;padding:10px 0 4px!important;}
+  /* ---- FIX D: totals — right-aligned 260px box, professional size ---- */
+  .inv-totals{display:flex!important;justify-content:flex-end!important;margin:16px 0!important;}
+  .totals-box{width:260px!important;max-width:260px!important;}
+  .total-row{font-size:11px!important;padding:4px 0!important;}
+  .grand-row{font-size:13px!important;padding:7px 0 3px!important;}
 
-  /* ---- FIX E: full-size logo (mobile shrinks to 70px) ---- */
-  .inv-logo,.inv-logo-placeholder{width:135px!important;height:135px!important;}
+  /* ---- FIX E: professional-size logo (was 135px — now 95px to match desktop) ---- */
+  .inv-logo,.inv-logo-placeholder{width:95px!important;height:95px!important;}
+  .inv-logo-placeholder{font-size:20px!important;}
 
   /* ---- FIX F: header row keeps logo+INVOICE on one row ---- */
   .inv-top-row{
@@ -1117,11 +1271,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     gap:16px!important;
   }
 
-  /* ---- FIX G: shorten the line under "INVOICE".
-     Mobile sets .inv-meta{flex:1 1 auto} so it stretches and the
-     doc-type underline (display:block) stretches with it. We pin
-     inv-meta to size-by-content so the underline matches the
-     Invoice/Date rows below it. ---- */
+  /* ---- FIX G: shorten the line under "INVOICE" — professional size ---- */
   .inv-meta{
     flex:0 0 auto!important;
     min-width:0!important;
@@ -1129,31 +1279,29 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     text-align:right!important;
   }
   .inv-meta .doc-type{
-    font-size:36px!important;
-    margin-bottom:8px!important;
-    padding-bottom:8px!important;
+    font-size:24px!important;
+    margin-bottom:6px!important;
+    padding-bottom:6px!important;
     display:block!important;
     text-align:right!important;
   }
 
-  /* ---- FIX H: align "Invoice:" and "Date:" rows.
-     Right-align both label and value, give the value column a
-     fixed min-width — this makes the right edges of values line
-     up cleanly, and the colons end up at consistent positions. ---- */
+  /* ---- FIX H: align "Invoice:" and "Date:" rows ---- */
   .inv-meta-row{
     display:grid!important;
     grid-template-columns:auto auto!important;
-    gap:4px 8px!important;
+    gap:3px 8px!important;
     justify-content:end!important;
     align-items:baseline!important;
+    font-size:11px!important;
   }
-  .inv-meta-row strong{text-align:right!important;font-weight:700!important;}
-  .inv-meta-row .meta-val{text-align:right!important;min-width:130px!important;}
-  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;}
+  .inv-meta-row strong{text-align:right!important;font-weight:700!important;font-size:11px!important;}
+  .inv-meta-row .meta-val{text-align:right!important;min-width:110px!important;font-size:11px!important;}
+  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;font-size:11px!important;}
 
-  /* Company name block */
-  .inv-company-block h1{font-size:34px!important;}
-  .inv-company-block p{font-size:13px!important;}
+  /* Company name block — professional smaller size */
+  .inv-company-block h1{font-size:20px!important;}
+  .inv-company-block p{font-size:10px!important;}
 }
 </style>
 </head>
@@ -1164,8 +1312,21 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="login-orb-blue"></div>
+  <div class="login-aurora"></div>
+  <div class="login-parallax" id="loginParallax">
+    <div class="login-orb-blue"></div>
+    <div class="login-orb-pink"></div>
+    <div class="login-orb-cyan"></div>
+  </div>
   <div class="login-grain"></div>
+  <!-- Floating sparkle particles -->
+  <div class="login-sparkle" style="top:15%;left:20%;animation-delay:0s;"></div>
+  <div class="login-sparkle" style="top:25%;right:25%;animation-delay:.7s;"></div>
+  <div class="login-sparkle" style="top:65%;left:15%;animation-delay:1.4s;"></div>
+  <div class="login-sparkle" style="top:80%;right:30%;animation-delay:2.1s;"></div>
+  <div class="login-sparkle" style="top:40%;left:80%;animation-delay:.3s;"></div>
+  <div class="login-sparkle" style="top:55%;right:10%;animation-delay:1.8s;"></div>
+  <div class="login-sparkle" style="top:10%;left:50%;animation-delay:2.5s;"></div>
   <div class="login-card" id="loginCard">
     <div class="login-logo"><img src="logo.png" alt="Logo" onerror="this.parentElement.innerHTML='<div class=login-logo-placeholder>AP</div>'"></div>
     <h1>A P Trading</h1>
@@ -1182,6 +1343,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
 <!-- MODE SELECTION -->
 <div id="modeScreen" class="hidden">
+  <div class="mode-orb-extra"></div>
   <div class="mode-card-container anim-fade">
     <h1>A P Trading System</h1>
     <p>Choose what you'd like to do</p>
@@ -1223,6 +1385,8 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
       <button class="nav-link" id="navAdmin" onclick="navigate('admin')">🛠️ Admin</button>
     </div>
     <div class="nav-right">
+      <button class="mode-toggle hidden" id="themeToggleBtn" onclick="toggleAdminTheme()" title="Toggle admin theme"><span class="dot"></span>Theme</button>
+      <button class="mode-toggle hidden" id="animToggleBtn" onclick="toggleAdminAnim()" title="Toggle admin animations"><span class="dot"></span>Motion</button>
       <button class="btn btn-ghost btn-sm" onclick="toggleDark()" id="darkBtn">🌙</button>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
     </div>
@@ -1347,6 +1511,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
           <div class="card-header"><span style="font-weight:600;font-size:14px;">📝 Notes</span></div>
           <div class="card-body">
             <textarea class="form-control" id="invNotesInput" placeholder="Add notes…" oninput="updateNotesDisplay('invoice')" rows="3"></textarea>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" onclick="saveDefaultNotes('invoice')">💾 Save as Default</button>
           </div>
         </div>
 
@@ -1472,12 +1637,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
             </label>
           </div>
           <div class="card-body">
-            <textarea class="form-control" id="qtnTermsInput" rows="6" oninput="updateTermsDisplay('quotation')">1. Prices are valid for 30 days from quotation date.
-2. Payment terms: 50% advance, 50% upon delivery.
-3. Delivery time: 7-10 working days after order confirmation.
-4. Prices are exclusive of applicable taxes.
-5. All items are subject to availability.
-6. This quotation is subject to change without notice.</textarea>
+            <textarea class="form-control" id="qtnTermsInput" rows="6" oninput="updateTermsDisplay('quotation')">1. Prices are valid for 30 days from quotation date.</textarea>
             <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" onclick="saveDefaultTerms('quotation')">💾 Save as Default</button>
           </div>
         </div>
@@ -1485,6 +1645,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
           <div class="card-header"><span style="font-weight:600;font-size:14px;">📝 Additional Notes</span></div>
           <div class="card-body">
             <textarea class="form-control" id="qtnNotesInput" placeholder="Additional notes…" rows="3" oninput="updateNotesDisplay('quotation')"></textarea>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" onclick="saveDefaultNotes('quotation')">💾 Save as Default</button>
           </div>
         </div>
       </div>
@@ -1493,6 +1654,10 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
   <!-- ===================== ADMIN PAGE ===================== -->
   <div id="adminPage" class="page">
+    <!-- Background animated orbs (toggleable via Theme button) -->
+    <div class="admin-bg-orb orb1"></div>
+    <div class="admin-bg-orb orb2"></div>
+    <div class="admin-bg-orb orb3"></div>
     <div class="admin-layout">
       <!-- Vertical sidebar tabs -->
       <div class="admin-sidebar">
@@ -1503,6 +1668,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
         <button class="admin-tab" onclick="switchAdminTab('payments',this)">💳 Payments</button>
         <button class="admin-tab" onclick="switchAdminTab('expenses',this)">💸 Expenses</button>
         <button class="admin-tab" onclick="switchAdminTab('items',this)">📦 Item Report</button>
+        <button class="admin-tab" onclick="switchAdminTab('itemnames',this)">🏷️ Item Names</button>
         <button class="admin-tab" onclick="switchAdminTab('backup',this)">🗄️ Backup</button>
       </div>
       <div class="admin-content">
@@ -1664,6 +1830,40 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
               </thead>
               <tbody id="itemReportBody"></tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item Names Manager -->
+      <div id="tab-itemnames" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <span style="font-weight:600;">🏷️ Item Names Manager</span>
+          <span style="font-size:12px;color:var(--text-muted);">Manage the dropdown list used on invoices &amp; quotations</span>
+        </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><span style="font-weight:600;font-size:14px;">➕ Add New Item Name</span></div>
+          <div class="card-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+              <div class="form-group" style="margin-bottom:0;flex:1;min-width:200px;">
+                <label>Item Name</label>
+                <input class="form-control" id="newItemName" placeholder="e.g. Safety Boots" onkeydown="if(event.key==='Enter')addItemName()">
+              </div>
+              <button class="btn btn-orange" onclick="addItemName()">+ Add Item</button>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">New items will appear in the dropdown when creating invoices and quotations.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span style="font-weight:600;font-size:14px;">📋 Current Items</span>
+            <span id="itemCountBadge" class="badge badge-blue" style="font-size:11px;">0 items</span>
+          </div>
+          <div class="card-body">
+            <div id="itemNamesList" style="display:flex;flex-direction:column;gap:8px;"></div>
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="resetItemNames()">↺ Reset to Defaults</button>
+              <span style="font-size:11px;color:var(--text-muted);align-self:center;">"Other" is always included as a built-in option for custom names.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1853,7 +2053,54 @@ let _editingInvId=null,_editingQtnId=null;
 // NEW: dirty state — true when user has unsaved changes. Save button visible only when dirty.
 let _invDirty=false,_qtnDirty=false;
 
-const ITEM_OPTIONS=['Safety Helmet','Safety Jacket','Safety Gloves','Ratchet','Pillows','Traveling Mattress','Other'];
+// ===================== ITEM OPTIONS (persisted, manageable from admin) =====================
+const DEFAULT_ITEM_OPTIONS=['Safety Helmet','Safety Jacket','Safety Gloves','Ratchet','Pillows','Traveling Mattress'];
+const ITEM_OPTIONS_KEY='ap_itemOptions_v1';
+function loadItemOptions(){
+  try{
+    const saved=localStorage.getItem(ITEM_OPTIONS_KEY);
+    if(saved){
+      const arr=JSON.parse(saved);
+      if(Array.isArray(arr)&&arr.length>0){
+        // Always ensure "Other" is the last option, no duplicates
+        const clean=arr.filter(x=>typeof x==='string'&&x.trim()&&x.trim().toLowerCase()!=='other');
+        return[...new Set(clean.map(x=>x.trim()))].concat(['Other']);
+      }
+    }
+  }catch(e){}
+  return[...DEFAULT_ITEM_OPTIONS,'Other'];
+}
+function saveItemOptions(){
+  // Save without the trailing "Other" — it's always re-appended on load
+  const toSave=ITEM_OPTIONS.filter(x=>x.toLowerCase()!=='other');
+  localStorage.setItem(ITEM_OPTIONS_KEY,JSON.stringify(toSave));
+}
+let ITEM_OPTIONS=loadItemOptions();
+
+// ===================== BUY PRICE MEMORY (persistent across resets) =====================
+// Stores last-entered buy price per item NAME (case-insensitive key, original-case display).
+// This way, when the user starts a new invoice, prior buy prices for known items are restored.
+const BUY_PRICE_KEY='ap_buyPriceMemory_v1';
+function loadBuyPriceMemory(){
+  try{
+    const raw=localStorage.getItem(BUY_PRICE_KEY);
+    return raw?JSON.parse(raw):{};
+  }catch{return{};}
+}
+function saveBuyPriceMemory(){
+  localStorage.setItem(BUY_PRICE_KEY,JSON.stringify(BUY_PRICE_MEMORY));
+}
+let BUY_PRICE_MEMORY=loadBuyPriceMemory();
+function rememberBuyPrice(name,price){
+  if(!name||isNaN(price)||price<=0)return;
+  BUY_PRICE_MEMORY[name.toLowerCase().trim()]={name:name.trim(),price};
+  saveBuyPriceMemory();
+}
+function recallBuyPrice(name){
+  if(!name)return 0;
+  const rec=BUY_PRICE_MEMORY[name.toLowerCase().trim()];
+  return rec?rec.price:0;
+}
 
 // ===================== INIT =====================
 window.onload=()=>{
@@ -1869,6 +2116,7 @@ window.onload=()=>{
   document.getElementById('qtnNum').value=genDocNum('QTN');
   // NEW: Load any saved default Terms text + checkbox preference BEFORE adding items
   loadDefaultTerms();
+  loadDefaultNotes(); // NEW: load saved default notes
   addItem('invoice');
   addItem('quotation');
   // NEW: refresh terms display in case checkbox was already ticked
@@ -1877,6 +2125,10 @@ window.onload=()=>{
   // NEW: wire up dirty-state listeners so Save button shows/hides automatically
   installDirtyListeners();
   if(localStorage.getItem('ap_dark')==='1'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
+  // NEW: Restore admin theme / animation preferences
+  initAdminTogglePrefs();
+  // NEW: Initialize the interactive parallax effect on the login screen
+  initLoginParallax();
 };
 
 // FIX #10: genDocNum uses max existing number instead of array.length+1 to avoid collisions on delete
@@ -1963,6 +2215,8 @@ function navigate(page){
   document.getElementById(page+'Page').classList.add('active');
   const navEl=document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1));
   if(navEl)navEl.classList.add('active');
+  // NEW: show theme/motion toggle buttons only on admin page
+  updateNavToggleVisibility(page);
   if(page==='admin'){renderDashboard();renderInvoicesList();renderQtnList();renderCustomers();renderPayments();renderExpenses();populateCustomerFilters();}
 }
 
@@ -2026,7 +2280,7 @@ function buildItemRow(item,type){
     inp.value=item.name;inp.placeholder='Item name';inp.style.flex='1';
     inp.oninput=e=>{item.name=e.target.value;calcTotals(type);if(type==='invoice')updateBuyPriceTable();};
     const btn=document.createElement('button');
-    btn.innerHTML='↻';btn.className='btn btn-ghost btn-icon';btn.title='Use dropdown';btn.style.padding='4px 8px';
+    btn.innerHTML='↻';btn.className='btn btn-ghost btn-icon no-print';btn.title='Use dropdown';btn.style.padding='4px 8px';
     btn.onclick=()=>{item.isCustom=false;item.name=ITEM_OPTIONS[0];tr.replaceWith(buildItemRow(item,type));calcTotals(type);if(type==='invoice')updateBuyPriceTable();};
     wrapper.appendChild(inp);wrapper.appendChild(btn);
   } else {
@@ -2110,7 +2364,7 @@ function calcTotals(type){
 function updateBuyPriceTable(){
   const items=getItemsFromTable('invoice');
   const tbody=document.getElementById('buyPriceBody');
-  // Preserve existing values from DOM before clearing
+  // Preserve existing values from DOM before clearing (in case user just changed something)
   const existing={};
   document.querySelectorAll('#buyPriceBody input').forEach(inp=>{existing[inp.dataset.itemId]=inp.value;});
   tbody.innerHTML='';
@@ -2120,8 +2374,22 @@ function updateBuyPriceTable(){
     const priceTd=document.createElement('td');
     const inp=document.createElement('input');inp.type='number';inp.min='0';inp.step='0.01';inp.placeholder='0.00';
     inp.id='buy-'+item.id;inp.dataset.itemId=item.id;
-    inp.value=existing[item.id]||'';
-    inp.oninput=updateProfitRow;
+    // Priority order: DOM existing > saved item.buyPrice > remembered by name
+    let val=existing[item.id];
+    if(val===undefined||val===''){
+      if(item.buyPrice&&item.buyPrice>0)val=item.buyPrice;
+      else{
+        const recalled=recallBuyPrice(item.name);
+        val=recalled>0?recalled:'';
+      }
+    }
+    inp.value=val;
+    inp.oninput=()=>{
+      // Remember this buy price by item name so it survives reset
+      const v=parseFloat(inp.value)||0;
+      if(v>0&&item.name)rememberBuyPrice(item.name,v);
+      updateProfitRow();
+    };
     priceTd.appendChild(inp);
     tr.appendChild(nameTd);tr.appendChild(priceTd);tbody.appendChild(tr);
   });
@@ -2223,6 +2491,25 @@ function loadDefaultTerms(){
     const checkVal=localStorage.getItem('ap_termsCheck_'+type);
     const checkEl=document.getElementById(pref+'TermsCheck');
     if(checkEl)checkEl.checked=checkVal==='1';
+  });
+}
+
+// NEW: Save the current Notes textarea as the default for future new invoices/quotations
+function saveDefaultNotes(type){
+  const pref=type==='invoice'?'inv':'qtn';
+  const notes=(document.getElementById(pref+'NotesInput')?.value||'').trim();
+  localStorage.setItem('ap_defaultNotes_'+type,notes);
+  toast('Default notes saved!');
+}
+// NEW: Load saved default notes back into the textarea on app init (if any saved)
+function loadDefaultNotes(){
+  ['invoice','quotation'].forEach(type=>{
+    const pref=type==='invoice'?'inv':'qtn';
+    const saved=localStorage.getItem('ap_defaultNotes_'+type);
+    if(saved!==null && saved!==''){
+      const ta=document.getElementById(pref+'NotesInput');
+      if(ta){ta.value=saved;updateNotesDisplay(type);}
+    }
   });
 }
 
@@ -2667,13 +2954,29 @@ const DEFAULT_QTN_TERMS=`1. Prices are valid for 30 days from quotation date.
 function resetDoc(type){
   if(!confirm('Start a new '+(type==='invoice'?'invoice':'quotation')+'? Any unsaved changes will be lost.'))return;
   if(type==='invoice'){
+    // NEW: Snapshot current buy prices BEFORE clearing, so they survive the reset.
+    // We capture by item name (case-insensitive) so the new item gets the same price
+    // back when it's re-added with the same default name.
+    const currentBuyPrices={};
+    getItemsFromTable('invoice').forEach(it=>{
+      const inp=document.getElementById('buy-'+it.id);
+      if(inp&&inp.value){
+        const v=parseFloat(inp.value)||0;
+        if(v>0&&it.name){
+          currentBuyPrices[it.name.toLowerCase().trim()]=v;
+          // Also remember persistently
+          rememberBuyPrice(it.name,v);
+        }
+      }
+    });
     _editingInvId=null;
     document.getElementById('invNum').value=genDocNum('INV');
     document.getElementById('invDate').value=new Date().toISOString().split('T')[0];
     document.getElementById('invCustSearchInput').value='';
     document.getElementById('invCustPhone').value='';
     document.getElementById('invCustEmail').value='';
-    document.getElementById('invNotesInput').value='';
+    // NEW: reset Notes back to saved default (or empty)
+    document.getElementById('invNotesInput').value=localStorage.getItem('ap_defaultNotes_invoice')||'';
     // NEW: reset Terms text back to saved default (or built-in fallback)
     document.getElementById('invTermsInput').value=localStorage.getItem('ap_defaultTerms_invoice')||DEFAULT_INV_TERMS;
     // NEW: reset Terms checkbox to saved preference (default: unchecked)
@@ -2684,6 +2987,16 @@ function resetDoc(type){
     const tbody=document.getElementById('invItemsBody');tbody.innerHTML='';itemSeedInv=1;
     addItem('invoice');
     updateCustDisplay('invoice');updateNotesDisplay('invoice');updateTermsDisplay('invoice');updateBuyPriceTable();
+    // NEW: Re-apply captured buy prices to the new (matching-name) item rows.
+    // updateBuyPriceTable already restores via BUY_PRICE_MEMORY by name, but in case
+    // recallBuyPrice misses for any reason (e.g. trimming), force-fill here too.
+    getItemsFromTable('invoice').forEach(it=>{
+      const inp=document.getElementById('buy-'+it.id);
+      if(!inp||inp.value)return;
+      const v=currentBuyPrices[(it.name||'').toLowerCase().trim()];
+      if(v){inp.value=v;}
+    });
+    updateProfitRow();
     updateEditingBadge('invoice');
     setDirty('invoice',false); // NEW: fresh form has no unsaved changes
   } else {
@@ -2694,7 +3007,8 @@ function resetDoc(type){
     document.getElementById('qtnCustSearchInput').value='';
     document.getElementById('qtnCustPhone').value='';
     document.getElementById('qtnCustEmail').value='';
-    document.getElementById('qtnNotesInput').value='';
+    // NEW: reset Notes back to saved default
+    document.getElementById('qtnNotesInput').value=localStorage.getItem('ap_defaultNotes_quotation')||'';
     document.getElementById('qtnTermsInput').value=localStorage.getItem('ap_defaultTerms_quotation')||DEFAULT_QTN_TERMS;
     const tc=document.getElementById('qtnTermsCheck');
     if(tc)tc.checked=localStorage.getItem('ap_termsCheck_quotation')==='1';
@@ -2848,8 +3162,8 @@ window.viewInvoice=function(id){
     <thead><tr style="background:var(--bg);"><th style="padding:8px;text-align:left;">Item</th><th style="padding:8px;text-align:center;">Qty</th><th style="padding:8px;text-align:right;">Price</th><th style="padding:8px;text-align:right;">Total</th></tr></thead><tbody>`;
   (inv.items||[]).forEach(it=>{html+=`<tr><td style="padding:8px;">${it.name}</td><td style="padding:8px;text-align:center;">${it.qty}</td><td style="padding:8px;text-align:right;">${fmtRs(it.price)}</td><td style="padding:8px;text-align:right;">${fmtRs(it.qty*it.price)}</td></tr>`;});
   html+=`</tbody></table>`;
-  if(inv.notes)html+=`<div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:var(--radius);font-size:13px;"><strong>Notes:</strong><p style="margin-top:4px;white-space:pre-line;">${inv.notes}</p></div>`;
-  if(inv.terms)html+=`<div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:var(--radius);font-size:13px;"><strong>Terms:</strong><p style="margin-top:4px;white-space:pre-line;">${inv.terms}</p></div>`;
+  if(inv.notes)html+=`<div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:var(--radius);font-size:13px;"><strong>Notes:</strong><p style="margin-top:4px;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(inv.notes)}</p></div>`;
+  if(inv.terms)html+=`<div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:var(--radius);font-size:13px;"><strong>Terms:</strong><p style="margin-top:4px;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(inv.terms)}</p></div>`;
   // FIX #1: Payment history embedded in invoice view
   html+=buildPaymentHistoryHtml(inv.id);
   document.getElementById('viewInvBody').innerHTML=html;
@@ -3504,6 +3818,167 @@ function switchAdminTab(tab,btn){
   if(tab==='payments'){renderPayments();populateCustomerFilters();}
   if(tab==='expenses')renderExpenses();
   if(tab==='items')renderItemReport();
+  if(tab==='itemnames')renderItemNamesList(); // NEW
+}
+
+// ===================== ITEM NAMES MANAGER (admin) =====================
+function renderItemNamesList(){
+  const list=document.getElementById('itemNamesList');
+  if(!list)return;
+  // Only show user-editable items (everything except trailing "Other")
+  const editable=ITEM_OPTIONS.filter(x=>x.toLowerCase()!=='other');
+  const badge=document.getElementById('itemCountBadge');
+  if(badge)badge.textContent=editable.length+' item'+(editable.length===1?'':'s');
+  if(editable.length===0){
+    list.innerHTML='<p style="text-align:center;color:var(--text-muted);padding:24px;">No items yet. Add your first one above.</p>';
+    return;
+  }
+  list.innerHTML=editable.map((name,idx)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);">
+      <span style="font-size:13px;color:var(--text-muted);font-weight:600;min-width:24px;">#${idx+1}</span>
+      <span style="flex:1;font-weight:500;font-size:14px;">${escapeHtml(name)}</span>
+      <button class="btn btn-ghost btn-sm" onclick="editItemName(${idx})" title="Rename">✏️</button>
+      <button class="btn btn-red btn-sm" onclick="deleteItemName(${idx})" title="Delete">🗑️</button>
+    </div>`).join('');
+}
+function addItemName(){
+  const inp=document.getElementById('newItemName');
+  const name=(inp.value||'').trim();
+  if(!name){toast('Enter an item name','error');return;}
+  if(name.toLowerCase()==='other'){toast('"Other" is a reserved name','error');return;}
+  if(ITEM_OPTIONS.some(x=>x.toLowerCase()===name.toLowerCase())){
+    toast('That item already exists','error');return;
+  }
+  // Insert before the trailing "Other"
+  const otherIdx=ITEM_OPTIONS.findIndex(x=>x.toLowerCase()==='other');
+  if(otherIdx>=0)ITEM_OPTIONS.splice(otherIdx,0,name);
+  else ITEM_OPTIONS.push(name);
+  saveItemOptions();
+  inp.value='';
+  renderItemNamesList();
+  toast('Added: '+name);
+}
+window.editItemName=function(idx){
+  const editable=ITEM_OPTIONS.filter(x=>x.toLowerCase()!=='other');
+  const current=editable[idx];
+  if(current===undefined)return;
+  const nw=prompt('Rename item:',current);
+  if(nw===null)return;
+  const nm=nw.trim();
+  if(!nm){toast('Name cannot be empty','error');return;}
+  if(nm.toLowerCase()==='other'){toast('"Other" is reserved','error');return;}
+  if(ITEM_OPTIONS.some((x,i)=>x.toLowerCase()===nm.toLowerCase()&&x!==current)){
+    toast('That name already exists','error');return;
+  }
+  // Replace in main list
+  const realIdx=ITEM_OPTIONS.findIndex(x=>x===current);
+  if(realIdx>=0)ITEM_OPTIONS[realIdx]=nm;
+  saveItemOptions();
+  renderItemNamesList();
+  toast('Renamed to: '+nm);
+};
+window.deleteItemName=function(idx){
+  const editable=ITEM_OPTIONS.filter(x=>x.toLowerCase()!=='other');
+  const target=editable[idx];
+  if(target===undefined)return;
+  if(!confirm('Delete item "'+target+'"? This only removes it from the dropdown — existing invoices that already use this name are unaffected.'))return;
+  ITEM_OPTIONS=ITEM_OPTIONS.filter(x=>x!==target);
+  saveItemOptions();
+  renderItemNamesList();
+  toast('Deleted: '+target);
+};
+function resetItemNames(){
+  if(!confirm('Reset the item list to defaults? Your custom items will be removed.'))return;
+  ITEM_OPTIONS=[...DEFAULT_ITEM_OPTIONS,'Other'];
+  saveItemOptions();
+  renderItemNamesList();
+  toast('Items reset to defaults.');
+}
+
+// ===================== ADMIN THEME & ANIMATION TOGGLES =====================
+function toggleAdminTheme(){
+  const on=!document.body.classList.contains('admin-themed');
+  document.body.classList.toggle('admin-themed',on);
+  localStorage.setItem('ap_admin_theme',on?'1':'0');
+  const btn=document.getElementById('themeToggleBtn');
+  if(btn)btn.classList.toggle('on',on);
+  toast(on?'Theme: ON':'Theme: OFF');
+}
+function toggleAdminAnim(){
+  const on=!document.body.classList.contains('admin-animated');
+  document.body.classList.toggle('admin-animated',on);
+  localStorage.setItem('ap_admin_anim',on?'1':'0');
+  const btn=document.getElementById('animToggleBtn');
+  if(btn)btn.classList.toggle('on',on);
+  toast(on?'Motion: ON':'Motion: OFF');
+}
+function initAdminTogglePrefs(){
+  // Default: theme ON, animation ON for fresh visit
+  const themeOn=localStorage.getItem('ap_admin_theme');
+  const animOn=localStorage.getItem('ap_admin_anim');
+  const themeShouldBeOn=themeOn===null?true:themeOn==='1';
+  const animShouldBeOn=animOn===null?true:animOn==='1';
+  document.body.classList.toggle('admin-themed',themeShouldBeOn);
+  document.body.classList.toggle('admin-animated',animShouldBeOn);
+  const tBtn=document.getElementById('themeToggleBtn');
+  const aBtn=document.getElementById('animToggleBtn');
+  if(tBtn)tBtn.classList.toggle('on',themeShouldBeOn);
+  if(aBtn)aBtn.classList.toggle('on',animShouldBeOn);
+}
+
+// Show/hide theme & anim toggles based on current page (only on admin)
+function updateNavToggleVisibility(page){
+  const tBtn=document.getElementById('themeToggleBtn');
+  const aBtn=document.getElementById('animToggleBtn');
+  if(page==='admin'){
+    if(tBtn)tBtn.classList.remove('hidden');
+    if(aBtn)aBtn.classList.remove('hidden');
+  } else {
+    if(tBtn)tBtn.classList.add('hidden');
+    if(aBtn)aBtn.classList.add('hidden');
+  }
+}
+
+// ===================== LOGIN PARALLAX (Antigravity-style mouse-follow) =====================
+function initLoginParallax(){
+  const parallax=document.getElementById('loginParallax');
+  if(!parallax)return;
+  const loginScreen=document.getElementById('loginScreen');
+  if(!loginScreen)return;
+  let rafId=null;
+  let targetX=0,targetY=0,currentX=0,currentY=0;
+  const handleMove=(e)=>{
+    const rect=loginScreen.getBoundingClientRect();
+    const x=(e.clientX-rect.left)/rect.width-0.5;
+    const y=(e.clientY-rect.top)/rect.height-0.5;
+    targetX=x*40;targetY=y*40; // max offset 40px
+  };
+  const animate=()=>{
+    // Smooth easing toward target
+    currentX+=(targetX-currentX)*0.08;
+    currentY+=(targetY-currentY)*0.08;
+    parallax.style.transform=`translate3d(${currentX}px,${currentY}px,0)`;
+    rafId=requestAnimationFrame(animate);
+  };
+  loginScreen.addEventListener('mousemove',handleMove,{passive:true});
+  // Touch support (move based on touch position)
+  loginScreen.addEventListener('touchmove',(e)=>{
+    if(e.touches.length){
+      const t=e.touches[0];
+      handleMove({clientX:t.clientX,clientY:t.clientY});
+    }
+  },{passive:true});
+  // Subtle device-orientation parallax on mobile (when permission allows)
+  if(window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation',(e)=>{
+      if(e.gamma==null||e.beta==null)return;
+      // Map -45..45° → -1..1
+      const x=Math.max(-1,Math.min(1,(e.gamma||0)/45));
+      const y=Math.max(-1,Math.min(1,((e.beta||0)-45)/45));
+      targetX=x*30;targetY=y*30;
+    },{passive:true});
+  }
+  animate();
 }
 
 // ===================== BACKUP =====================
