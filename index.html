@@ -1361,10 +1361,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
           </div>
           <div class="card-body">
             <textarea class="form-control" id="invTermsInput" rows="5" oninput="updateTermsDisplay('invoice')">1. Payment is due within 30 days of invoice date.
-2. Goods remain property of A P Trading until full payment.
-3. Returns accepted within 7 days in original condition.
-4. Prices are in Sri Lankan Rupees (LKR).
-5. Any disputes must be raised within 14 days.</textarea>
+</textarea>
             <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" onclick="saveDefaultTerms('invoice')">💾 Save as Default</button>
           </div>
         </div>
@@ -2663,17 +2660,9 @@ function convertDoc(from,to){
 // ===================== RESET =====================
 // NEW: Full reset — clears terms text (or restores saved default), terms checkbox,
 // discount values, buy prices, notes, customer, and editing/dirty state. Whole page resets.
-const DEFAULT_INV_TERMS=`1. Payment is due within 30 days of invoice date.
-2. Goods remain property of A P Trading until full payment.
-3. Returns accepted within 7 days in original condition.
-4. Prices are in Sri Lankan Rupees (LKR).
-5. Any disputes must be raised within 14 days.`;
+const DEFAULT_INV_TERMS=`1. Payment is due within 30 days of invoice date.`;
 const DEFAULT_QTN_TERMS=`1. Prices are valid for 30 days from quotation date.
-2. Payment terms: 50% advance, 50% upon delivery.
-3. Delivery time: 7-10 working days after order confirmation.
-4. Prices are exclusive of applicable taxes.
-5. All items are subject to availability.
-6. This quotation is subject to change without notice.`;
+`;
 
 function resetDoc(type){
   if(!confirm('Start a new '+(type==='invoice'?'invoice':'quotation')+'? Any unsaved changes will be lost.'))return;
