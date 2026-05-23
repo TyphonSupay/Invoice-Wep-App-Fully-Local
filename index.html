@@ -828,20 +828,28 @@ body.dark.liquid-glass #navbar{
     margin-bottom:0;
     isolation:isolate;
   }
-  /* Admin sidebar gets a slightly stronger background + no backdrop-filter to
-     avoid the iOS Safari bug where flex/grid wrapped children visually escape
-     the parent when both have backdrop-filter at the same z-level. */
+  /* Admin sidebar on liquid-glass mode — solid translucent background (NO
+     backdrop-filter) and enforced height/spacing to prevent the iOS Safari bug
+     where wrapped grid items visually escape the container. */
   body.liquid-glass #adminPage .admin-sidebar{
-    background:rgba(255,255,255,.78)!important;
+    background:rgba(255,255,255,.85)!important;
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
     border-radius:16px;
     isolation:isolate;
     position:relative;
-    z-index:2;
+    z-index:5;
+    /* Reinforce the explicit row count + margins from the base mobile rule */
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:46px 46px 46px!important;
+    min-height:158px!important;
+    margin-top:0!important;
+    margin-bottom:32px!important;  /* EXTRA clear space before stats start */
+    overflow:visible!important;
   }
   body.dark.liquid-glass #adminPage .admin-sidebar{
-    background:rgba(28,28,30,.85)!important;
+    background:rgba(28,28,30,.92)!important;
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
   }
@@ -854,17 +862,26 @@ body.dark.liquid-glass #navbar{
   body.dark.liquid-glass #adminPage .payment-table-wrap{
     background:rgba(28,28,30,.70);
   }
-  /* Make the admin-content explicitly below the sidebar — no stacking overlap */
+  /* Admin-content explicitly BELOW the sidebar with safety padding-top */
   body.liquid-glass #adminPage .admin-content{
     position:relative;
     z-index:1;
+    padding-top:12px!important;
+    clear:both;
   }
-  /* Stats grid: ensure 2-col stacking is enforced and gap respected */
+  /* The stat-cards themselves get an extra positional safety against the
+     sidebar visually leaking over them in liquid-glass mode */
+  body.liquid-glass #adminPage .stats-grid{
+    position:relative;
+    z-index:0;
+    margin-top:12px!important;
+  }
+  /* Stats grid: SINGLE column on mobile (matches good.png reference) */
   body.liquid-glass .stats-grid{
     display:grid!important;
-    grid-template-columns:1fr 1fr!important;
+    grid-template-columns:1fr!important;
     gap:12px!important;
-    margin-bottom:16px!important;
+    margin-bottom:18px!important;
   }
   body.liquid-glass #expSummaryCards,
   body.liquid-glass #paymentSummaryCards{
@@ -1268,6 +1285,9 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
    ======================================================== */
 @media(max-width:768px){
   .page{padding:12px;padding-bottom:24px;}
+  /* Pull the admin page UP — sidebar starts right under the navbar with no
+     wasted empty space above it. Stats then get a clear gap below the sidebar. */
+  #adminPage.page{padding-top:6px;}
 
   /* ========== NAVBAR: Two-row layout — NO horizontal scrolling needed ========== */
   #navbar{
@@ -1660,16 +1680,17 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     grid-template-columns:1fr!important;
   }
 
-  /* ========== ADMIN SIDEBAR (sub-tabs) — proper CSS grid, no overlap ========== */
-  /* CSS grid (not flex-wrap) guarantees the container's height includes ALL
-     wrapped tabs — flex-wrap can mis-calculate height when combined with
-     backdrop-filter, causing tab rows to overlap the stat-card below. */
+  /* ========== ADMIN SIDEBAR (sub-tabs) — EXPLICIT 3-row grid, MOVED UP ========== */
+  /* Sidebar pulled UP into the empty space below the navbar (user requested).
+     Container MUST recognize all 3 rows of tabs — iOS Safari mis-calculates
+     height when grid-auto-rows + auto-placement are used together with
+     backdrop-filter, so we declare grid-template-rows explicitly. */
   .admin-sidebar{
     position:static;
     z-index:1;
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
-    grid-auto-rows:minmax(44px,auto);
+    grid-template-rows:46px 46px 46px;  /* EXPLICIT 3 rows × 46px */
     overflow:visible;
     padding:6px;
     gap:4px;
@@ -1679,55 +1700,95 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     box-shadow:var(--shadow-sm);
     width:100%;
     box-sizing:border-box;
-    margin-bottom:14px;
-    /* No transform / no contain — they break stacking on iOS with backdrop-filter */
+    /* Pull sidebar UP into the empty space (was leaving ~80px gap above) */
+    margin-top:0!important;
+    /* Force a CLEAR gap below the sidebar before stats start — no more overlap */
+    margin-bottom:28px;
+    /* Hard minimum height = 3*46 + 2*4 + 2*6 = 158px */
+    min-height:158px;
   }
   body.dark .admin-sidebar{background:var(--surface);}
   .admin-sidebar::-webkit-scrollbar{display:none;}
   .admin-sidebar .admin-tab{
     flex:none;
     min-width:0;
-    padding:9px 2px;
+    padding:8px 2px;
     font-size:11px;
     font-weight:600;
     text-align:center;
     justify-content:center;
     align-items:center;
     gap:3px;
-    min-height:44px;
+    min-height:0;
+    height:100%;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
     line-height:1.2;
     width:100%;
   }
-  /* The last admin-tab (Backup) sits alone on row 3. Make it span all 4 columns
-     so the row is fully filled — no empty grid cells that could visually clash
-     with the stat-cards positioned below the sidebar. */
+  /* Backup (last tab) — center it in row 3 by spanning the middle 2 columns */
   .admin-sidebar .admin-tab:last-child{
-    grid-column:1 / -1;
+    grid-column:2 / 4;
+    grid-row:3;
   }
-  /* Force the admin-content to ALWAYS sit cleanly below the sidebar */
+  /* admin-content sits cleanly below the sidebar with extra safety padding-top
+     so even if some browser mis-measures the sidebar, stats can never overlap. */
   .admin-content{
     position:relative;
     z-index:0;
     width:100%;
     min-width:0;
     clear:both;
-    margin-top:6px;
+    padding-top:8px;  /* Belt-and-braces safety gap */
   }
-  /* Make sure the admin-layout grid keeps proper vertical stacking + tight gap so
-     the sidebar feels "up" close to the navbar instead of leaving a big gap before
-     the dashboard cards. */
+  /* Vertical stack — sidebar pinned to top of admin area */
   .admin-layout{
     display:grid!important;
     grid-template-columns:1fr!important;
-    grid-template-rows:auto auto;
-    gap:10px!important;
+    grid-template-rows:auto 1fr;
+    gap:0!important;        /* gap handled by sidebar margin-bottom + content padding-top */
+    align-content:start!important;
   }
-  /* Page padding on mobile — reduce top padding to bring admin sidebar closer
-     to the navbar (matches the user request: "admin panel menu to up") */
-  #adminPage{padding-top:10px!important;}
+  /* ELIMINATE top padding so the menu sits flush against the navbar.
+     This pulls the sidebar UP using the empty space the user pointed out. */
+  #adminPage{padding-top:0!important;padding-bottom:24px!important;}
+
+  /* ========== STATS GRID — SINGLE COLUMN on mobile (matches good.png) ========== */
+  /* Each stat card gets its own full-width row — no more 2-col cramping where
+     icons can be visually clipped by the sidebar boundary. Extra margin-top
+     guarantees stats cannot visually touch the sidebar above. */
+  .stats-grid{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    margin-top:8px!important;
+    margin-bottom:18px!important;
+    position:relative;
+    z-index:0;
+    clear:both;
+  }
+  .stat-card{
+    padding:18px 18px!important;
+    min-width:0;
+    overflow:hidden;
+  }
+  .stat-card .stat-icon{
+    width:44px!important;
+    height:44px!important;
+    font-size:20px!important;
+    margin-bottom:12px;
+  }
+  .stat-card .stat-value{
+    font-size:clamp(22px, 7vw, 28px)!important;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    min-width:0;
+    max-width:100%;
+    margin-bottom:4px!important;
+  }
+  .stat-card .stat-label{font-size:13px!important;}
 
   /* ========== MONTH/CHART ROWS ========== */
   .month-bar-row{grid-template-columns:46px 1fr 70px;gap:6px;font-size:11px;}
