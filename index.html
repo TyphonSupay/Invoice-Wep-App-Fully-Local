@@ -216,35 +216,39 @@ body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .demo-hint{text-align:center;margin-top:18px;font-size:13px;color:rgba(255,255,255,.4);animation:slideUpStagger .8s var(--ease) .55s both;}
 .demo-hint strong{color:#F97316;}
 
-/* ===== MODE SELECTION ===== */
+/* ===== MODE SELECTION — clean minimal dark (no orbs/shimmer/gradient-shift) ===== */
 #modeScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
-#modeScreen::before,#modeScreen::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;will-change:transform;}
-#modeScreen::before{width:550px;height:550px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-150px;left:-100px;animation:orbDrift1 20s ease-in-out infinite;}
-#modeScreen::after{width:500px;height:500px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-100px;animation:orbDrift2 24s ease-in-out infinite;}
-.mode-orb-extra{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(85px);opacity:.35;
-  background:radial-gradient(circle,#8B5CF6 0%,transparent 70%);
-  top:40%;left:50%;animation:orbDrift3 28s ease-in-out infinite;pointer-events:none;will-change:transform;}
-.mode-card-container{position:relative;z-index:2;background:rgba(10,10,10,.7);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);padding:48px;border-radius:24px;width:100%;max-width:600px;box-shadow:0 32px 80px rgba(0,0,0,.6);animation:cardLift .9s var(--ease) both;text-align:center;color:#fff;}
-.mode-card-container::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),rgba(59,130,246,.6),transparent);
-  animation:shimmerLine 4s ease-in-out infinite;
-  pointer-events:none;
+.mode-orb-extra{display:none!important;}
+.mode-card-container{
+  position:relative;z-index:2;
+  background:rgba(15,15,15,.9);
+  border:1px solid rgba(255,255,255,.08);
+  padding:48px;border-radius:24px;width:100%;max-width:600px;
+  box-shadow:0 32px 80px rgba(0,0,0,.6);
+  animation:cardLift .8s var(--ease) both;
+  text-align:center;color:#fff;
 }
-.mode-card-container h1{font-size:30px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;color:#fff;background:linear-gradient(135deg,#fff 0%,#FFAB66 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 6s ease-in-out infinite;}
+.mode-card-container h1{
+  font-size:30px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;color:#fff;
+}
 .mode-card-container>p{color:rgba(255,255,255,.6);margin-bottom:32px;}
 .mode-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;}
-.mode-opt{padding:28px 16px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;cursor:pointer;transition:all .35s var(--ease);text-align:center;color:#fff;position:relative;overflow:hidden;}
-.mode-opt::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(249,115,22,.1) 0%,transparent 50%);
-  opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
+.mode-opt{
+  padding:28px 16px;background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.08);border-radius:16px;
+  cursor:pointer;transition:all .28s var(--ease);
+  text-align:center;color:#fff;position:relative;overflow:hidden;
 }
-.mode-opt:hover{border-color:rgba(249,115,22,.5);background:rgba(255,255,255,.07);transform:translateY(-6px) scale(1.02);box-shadow:0 16px 36px rgba(0,0,0,.5),0 0 30px rgba(249,115,22,.15);}
-.mode-opt:hover::before{opacity:1;}
-.mode-opt.active{border-color:#F97316;background:rgba(249,115,22,.12);box-shadow:0 0 0 3px rgba(249,115,22,.15),0 8px 24px rgba(249,115,22,.2);}
-.mode-opt .icon{font-size:40px;margin-bottom:12px;transition:transform .4s var(--ease-spring);display:block;}
-.mode-opt:hover .icon{transform:scale(1.2) rotate(-8deg);}
+.mode-opt:hover{
+  border-color:rgba(249,115,22,.5);background:rgba(255,255,255,.07);
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px rgba(0,0,0,.4);
+}
+.mode-opt.active{
+  border-color:#F97316;background:rgba(249,115,22,.12);
+  box-shadow:0 0 0 3px rgba(249,115,22,.15);
+}
+.mode-opt .icon{font-size:40px;margin-bottom:12px;display:block;}
 .mode-opt h3{font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.01em;}
 .mode-opt p{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;}
 
@@ -486,26 +490,149 @@ body.dark .admin-sidebar .admin-tab.active{background:rgba(249,115,22,.15);color
   margin-left:4px;display:inline-block;color:var(--orange);font-weight:300;
 }
 
-/* ===== BLUR TEXT — page-transition heading ===== */
-.blur-text{display:inline-flex;flex-wrap:wrap;}
-.blur-text-segment{
+/* ===== ADMIN TAB LOADING MOTION ===== */
+/* When a sub-tab is shown, its contents fade + slide up with a stagger.
+   Toggleable via Settings → "Admin Tab Motion". */
+@keyframes adminTabRise{
+  from{opacity:0;transform:translateY(14px) scale(.985);filter:blur(4px);}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}
+}
+@keyframes adminCardRise{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.admin-tab-anim{animation:adminTabRise .55s cubic-bezier(.22,1,.36,1) both;}
+.admin-tab-anim .stat-card,
+.admin-tab-anim .card,
+.admin-tab-anim .month-chart-wrap,
+.admin-tab-anim .customer-card,
+.admin-tab-anim .expense-item,
+.admin-tab-anim .invoices-table-wrap,
+.admin-tab-anim .payment-table-wrap{
+  animation:adminCardRise .5s cubic-bezier(.22,1,.36,1) both;
+}
+.admin-tab-anim .stat-card:nth-child(1),
+.admin-tab-anim>*:nth-child(1) .card,
+.admin-tab-anim>*:nth-child(1){animation-delay:.04s;}
+.admin-tab-anim .stat-card:nth-child(2){animation-delay:.10s;}
+.admin-tab-anim .stat-card:nth-child(3){animation-delay:.16s;}
+.admin-tab-anim .stat-card:nth-child(4){animation-delay:.22s;}
+.admin-tab-anim .stat-card:nth-child(5){animation-delay:.28s;}
+.admin-tab-anim .stat-card:nth-child(6){animation-delay:.34s;}
+.admin-tab-anim .month-chart-wrap:nth-child(1){animation-delay:.18s;}
+.admin-tab-anim .month-chart-wrap:nth-child(2){animation-delay:.26s;}
+
+/* ===== LIQUID GLASS THEME — admin pages only ===== */
+/* Activated by body.liquid-glass — adds a colorful blurred backdrop on the
+   admin page and gives all cards a frosted-glass surface that lets the
+   backdrop tint show through. */
+body.liquid-glass #adminPage{
+  position:relative;
+  background:
+    radial-gradient(40rem 30rem at 12% 8%, rgba(249,115,22,.22), transparent 60%),
+    radial-gradient(35rem 28rem at 88% 18%, rgba(59,130,246,.20), transparent 60%),
+    radial-gradient(38rem 32rem at 50% 110%, rgba(139,92,246,.22), transparent 60%),
+    radial-gradient(28rem 24rem at 95% 90%, rgba(236,72,153,.16), transparent 60%),
+    var(--bg);
+}
+body.dark.liquid-glass #adminPage{
+  background:
+    radial-gradient(40rem 30rem at 12% 8%, rgba(249,115,22,.30), transparent 60%),
+    radial-gradient(35rem 28rem at 88% 18%, rgba(59,130,246,.28), transparent 60%),
+    radial-gradient(38rem 32rem at 50% 110%, rgba(139,92,246,.30), transparent 60%),
+    radial-gradient(28rem 24rem at 95% 90%, rgba(236,72,153,.20), transparent 60%),
+    #000;
+}
+/* Glass surface — applies to all key admin containers */
+body.liquid-glass #adminPage .card,
+body.liquid-glass #adminPage .stat-card,
+body.liquid-glass #adminPage .month-chart-wrap,
+body.liquid-glass #adminPage .customer-card,
+body.liquid-glass #adminPage .expense-item,
+body.liquid-glass #adminPage .admin-sidebar,
+body.liquid-glass #adminPage .invoices-table-wrap,
+body.liquid-glass #adminPage .payment-table-wrap{
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,.65),
+    inset 0 0 8px rgba(255,255,255,.4),
+    0 10px 30px rgba(0,0,0,.10),
+    0 2px 6px rgba(0,0,0,.06);
+  position:relative;
+  isolation:isolate;
+}
+body.dark.liquid-glass #adminPage .card,
+body.dark.liquid-glass #adminPage .stat-card,
+body.dark.liquid-glass #adminPage .month-chart-wrap,
+body.dark.liquid-glass #adminPage .customer-card,
+body.dark.liquid-glass #adminPage .expense-item,
+body.dark.liquid-glass #adminPage .admin-sidebar,
+body.dark.liquid-glass #adminPage .invoices-table-wrap,
+body.dark.liquid-glass #adminPage .payment-table-wrap{
+  background:rgba(20,20,20,.55);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,.10),
+    inset 0 0 8px rgba(255,255,255,.06),
+    0 10px 30px rgba(0,0,0,.35);
+}
+/* Subtle specular highlight strip on top of each card */
+body.liquid-glass #adminPage .card::before,
+body.liquid-glass #adminPage .stat-card::before,
+body.liquid-glass #adminPage .month-chart-wrap::before,
+body.liquid-glass #adminPage .customer-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 35%);
+  z-index:1;
+}
+body.dark.liquid-glass #adminPage .card::before,
+body.dark.liquid-glass #adminPage .stat-card::before,
+body.dark.liquid-glass #adminPage .month-chart-wrap::before,
+body.dark.liquid-glass #adminPage .customer-card::before{
+  background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 40%);
+}
+/* Make sure card content sits above the specular overlay */
+body.liquid-glass #adminPage .card>*,
+body.liquid-glass #adminPage .stat-card>*,
+body.liquid-glass #adminPage .month-chart-wrap>*,
+body.liquid-glass #adminPage .customer-card>*{position:relative;z-index:2;}
+
+/* Table rows: keep them legible on glass */
+body.liquid-glass #adminPage .invoices-table th,
+body.liquid-glass #adminPage .payment-table th{
+  background:rgba(255,255,255,.35)!important;
+}
+body.dark.liquid-glass #adminPage .invoices-table th,
+body.dark.liquid-glass #adminPage .payment-table th{
+  background:rgba(40,40,40,.6)!important;
+}
+/* Glass card hover — gentle lift */
+body.liquid-glass #adminPage .stat-card:hover,
+body.liquid-glass #adminPage .customer-card:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,.75),
+    inset 0 0 10px rgba(255,255,255,.5),
+    0 16px 36px rgba(0,0,0,.18);
+}
+
+/* ===== COUNT-UP HELPER (smooth numbers, no wrap) ===== */
+/* white-space:nowrap fixes the issue where "Rs" appeared on its own line
+   above big numbers like "1,999,000.00" when the card was narrow. */
+.countup-target{
   display:inline-block;
-  filter:blur(10px);opacity:0;transform:translateY(-20px);
-  transition:filter .6s ease,opacity .6s ease,transform .6s ease;
-  will-change:filter,opacity,transform;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
 }
-.blur-text-segment.in{filter:blur(0);opacity:1;transform:translateY(0);}
-
-/* ===== PAGE TRANSITION ===== */
-.page-transitioning{
-  filter:blur(10px);opacity:.3;transform:translateY(8px);
+.stat-card .stat-value,
+#profitAnalysisBody>div>div>div:first-child{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-.page{
-  transition:filter .35s var(--ease),opacity .35s var(--ease),transform .35s var(--ease);
-}
-
-/* ===== COUNT-UP HELPER (smooth numbers) ===== */
-.countup-target{display:inline-block;font-variant-numeric:tabular-nums;}
 
 /* ===== SETTINGS — mobile responsive ===== */
 @media(max-width:600px){
@@ -588,24 +715,25 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 .expense-item .exp-info p{font-size:12px;color:var(--text-muted);}
 .expense-item .exp-amount{font-size:16px;font-weight:700;color:var(--red-dark);}
 
-/* ===== PRINT STYLES — PROFESSIONAL LETTER LAYOUT ===== */
-/* Professional letter margins ~25mm (1 inch) all around */
-@page{size:A4;margin:25mm 25mm;}
+/* ===== PRINT STYLES — BIGGER CONTENT, HEADER PINNED TOP, FOOTER PINNED BOTTOM ===== */
+/* Tighter professional margins (~18mm) to give more room to bigger content */
+@page{size:A4;margin:18mm 18mm;}
 @media print{
   /* Hide UI */
   #navbar,.inv-sidebar,.action-bar,#toast-container,#settingsPanel,#settingsBackdrop,
-  #splashCanvas,#welcomeOverlay,.admin-bg-orb{display:none!important;}
+  #splashCanvas,#welcomeOverlay,.admin-bg-orb,#splashCanvasWrap{display:none!important;}
   #invoicePage,#quotationPage{padding:0!important;}
   .invoice-layout{grid-template-columns:1fr!important;gap:0!important;max-width:none!important;}
-  /* The full printable area is 297mm - 2*25mm = 247mm tall.
+  /* Printable area = 297mm - 2*18mm = 261mm tall.
      Flex column with header at top, items in middle (flex:1), footer at bottom. */
   .invoice-doc{
     box-shadow:none!important;border:none!important;padding:0!important;
     border-radius:0!important;
-    min-height:247mm!important;height:247mm!important;
+    min-height:261mm!important;height:261mm!important;
     background:#fff!important;
     display:flex!important;flex-direction:column!important;
     animation:none!important;
+    filter:none!important;opacity:1!important;transform:none!important;
   }
   .no-print{display:none!important;}
   .print-only{display:inline!important;}
@@ -624,72 +752,73 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   input[type="date"]::-webkit-clear-button{display:none!important;-webkit-appearance:none!important;}
   input[type=date]{-webkit-appearance:none;-moz-appearance:textfield;appearance:textfield;}
 
-  /* ===== HEADER — Bigger logo & company name ===== */
-  .inv-top-row{margin-bottom:10px!important;}
-  .inv-logo{width:120px!important;height:120px!important;}
-  .inv-logo-placeholder{width:120px!important;height:120px!important;font-size:26px!important;}
-  /* Meta layout in print: bigger Invoice/Date labels */
-  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:4px 12px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:13px!important;}
-  .inv-meta-row strong{font-size:13px!important;}
-  .inv-meta-row .meta-val{text-align:left!important;font-size:13px!important;}
-  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:13px!important;}
-  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:30px!important;margin-bottom:8px!important;padding-bottom:8px!important;}
-  /* Company name block — bigger */
-  .inv-company-block{border-bottom-color:#000!important;padding-bottom:14px!important;margin-bottom:20px!important;border-bottom-width:3px!important;}
-  .inv-company-block h1{color:#000!important;font-size:28px!important;margin-bottom:4px!important;}
-  .inv-company-block p{color:#525252!important;font-size:12px!important;}
+  /* ===== HEADER — LARGER logo & doc-type, pinned to top ===== */
+  .inv-top-row{margin-bottom:14px!important;flex-shrink:0!important;}
+  .inv-logo{width:150px!important;height:150px!important;}
+  .inv-logo-placeholder{width:150px!important;height:150px!important;font-size:32px!important;}
+  /* Meta layout in print: LARGER Invoice/Date labels */
+  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:6px 14px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:16px!important;}
+  .inv-meta-row strong{font-size:16px!important;font-weight:700!important;}
+  .inv-meta-row .meta-val{text-align:left!important;font-size:16px!important;}
+  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:16px!important;}
+  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:40px!important;margin-bottom:10px!important;padding-bottom:10px!important;border-bottom-width:3px!important;}
+  /* Company name block — LARGER */
+  .inv-company-block{border-bottom-color:#000!important;padding-bottom:18px!important;margin-bottom:24px!important;border-bottom-width:3px!important;flex-shrink:0!important;}
+  .inv-company-block h1{color:#000!important;font-size:38px!important;margin-bottom:6px!important;font-weight:800!important;}
+  .inv-company-block p{color:#525252!important;font-size:15px!important;line-height:1.5!important;}
 
-  /* Customer details box — bigger */
-  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:12px 16px!important;margin-bottom:18px!important;font-size:13px!important;}
+  /* Customer details box — LARGER */
+  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:16px 20px!important;margin-bottom:20px!important;font-size:16px!important;}
   .inv-customer strong.cust-title,.inv-customer span{color:#000!important;}
-  .inv-customer strong.cust-title{font-size:14px!important;margin-bottom:6px!important;}
-  .inv-customer span{font-size:12.5px!important;margin-bottom:3px!important;}
+  .inv-customer strong.cust-title{font-size:17px!important;margin-bottom:8px!important;font-weight:700!important;}
+  .inv-customer span{font-size:15px!important;margin-bottom:5px!important;line-height:1.5!important;}
 
-  /* Items table — bigger */
-  .items-table{font-size:12.5px!important;margin-bottom:14px!important;}
-  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:12px!important;padding:9px 7px!important;}
-  .items-table td{color:#000!important;font-size:12.5px!important;padding:8px 7px!important;}
-  .items-table input,.items-table select{font-size:12.5px!important;}
+  /* Items table — LARGER */
+  .items-table{font-size:15px!important;margin-bottom:18px!important;}
+  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:14px!important;padding:11px 9px!important;font-weight:700!important;}
+  .items-table td{color:#000!important;font-size:15px!important;padding:10px 9px!important;}
+  .items-table input,.items-table select{font-size:15px!important;}
 
-  /* ===== TOTALS — Bigger and highlighted ===== */
-  .inv-totals{margin:18px 0!important;}
-  .totals-box{width:340px!important;}
-  .total-row{font-size:12.5px!important;padding:5px 0!important;}
-  /* Grand total — HIGHLIGHTED — orange/dark border, larger, bold */
+  /* ===== TOTALS — LARGER, BOLD grand-total highlighted ===== */
+  .inv-totals{margin:24px 0!important;}
+  .totals-box{width:380px!important;}
+  .total-row{font-size:15px!important;padding:6px 0!important;}
+  /* Grand total — HIGHLIGHTED — orange border + background, very prominent */
   .grand-row{
-    font-size:18px!important;
+    font-size:22px!important;
     font-weight:900!important;
-    padding:12px 14px!important;
-    margin-top:8px!important;
+    padding:16px 20px!important;
+    margin-top:10px!important;
     background:#FFF7ED!important;
-    border:2px solid #F97316!important;
-    border-radius:6px!important;
+    border:3px solid #F97316!important;
+    border-radius:8px!important;
     color:#000!important;
     -webkit-print-color-adjust:exact!important;
     print-color-adjust:exact!important;
   }
-  .grand-row span:first-child{color:#000!important;font-weight:900!important;}
-  .grand-row span:last-child{color:#EA580C!important;font-weight:900!important;font-size:19px!important;}
+  .grand-row span:first-child{color:#000!important;font-weight:900!important;font-size:22px!important;}
+  .grand-row span:last-child{color:#EA580C!important;font-weight:900!important;font-size:24px!important;}
 
-  /* Notes/Terms — bigger with proper wrapping */
-  .inv-notes{padding:12px 14px!important;margin-bottom:14px!important;font-size:12px!important;}
-  .inv-notes strong{font-size:12.5px!important;margin-bottom:5px!important;}
-  .inv-notes p{font-size:12px!important;line-height:1.55!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
+  /* Notes/Terms — LARGER */
+  .inv-notes{padding:14px 18px!important;margin-bottom:16px!important;font-size:14px!important;}
+  .inv-notes strong{font-size:15px!important;margin-bottom:6px!important;font-weight:700!important;}
+  .inv-notes p{font-size:14px!important;line-height:1.6!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
 
-  /* ===== FOOTER — bigger & ALWAYS at bottom of page ===== */
+  /* ===== FOOTER — LARGER, ALWAYS pinned to bottom of page ===== */
   .inv-footer{
-    border-top:1.5px solid #000!important;
+    border-top:2px solid #000!important;
     color:#000!important;
-    padding-top:14px!important;
-    font-size:11.5px!important;
+    padding-top:18px!important;
+    font-size:14px!important;
     margin-top:auto!important;  /* push to bottom of flex column */
+    flex-shrink:0!important;
   }
-  .inv-footer p:first-child{color:#000!important;font-size:13px!important;font-weight:600!important;}
-  .inv-footer p{margin-bottom:3px!important;font-size:11.5px!important;}
-  .inv-footer .powered-by{font-size:10.5px!important;margin-top:6px!important;color:#525252!important;}
+  .inv-footer p:first-child{color:#000!important;font-size:16px!important;font-weight:700!important;margin-bottom:5px!important;}
+  .inv-footer p{margin-bottom:4px!important;font-size:14px!important;line-height:1.5!important;}
+  .inv-footer .powered-by{font-size:12px!important;margin-top:8px!important;color:#525252!important;}
   .inv-footer .powered-by strong{color:#EA580C!important;}
 
-  /* Disable all transitions in print */
+  /* Disable all transitions & motion effects in print */
   *{transition:none!important;animation:none!important;}
   /* Totals stay black */
   .total-row{color:#000!important;}
@@ -700,7 +829,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .print-mode #invNum,.print-mode #qtnNum{display:none!important;}
   .print-mode #invDatePrint,.print-mode #qtnDatePrint,.print-mode #qtnValidDatePrint,
   .print-mode #invNumPrint,.print-mode #qtnNumPrint{
-    display:inline!important;font-weight:700!important;color:#000!important;font-size:13px!important;
+    display:inline!important;font-weight:700!important;color:#000!important;font-size:16px!important;
   }
 }
 
@@ -1409,10 +1538,18 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
     <div class="setting-row">
       <div>
-        <div class="setting-label">✨ Page Transitions</div>
-        <div class="setting-desc">Smooth blur on page change</div>
+        <div class="setting-label">🎬 Admin Tab Motion</div>
+        <div class="setting-desc">Animate tab content on load</div>
       </div>
-      <label class="switch"><input type="checkbox" id="setTransitions"><span class="slider"></span></label>
+      <label class="switch"><input type="checkbox" id="setAdminMotion"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">🪟 Liquid Glass Theme</div>
+        <div class="setting-desc">Frosted glass look on admin cards</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setGlass"><span class="slider"></span></label>
     </div>
 
     <div class="setting-row">
@@ -1483,7 +1620,6 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
 <!-- MODE SELECTION -->
 <div id="modeScreen" class="hidden">
-  <div class="mode-orb-extra"></div>
   <div class="mode-card-container anim-fade">
     <h1>A P Trading System</h1>
     <p>Choose what you'd like to do</p>
@@ -2346,28 +2482,21 @@ function goToModeSelect(){
 
 // ===================== NAVIGATION =====================
 function navigate(page){
-  const wrap=document.getElementById('appWrapper');
-  const transitionsOn=localStorage.getItem('ap_pageTransitions')!=='0'; // default ON
-  const doSwap=()=>{
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-    const target=document.getElementById(page+'Page');
-    if(target)target.classList.add('active');
-    const navEl=document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1));
-    if(navEl)navEl.classList.add('active');
-    if(page==='admin'){renderDashboard();renderInvoicesList();renderQtnList();renderCustomers();renderPayments();renderExpenses();populateCustomerFilters();}
-    // Re-apply blur-text intro on page titles when transitions on
-    if(transitionsOn && typeof animateBlurTitles==='function')requestAnimationFrame(animateBlurTitles);
-  };
-  if(transitionsOn && wrap){
-    wrap.classList.add('page-transitioning');
-    setTimeout(()=>{
-      doSwap();
-      requestAnimationFrame(()=>wrap.classList.remove('page-transitioning'));
-    },180);
-  } else {
-    doSwap();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const target=document.getElementById(page+'Page');
+  if(target)target.classList.add('active');
+  const navEl=document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1));
+  if(navEl)navEl.classList.add('active');
+  if(page==='admin'){
+    renderDashboard();renderInvoicesList();renderQtnList();
+    renderCustomers();renderPayments();renderExpenses();populateCustomerFilters();
+    // When entering admin page, play the tab-motion on the current sub-tab
+    if(typeof playAdminTabMotion==='function')playAdminTabMotion();
   }
+  window.scrollTo(0,0);
+  // Fire count-ups on the new page
+  if(typeof triggerCountUps==='function')requestAnimationFrame(triggerCountUps);
 }
 
 // ===================== DARK MODE =====================
@@ -3974,6 +4103,8 @@ function switchAdminTab(tab,btn){
   if(tab==='expenses')renderExpenses();
   if(tab==='items')renderItemReport();
   if(tab==='itemnames')renderItemNamesList(); // NEW
+  // Play the admin sub-tab loading motion
+  if(typeof playAdminTabMotion==='function')playAdminTabMotion();
 }
 
 // ===================== ITEM NAMES MANAGER (admin) =====================
@@ -4154,17 +4285,19 @@ function importBackup(input){
 // ===================== SETTINGS STORAGE KEYS =====================
 const SETTINGS_KEYS = {
   dark:'ap_dark',
-  transitions:'ap_pageTransitions',
+  adminMotion:'ap_adminMotion',
+  glass:'ap_liquidGlass',
   welcome:'ap_welcomeMsg',
   countUp:'ap_countUp',
   countUpSpeed:'ap_countUpSpeed',
   splash:'ap_splashCursor',
   splashColor:'ap_splashColor'
 };
-// Default ON (transitions/welcome/countUp), default OFF (splash)
+// Default ON: adminMotion / welcome / countUp.  Default OFF: glass / splash.
 const SETTINGS_DEFAULTS = {
   dark:'0',
-  transitions:'1',
+  adminMotion:'1',
+  glass:'0',
   welcome:'1',
   countUp:'1',
   countUpSpeed:'1.5',
@@ -4196,8 +4329,10 @@ function toggleSettings(open){
 function syncSettingsControls(){
   const dark=document.getElementById('setDark');
   if(dark)dark.checked=document.body.classList.contains('dark');
-  const tr=document.getElementById('setTransitions');
-  if(tr)tr.checked=getSetting('transitions')==='1';
+  const am=document.getElementById('setAdminMotion');
+  if(am)am.checked=getSetting('adminMotion')==='1';
+  const gl=document.getElementById('setGlass');
+  if(gl)gl.checked=getSetting('glass')==='1';
   const w=document.getElementById('setWelcome');
   if(w)w.checked=getSetting('welcome')==='1';
   const cu=document.getElementById('setCountUp');
@@ -4216,11 +4351,22 @@ function setupSettingsListeners(){
   if(dark)dark.addEventListener('change',()=>{
     if(dark.checked!==document.body.classList.contains('dark'))toggleDark();
   });
-  // Page transitions
-  const tr=document.getElementById('setTransitions');
-  if(tr)tr.addEventListener('change',()=>{
-    setSetting('transitions',tr.checked?'1':'0');
-    toast('Page transitions: '+(tr.checked?'ON':'OFF'));
+  // Admin Tab Motion
+  const am=document.getElementById('setAdminMotion');
+  if(am)am.addEventListener('change',()=>{
+    setSetting('adminMotion',am.checked?'1':'0');
+    toast('Admin tab motion: '+(am.checked?'ON':'OFF'));
+    // If admin is the current page, replay the animation immediately
+    if(document.getElementById('adminPage')?.classList.contains('active')){
+      if(typeof playAdminTabMotion==='function')playAdminTabMotion();
+    }
+  });
+  // Liquid Glass theme
+  const gl=document.getElementById('setGlass');
+  if(gl)gl.addEventListener('change',()=>{
+    setSetting('glass',gl.checked?'1':'0');
+    applyLiquidGlass(gl.checked);
+    toast('Liquid Glass: '+(gl.checked?'ON':'OFF'));
   });
   // Welcome message
   const w=document.getElementById('setWelcome');
@@ -4261,12 +4407,42 @@ function setupSettingsListeners(){
 function applyAllSettings(){
   // 1. Dark mode (already applied by main init, but make sure body class matches storage)
   if(getSetting('dark')==='1')document.body.classList.add('dark');
-  // 2. Splash cursor: only start if explicitly enabled
+  // 2. Liquid Glass theme — apply body class if enabled
+  applyLiquidGlass(getSetting('glass')==='1');
+  // 3. Splash cursor: only start if explicitly enabled
   if(getSetting('splash')==='1')startSplashCursor();
-  // 3. Sync UI controls
+  // 4. Sync UI controls
   syncSettingsControls();
-  // 4. Wire up listeners (once)
+  // 5. Wire up listeners (once)
   setupSettingsListeners();
+}
+
+// ===================== LIQUID GLASS THEME =====================
+function applyLiquidGlass(enabled){
+  document.body.classList.toggle('liquid-glass',!!enabled);
+}
+
+// ===================== ADMIN TAB LOADING MOTION =====================
+// Restarts the CSS animation on whichever admin sub-tab is currently visible.
+// Triggered when: (a) admin page is entered via navigate(),
+// (b) the user switches a sub-tab, (c) the user toggles the setting on.
+function playAdminTabMotion(){
+  if(getSetting('adminMotion')!=='1')return;
+  // Find the visible sub-tab content (one of #tab-dashboard, #tab-invoices, ...)
+  const tabs=document.querySelectorAll('#adminPage [id^="tab-"]');
+  let active=null;
+  tabs.forEach(t=>{
+    if(!t.classList.contains('hidden'))active=t;
+  });
+  if(!active)return;
+  // Force reflow then re-apply class so animation restarts
+  active.classList.remove('admin-tab-anim');
+  // eslint-disable-next-line no-unused-expressions
+  void active.offsetWidth;
+  active.classList.add('admin-tab-anim');
+  // Clean up after animation finishes so future re-renders aren't affected
+  clearTimeout(active._motionTimer);
+  active._motionTimer=setTimeout(()=>{active.classList.remove('admin-tab-anim');},900);
 }
 
 // ===================== COUNT-UP ANIMATION (vanilla port of CountUp) =====================
@@ -4314,56 +4490,7 @@ function triggerCountUps(){
 
 // ===================== BLUR-TEXT (vanilla port of BlurText React) =====================
 // Splits each visible h1/h2/h3 on the freshly-shown page into word-spans,
-// each starting blurred + translated, then animates them in with stagger.
-function applyBlurText(element){
-  if(!element || element.dataset.blurApplied==='1')return;
-  const original=element.textContent;
-  if(!original.trim())return;
-  // Preserve original for later restoration if needed
-  element.dataset.blurOrig=original;
-  element.dataset.blurApplied='1';
-  // Build word-segments
-  const words=original.split(' ');
-  element.classList.add('blur-text');
-  element.innerHTML='';
-  words.forEach((word,i)=>{
-    const span=document.createElement('span');
-    span.className='blur-text-segment';
-    span.textContent=word + (i<words.length-1?'\u00A0':'');
-    span.style.transitionDelay=(i*60)+'ms';
-    element.appendChild(span);
-  });
-  // Trigger in next frame so transition runs
-  requestAnimationFrame(()=>{
-    element.querySelectorAll('.blur-text-segment').forEach(s=>s.classList.add('in'));
-  });
-}
-
-function animateBlurTitles(){
-  // If transitions disabled, do nothing
-  if(getSetting('transitions')!=='1')return;
-  // Find the currently-active page and animate its top-level visible heading(s)
-  const activePage=document.querySelector('.page.active');
-  if(!activePage)return;
-  // Pick the first 1–2 visible headings as page titles
-  const headings=Array.from(activePage.querySelectorAll('h1,h2,h3')).filter(h=>{
-    // Skip headings inside hidden tabs
-    let n=h;
-    while(n && n!==activePage){
-      if(n.classList && n.classList.contains('hidden'))return false;
-      n=n.parentElement;
-    }
-    // Only the first heading per card-header is enough — skip nested duplicates
-    return h.offsetParent !== null;
-  }).slice(0,3);
-  headings.forEach(h=>{
-    // Reset for re-animation
-    h.dataset.blurApplied='';
-    // Re-set original text in case previous animation left spans
-    if(h.dataset.blurOrig){h.textContent=h.dataset.blurOrig;}
-    applyBlurText(h);
-  });
-}
+// (BlurText functions removed — page-transition feature was dropped per user request.)
 
 // ===================== WELCOME MESSAGE (vanilla port of TextType React) =====================
 // Shows the welcome overlay then types greetings using the TextType pattern.
