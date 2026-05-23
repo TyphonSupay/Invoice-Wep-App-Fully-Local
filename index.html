@@ -791,67 +791,62 @@ body.dark.liquid-glass #navbar{
 }
 
 /* ============================================================
-   MOBILE LIQUID GLASS — Performance + Layout Fixes
-   On mobile (especially iOS Safari), heavy backdrop-filter causes
-   panels to render on top of each other due to stacking-context
-   bugs. We lighten the blur and enforce strict z-index/isolation.
+   MOBILE LIQUID GLASS — keep the glass effect + fix spacing
+   The earlier mobile rule made the glass surfaces almost solid.
+   This version keeps the blur/translucency, while the final mobile
+   layout rule below keeps the sidebar in normal document flow so it
+   cannot overlap the Total Revenue card.
    ============================================================ */
 @media(max-width:768px){
   body.liquid-glass #adminPage{
-    background:#F5F5F7;
-    /* Disable expensive blur backdrop on mobile to prevent overlap & lag */
+    background:linear-gradient(180deg,#FFF4EC 0%,#EAF3FF 48%,#F4E8FF 100%);
   }
-  body.dark.liquid-glass #adminPage{background:#000;}
-  /* Tame aurora on mobile — keep it visible but less expensive */
+  body.dark.liquid-glass #adminPage{
+    background:linear-gradient(180deg,#1C0F09 0%,#07111F 48%,#19091D 100%);
+  }
+
+  /* Keep a light, static aurora layer behind the glass on mobile. */
   body.liquid-glass #adminPage::before{
-    filter:blur(30px);
+    display:block!important;
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
     background:
-      radial-gradient(28rem 22rem at 0% 0%, rgba(255,138,76,.45), transparent 55%),
-      radial-gradient(26rem 20rem at 100% 15%, rgba(64,156,255,.42), transparent 55%),
-      radial-gradient(28rem 24rem at 50% 100%, rgba(175,82,222,.45), transparent 55%);
+      radial-gradient(24rem 18rem at 8% 0%, rgba(255,138,76,.42), transparent 60%),
+      radial-gradient(24rem 20rem at 95% 8%, rgba(64,156,255,.38), transparent 62%),
+      radial-gradient(26rem 20rem at 52% 100%, rgba(175,82,222,.42), transparent 62%);
+    filter:blur(28px)!important;
+    animation:none!important;
+    pointer-events:none!important;
   }
-  /* Cards on mobile: lighter blur for perf, but proper spacing + visible separation.
-     IMPORTANT: do NOT apply transform:translateZ / contain here — those create
-     new stacking contexts that mis-render with backdrop-filter on iOS Safari
-     and cause tab rows to visually overlap stat cards. */
+  body.dark.liquid-glass #adminPage::before{
+    background:
+      radial-gradient(24rem 18rem at 8% 0%, rgba(255,138,76,.32), transparent 60%),
+      radial-gradient(24rem 20rem at 95% 8%, rgba(64,156,255,.28), transparent 62%),
+      radial-gradient(26rem 20rem at 52% 100%, rgba(175,82,222,.36), transparent 62%);
+    filter:blur(30px)!important;
+  }
+
+  /* Real Liquid Glass on mobile — translucent + frosted, not solid. */
   body.liquid-glass #adminPage .card,
   body.liquid-glass #adminPage .stat-card,
   body.liquid-glass #adminPage .month-chart-wrap,
   body.liquid-glass #adminPage .customer-card,
   body.liquid-glass #adminPage .expense-item,
   body.liquid-glass #adminPage .invoices-table-wrap,
-  body.liquid-glass #adminPage .payment-table-wrap{
-    background:rgba(255,255,255,.62);
-    backdrop-filter:blur(20px) saturate(170%);
-    -webkit-backdrop-filter:blur(20px) saturate(170%);
-    border-radius:18px;
-    margin-bottom:0;
-    isolation:isolate;
-  }
-  /* Admin sidebar on liquid-glass mode — solid translucent background (NO
-     backdrop-filter) and enforced height/spacing to prevent the iOS Safari bug
-     where wrapped grid items visually escape the container. */
+  body.liquid-glass #adminPage .payment-table-wrap,
   body.liquid-glass #adminPage .admin-sidebar{
-    background:rgba(255,255,255,.85)!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
-    border-radius:16px;
-    isolation:isolate;
-    position:relative;
-    z-index:5;
-    /* Reinforce the explicit row count + margins from the base mobile rule */
-    display:grid!important;
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    grid-template-rows:46px 46px 46px!important;
-    min-height:158px!important;
-    margin-top:0!important;
-    margin-bottom:32px!important;  /* EXTRA clear space before stats start */
-    overflow:visible!important;
-  }
-  body.dark.liquid-glass #adminPage .admin-sidebar{
-    background:rgba(28,28,30,.92)!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
+    background:rgba(255,255,255,.42)!important;
+    -webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.05)!important;
+    backdrop-filter:blur(28px) saturate(180%) brightness(1.05)!important;
+    border:0.5px solid rgba(255,255,255,.58)!important;
+    border-radius:18px!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.82),
+      inset 0 -1px 0 rgba(255,255,255,.18),
+      0 2px 8px rgba(0,0,0,.04),
+      0 12px 32px rgba(0,0,0,.08)!important;
+    isolation:isolate!important;
   }
   body.dark.liquid-glass #adminPage .card,
   body.dark.liquid-glass #adminPage .stat-card,
@@ -859,29 +854,78 @@ body.dark.liquid-glass #navbar{
   body.dark.liquid-glass #adminPage .customer-card,
   body.dark.liquid-glass #adminPage .expense-item,
   body.dark.liquid-glass #adminPage .invoices-table-wrap,
-  body.dark.liquid-glass #adminPage .payment-table-wrap{
-    background:rgba(28,28,30,.70);
+  body.dark.liquid-glass #adminPage .payment-table-wrap,
+  body.dark.liquid-glass #adminPage .admin-sidebar{
+    background:rgba(28,28,30,.52)!important;
+    -webkit-backdrop-filter:blur(28px) saturate(190%) brightness(1.12)!important;
+    backdrop-filter:blur(28px) saturate(190%) brightness(1.12)!important;
+    border:0.5px solid rgba(255,255,255,.14)!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.18),
+      inset 0 -1px 0 rgba(255,255,255,.05),
+      0 2px 8px rgba(0,0,0,.35),
+      0 12px 32px rgba(0,0,0,.30)!important;
   }
-  /* Admin-content explicitly BELOW the sidebar with safety padding-top */
+
+  /* Keep the glass highlights visible, but non-blocking. */
+  body.liquid-glass #adminPage .card::before,
+  body.liquid-glass #adminPage .stat-card::before,
+  body.liquid-glass #adminPage .month-chart-wrap::before,
+  body.liquid-glass #adminPage .customer-card::before,
+  body.liquid-glass #adminPage .card::after,
+  body.liquid-glass #adminPage .stat-card::after,
+  body.liquid-glass #adminPage .month-chart-wrap::after,
+  body.liquid-glass #adminPage .customer-card::after{
+    display:block!important;
+    pointer-events:none!important;
+  }
+
+  body.liquid-glass #adminPage.page{
+    padding-top:0!important;
+    margin-top:0!important;
+    min-height:auto!important;
+  }
+  body.liquid-glass .admin-layout{
+    margin-top:0!important;
+    padding-top:0!important;
+    gap:0!important;
+  }
   body.liquid-glass #adminPage .admin-content{
-    position:relative;
-    z-index:1;
-    padding-top:12px!important;
-    clear:both;
+    margin-top:0!important;
+    padding-top:0!important;
   }
-  /* The stat-cards themselves get an extra positional safety against the
-     sidebar visually leaking over them in liquid-glass mode */
-  body.liquid-glass #adminPage .stats-grid{
-    position:relative;
-    z-index:0;
-    margin-top:12px!important;
+
+  body.liquid-glass #adminPage .admin-sidebar{
+    position:relative!important;
+    z-index:5!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:46px 46px 46px!important;
+    gap:4px!important;
+    min-height:158px!important;
+    height:auto!important;
+    margin:0 0 24px 0!important;
+    padding:8px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
   }
-  /* Stats grid: SINGLE column on mobile (matches good.png reference) */
+
+  body.liquid-glass #adminPage .admin-content{
+    position:relative!important;
+    z-index:1!important;
+    clear:both!important;
+    padding-top:0!important;
+    margin-top:0!important;
+  }
   body.liquid-glass .stats-grid{
     display:grid!important;
     grid-template-columns:1fr!important;
     gap:12px!important;
+    margin-top:0!important;
     margin-bottom:18px!important;
+    padding-top:0!important;
+    position:relative;
+    z-index:0;
   }
   body.liquid-glass #expSummaryCards,
   body.liquid-glass #paymentSummaryCards{
@@ -889,37 +933,16 @@ body.dark.liquid-glass #navbar{
     grid-template-columns:1fr 1fr!important;
     gap:12px!important;
   }
-  /* Month grid: stack vertically, full gap between cards */
-  body.liquid-glass .month-grid{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:14px!important;
-    margin-bottom:18px!important;
-  }
-  /* monthHighlight: also force single-col with gap */
-  body.liquid-glass #monthHighlight{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:14px!important;
-    margin-bottom:18px!important;
-  }
-  /* Admin sidebar tabs on mobile — keep glass but ensure they wrap properly */
-  body.liquid-glass .admin-sidebar{
-    margin-bottom:14px!important;
-    padding:8px!important;
-  }
-  /* Customers grid: ensure proper stacking */
+  body.liquid-glass .month-grid,
+  body.liquid-glass #monthHighlight,
   body.liquid-glass .customers-grid{
     display:grid!important;
     grid-template-columns:1fr!important;
-    gap:12px!important;
+    gap:14px!important;
+    margin-bottom:18px!important;
   }
-  /* Disable expensive hover lift on touch devices to prevent jank */
   body.liquid-glass #adminPage .stat-card:hover,
-  body.liquid-glass #adminPage .customer-card:hover{
-    transform:none;
-  }
-  /* Stat icon container should not overlap value text */
+  body.liquid-glass #adminPage .customer-card:hover{transform:none;}
   body.liquid-glass #adminPage .stat-card{
     padding:14px 12px!important;
     overflow:hidden;
@@ -2050,6 +2073,82 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .inv-footer .powered-by{font-size:9px!important;color:#9CA3AF!important;margin-top:4px!important;}
   .inv-footer .powered-by strong{color:#9CA3AF!important;font-weight:500!important;}
 }
+
+
+/* ============================================================
+   FINAL FIX: Mobile Liquid Glass admin sidebar overlap
+   Keeps the sidebar as a normal document-flow block and adds
+   a hard spacing buffer before the dashboard cards. This fixes
+   the sidebar/Total Revenue overlap in normal and dark themes.
+   ============================================================ */
+@media(max-width:768px){
+  body.liquid-glass #adminPage.page{
+    padding-top:0!important;
+    overflow:visible!important;
+  }
+
+  body.liquid-glass #adminPage .admin-layout{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:0!important;
+    align-items:stretch!important;
+    overflow:visible!important;
+  }
+
+  body.liquid-glass #adminPage .admin-sidebar{
+    position:relative!important;
+    top:auto!important;
+    z-index:3!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:46px 46px 46px!important;
+    gap:4px!important;
+    width:100%!important;
+    min-height:158px!important;
+    height:auto!important;
+    margin:0 0 24px 0!important;
+    padding:8px!important;
+    overflow:visible!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+  }
+
+  body.liquid-glass #adminPage .admin-sidebar .admin-tab{
+    height:46px!important;
+    min-height:46px!important;
+    padding:8px 2px!important;
+    line-height:1.2!important;
+  }
+
+  body.liquid-glass #adminPage .admin-sidebar .admin-tab:last-child{
+    grid-column:2 / 4!important;
+    grid-row:3!important;
+  }
+
+  body.liquid-glass #adminPage .admin-content{
+    position:relative!important;
+    z-index:1!important;
+    clear:both!important;
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+
+  body.liquid-glass #adminPage .stats-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    margin-top:0!important;
+    padding-top:0!important;
+    clear:both!important;
+  }
+
+  body.liquid-glass #adminPage .stat-card{
+    width:100%!important;
+    min-height:136px!important;
+    padding:18px 18px!important;
+  }
+}
+
 </style>
 </head>
 <body>
