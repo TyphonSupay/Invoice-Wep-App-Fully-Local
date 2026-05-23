@@ -810,36 +810,54 @@ body.dark.liquid-glass #navbar{
       radial-gradient(26rem 20rem at 100% 15%, rgba(64,156,255,.42), transparent 55%),
       radial-gradient(28rem 24rem at 50% 100%, rgba(175,82,222,.45), transparent 55%);
   }
-  /* Cards on mobile: lighter blur for perf, but proper spacing + visible separation */
+  /* Cards on mobile: lighter blur for perf, but proper spacing + visible separation.
+     IMPORTANT: do NOT apply transform:translateZ / contain here — those create
+     new stacking contexts that mis-render with backdrop-filter on iOS Safari
+     and cause tab rows to visually overlap stat cards. */
   body.liquid-glass #adminPage .card,
   body.liquid-glass #adminPage .stat-card,
   body.liquid-glass #adminPage .month-chart-wrap,
   body.liquid-glass #adminPage .customer-card,
   body.liquid-glass #adminPage .expense-item,
-  body.liquid-glass #adminPage .admin-sidebar,
   body.liquid-glass #adminPage .invoices-table-wrap,
   body.liquid-glass #adminPage .payment-table-wrap{
     background:rgba(255,255,255,.62);
     backdrop-filter:blur(20px) saturate(170%);
     -webkit-backdrop-filter:blur(20px) saturate(170%);
     border-radius:18px;
-    /* CRITICAL: prevent stacking-context bugs that cause overlap on iOS/Android */
     margin-bottom:0;
     isolation:isolate;
-    transform:translateZ(0); /* Force GPU layer to isolate */
-    -webkit-transform:translateZ(0);
-    will-change:auto;
-    contain:layout style;
+  }
+  /* Admin sidebar gets a slightly stronger background + no backdrop-filter to
+     avoid the iOS Safari bug where flex/grid wrapped children visually escape
+     the parent when both have backdrop-filter at the same z-level. */
+  body.liquid-glass #adminPage .admin-sidebar{
+    background:rgba(255,255,255,.78)!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    border-radius:16px;
+    isolation:isolate;
+    position:relative;
+    z-index:2;
+  }
+  body.dark.liquid-glass #adminPage .admin-sidebar{
+    background:rgba(28,28,30,.85)!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
   }
   body.dark.liquid-glass #adminPage .card,
   body.dark.liquid-glass #adminPage .stat-card,
   body.dark.liquid-glass #adminPage .month-chart-wrap,
   body.dark.liquid-glass #adminPage .customer-card,
   body.dark.liquid-glass #adminPage .expense-item,
-  body.dark.liquid-glass #adminPage .admin-sidebar,
   body.dark.liquid-glass #adminPage .invoices-table-wrap,
   body.dark.liquid-glass #adminPage .payment-table-wrap{
     background:rgba(28,28,30,.70);
+  }
+  /* Make the admin-content explicitly below the sidebar — no stacking overlap */
+  body.liquid-glass #adminPage .admin-content{
+    position:relative;
+    z-index:1;
   }
   /* Stats grid: ensure 2-col stacking is enforced and gap respected */
   body.liquid-glass .stats-grid{
@@ -934,15 +952,19 @@ body.dark.liquid-glass #navbar{
   #settingsPanel{width:100%;max-width:100%;}
 }
 
-/* Dashboard */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;}
-.stat-card{background:var(--surface);border-radius:var(--radius-lg);padding:22px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative;overflow:hidden;min-width:0;}
+/* Dashboard — all 5 stat cards in a single straight row on desktop */
+.stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border-radius:var(--radius-lg);padding:18px 16px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative;overflow:hidden;min-width:0;}
 .stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,.02) 100%);pointer-events:none;}
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
-.stat-card .stat-icon{width:46px;height:46px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
-.stat-card .stat-value{font-size:clamp(16px,1.8vw,26px);font-weight:800;margin-bottom:4px;letter-spacing:-0.025em;min-width:0;}
-.stat-card .stat-label{font-size:13px;color:var(--text-muted);font-weight:500;}
+.stat-card .stat-icon{width:42px;height:42px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;}
+.stat-card .stat-value{font-size:clamp(14px,1.4vw,22px);font-weight:800;margin-bottom:4px;letter-spacing:-0.025em;min-width:0;}
+.stat-card .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;}
 .stat-card .stat-change{font-size:12px;margin-top:6px;font-weight:500;}
+/* Tablet — wrap to 3 across rather than letting 5 squeeze too tight */
+@media(max-width:1100px){
+  .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
 .stat-orange .stat-icon{background:var(--orange-light);}
 .stat-green .stat-icon{background:var(--green-light);}
 .stat-red .stat-icon{background:var(--red-light);}
@@ -1013,19 +1035,21 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 /* ===== PRINT STYLES — MATCH invoice.png REFERENCE ===== */
 /* Clean professional layout — logo left, INVOICE block right with thick underline,
    company name large below logo, simple items table, right-aligned totals,
-   centered footer with thin top border. */
-@page{size:A4;margin:18mm 18mm;}
+   footer pinned to BOTTOM of A4 page with thin top border. */
+@page{size:A4;margin:10mm 16mm;} /* 1cm top + 1cm bottom, 16mm sides */
 @media print{
   /* Hide UI */
   #navbar,.inv-sidebar,.action-bar,#toast-container,#settingsPanel,#settingsBackdrop,
   #splashCanvas,#welcomeOverlay,.admin-bg-orb,#splashCanvasWrap{display:none!important;}
   #invoicePage,#quotationPage{padding:0!important;}
   .invoice-layout{grid-template-columns:1fr!important;gap:0!important;max-width:none!important;}
-  /* Printable area = 297mm - 2*18mm = 261mm tall */
+  /* Printable area = 297mm - 2*10mm = 277mm tall.
+     Flex column with header at top, items in middle, footer pinned to bottom
+     via margin-top:auto on .inv-footer. */
   .invoice-doc{
     box-shadow:none!important;border:none!important;padding:0!important;
     border-radius:0!important;
-    min-height:261mm!important;height:261mm!important;
+    min-height:277mm!important;height:277mm!important;
     background:#fff!important;
     display:flex!important;flex-direction:column!important;
     animation:none!important;
@@ -1049,45 +1073,46 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   input[type="date"]::-webkit-clear-button{display:none!important;-webkit-appearance:none!important;}
   input[type=date]{-webkit-appearance:none;-moz-appearance:textfield;appearance:textfield;}
 
-  /* ===== HEADER — Logo left, INVOICE right with thick underline ===== */
+  /* ===== HEADER — Logo left (BIGGER), INVOICE right (BIGGER) with thick underline ===== */
   .inv-top-row{
-    margin-bottom:18px!important;
+    margin-bottom:6px!important;
     flex-shrink:0!important;
     display:flex!important;
     justify-content:space-between!important;
     align-items:flex-start!important;
     gap:24px!important;
   }
-  .inv-logo{width:90px!important;height:90px!important;object-fit:contain!important;}
-  .inv-logo-placeholder{width:90px!important;height:90px!important;font-size:22px!important;background:transparent!important;border:none!important;}
+  .inv-logo{width:120px!important;height:120px!important;object-fit:contain!important;}
+  .inv-logo-placeholder{width:120px!important;height:120px!important;font-size:28px!important;background:transparent!important;border:none!important;}
 
-  /* INVOICE title block — right aligned, thick black underline */
-  .inv-meta{min-width:0!important;text-align:right!important;flex-shrink:0!important;}
+  /* INVOICE title block — right aligned, thick black underline, LARGER */
+  .inv-meta{min-width:0!important;text-align:right!important;flex-shrink:0!important;padding-top:8px!important;}
   .inv-meta .doc-type{
     color:#000!important;
-    font-size:32px!important;
+    font-size:44px!important;
     font-weight:800!important;
-    letter-spacing:0.02em!important;
-    margin-bottom:6px!important;
-    padding-bottom:6px!important;
+    letter-spacing:0.01em!important;
+    margin-bottom:8px!important;
+    padding-bottom:8px!important;
     border-bottom:3px solid #000!important;
     display:block!important;
     text-align:right!important;
     font-family:'Inter','Helvetica Neue',Arial,sans-serif!important;
+    line-height:1!important;
   }
   .inv-meta-row{
     display:block!important;
     text-align:right!important;
-    font-size:12px!important;
+    font-size:13px!important;
     color:#000!important;
-    margin-bottom:2px!important;
-    line-height:1.5!important;
+    margin-bottom:3px!important;
+    line-height:1.4!important;
   }
-  .inv-meta-row strong{font-weight:700!important;font-size:12px!important;color:#000!important;margin-right:4px!important;}
-  .inv-meta-row .meta-val{text-align:right!important;font-size:12px!important;font-weight:600!important;color:#000!important;display:inline!important;min-width:0!important;}
+  .inv-meta-row strong{font-weight:700!important;font-size:13px!important;color:#000!important;margin-right:4px!important;}
+  .inv-meta-row .meta-val{text-align:right!important;font-size:13px!important;font-weight:600!important;color:#000!important;display:inline!important;min-width:0!important;}
   .inv-meta-row .meta-val input{
     text-align:right!important;width:auto!important;font-weight:600!important;
-    border:none!important;background:transparent!important;font-size:12px!important;
+    border:none!important;background:transparent!important;font-size:13px!important;
     display:inline!important;padding:0!important;
   }
 
@@ -1095,16 +1120,16 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .inv-company-block{
     border-bottom:none!important;
     padding-bottom:0!important;
-    margin-bottom:30px!important;
+    margin-bottom:24px!important;
     margin-top:0!important;
     flex-shrink:0!important;
   }
   .inv-company-block h1{
-    color:#000!important;font-size:32px!important;margin-bottom:2px!important;
+    color:#000!important;font-size:36px!important;margin-bottom:2px!important;
     font-weight:800!important;letter-spacing:-0.02em!important;
     font-family:'Inter','Helvetica Neue',Arial,sans-serif!important;
   }
-  .inv-company-block p{color:#525252!important;font-size:12px!important;line-height:1.5!important;font-weight:400!important;margin:0!important;}
+  .inv-company-block p{color:#525252!important;font-size:13px!important;line-height:1.5!important;font-weight:400!important;margin:0!important;}
 
   /* Customer details — clean simple box only when visible */
   .inv-customer{
@@ -1191,20 +1216,21 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .inv-notes strong{font-size:12px!important;margin-bottom:4px!important;font-weight:700!important;color:#000!important;}
   .inv-notes p{font-size:11px!important;line-height:1.5!important;color:#000!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
 
-  /* ===== FOOTER — thin black top line, centered text, small powered-by ===== */
+  /* ===== FOOTER — thin black top line, centered text, PINNED to page bottom ===== */
   .inv-footer{
     border-top:1px solid #000!important;
     color:#000!important;
-    padding-top:12px!important;
+    padding-top:10px!important;
     font-size:11px!important;
+    /* margin-top:auto pushes footer to the very bottom of the flex column */
     margin-top:auto!important;
     flex-shrink:0!important;
     text-align:center!important;
   }
-  .inv-footer p:first-child{color:#000!important;font-size:11px!important;font-weight:700!important;margin-bottom:3px!important;}
+  .inv-footer p:first-child{color:#000!important;font-size:11px!important;font-weight:700!important;margin-bottom:2px!important;}
   .inv-footer p:first-child strong{font-weight:800!important;}
-  .inv-footer p{margin-bottom:3px!important;font-size:11px!important;line-height:1.5!important;color:#000!important;}
-  .inv-footer .powered-by{font-size:9px!important;margin-top:8px!important;color:#9CA3AF!important;font-weight:400!important;}
+  .inv-footer p{margin-bottom:2px!important;font-size:11px!important;line-height:1.4!important;color:#000!important;}
+  .inv-footer .powered-by{font-size:9px!important;margin-top:4px!important;color:#9CA3AF!important;font-weight:400!important;}
   .inv-footer .powered-by strong{color:#9CA3AF!important;font-weight:500!important;}
 
   /* Disable all transitions & motion effects in print */
@@ -1634,13 +1660,16 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     grid-template-columns:1fr!important;
   }
 
-  /* ========== ADMIN SIDEBAR (sub-tabs) — ALL VISIBLE, no scroll, wrap grid ========== */
+  /* ========== ADMIN SIDEBAR (sub-tabs) — proper CSS grid, no overlap ========== */
+  /* CSS grid (not flex-wrap) guarantees the container's height includes ALL
+     wrapped tabs — flex-wrap can mis-calculate height when combined with
+     backdrop-filter, causing tab rows to overlap the stat-card below. */
   .admin-sidebar{
     position:static;
-    z-index:auto;
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-auto-rows:minmax(44px,auto);
     overflow:visible;
     padding:6px;
     gap:4px;
@@ -1648,11 +1677,15 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     border:1px solid var(--border);
     border-radius:var(--radius-lg);
     box-shadow:var(--shadow-sm);
+    width:100%;
+    box-sizing:border-box;
+    margin-bottom:14px;
+    /* No transform / no contain — they break stacking on iOS with backdrop-filter */
   }
   body.dark .admin-sidebar{background:var(--surface);}
   .admin-sidebar::-webkit-scrollbar{display:none;}
   .admin-sidebar .admin-tab{
-    flex:1 1 calc(25% - 4px);  /* 4 per row */
+    flex:none;
     min-width:0;
     padding:9px 2px;
     font-size:11px;
@@ -1666,7 +1699,35 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     overflow:hidden;
     text-overflow:ellipsis;
     line-height:1.2;
+    width:100%;
   }
+  /* The last admin-tab (Backup) sits alone on row 3. Make it span all 4 columns
+     so the row is fully filled — no empty grid cells that could visually clash
+     with the stat-cards positioned below the sidebar. */
+  .admin-sidebar .admin-tab:last-child{
+    grid-column:1 / -1;
+  }
+  /* Force the admin-content to ALWAYS sit cleanly below the sidebar */
+  .admin-content{
+    position:relative;
+    z-index:0;
+    width:100%;
+    min-width:0;
+    clear:both;
+    margin-top:6px;
+  }
+  /* Make sure the admin-layout grid keeps proper vertical stacking + tight gap so
+     the sidebar feels "up" close to the navbar instead of leaving a big gap before
+     the dashboard cards. */
+  .admin-layout{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto;
+    gap:10px!important;
+  }
+  /* Page padding on mobile — reduce top padding to bring admin sidebar closer
+     to the navbar (matches the user request: "admin panel menu to up") */
+  #adminPage{padding-top:10px!important;}
 
   /* ========== MONTH/CHART ROWS ========== */
   .month-bar-row{grid-template-columns:46px 1fr 70px;gap:6px;font-size:11px;}
@@ -1867,61 +1928,65 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .total-row{font-size:12px!important;padding:7px 0!important;border-bottom:1px solid #CBD5E1!important;}
   .grand-row{font-size:16px!important;padding:10px 0!important;border:none!important;background:transparent!important;}
 
-  /* Logo size matching reference */
-  .inv-logo,.inv-logo-placeholder{width:90px!important;height:90px!important;}
-  .inv-logo-placeholder{font-size:22px!important;}
+  /* Logo size matching reference — BIGGER */
+  .inv-logo,.inv-logo-placeholder{width:120px!important;height:120px!important;}
+  .inv-logo-placeholder{font-size:28px!important;}
 
-  /* Header row: logo+INVOICE on one row */
+  /* Header row: logo+INVOICE on one row, tighter bottom margin */
   .inv-top-row{
     display:flex!important;
     flex-wrap:nowrap!important;
     justify-content:space-between!important;
     align-items:flex-start!important;
     gap:24px!important;
-    margin-bottom:18px!important;
+    margin-bottom:6px!important;
   }
 
-  /* INVOICE doc-type with thick underline */
+  /* INVOICE doc-type with thick underline — BIGGER */
   .inv-meta{
     flex:0 0 auto!important;
     min-width:0!important;
     width:auto!important;
     text-align:right!important;
+    padding-top:8px!important;
   }
   .inv-meta .doc-type{
-    font-size:32px!important;
-    margin-bottom:6px!important;
-    padding-bottom:6px!important;
+    font-size:44px!important;
+    margin-bottom:8px!important;
+    padding-bottom:8px!important;
     display:block!important;
     text-align:right!important;
     border-bottom:3px solid #000!important;
+    line-height:1!important;
   }
 
   /* Invoice: / Date: rows */
   .inv-meta-row{
     display:block!important;
     text-align:right!important;
-    font-size:12px!important;
-    margin-bottom:2px!important;
+    font-size:13px!important;
+    margin-bottom:3px!important;
   }
-  .inv-meta-row strong{text-align:right!important;font-weight:700!important;font-size:12px!important;}
-  .inv-meta-row .meta-val{text-align:right!important;font-size:12px!important;display:inline!important;}
-  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;font-size:12px!important;}
+  .inv-meta-row strong{text-align:right!important;font-weight:700!important;font-size:13px!important;}
+  .inv-meta-row .meta-val{text-align:right!important;font-size:13px!important;display:inline!important;}
+  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;font-size:13px!important;}
 
-  /* Company name block */
-  .inv-company-block{margin-bottom:30px!important;border-bottom:none!important;padding-bottom:0!important;}
-  .inv-company-block h1{font-size:32px!important;margin-bottom:2px!important;}
-  .inv-company-block p{font-size:12px!important;}
+  /* Company name block — LARGER */
+  .inv-company-block{margin-bottom:24px!important;border-bottom:none!important;padding-bottom:0!important;}
+  .inv-company-block h1{font-size:36px!important;margin-bottom:2px!important;}
+  .inv-company-block p{font-size:13px!important;}
 
-  /* Footer matching reference */
+  /* Footer matching reference — pinned to page bottom */
   .inv-footer{
     text-align:center!important;
     border-top:1px solid #000!important;
-    padding-top:12px!important;
+    padding-top:10px!important;
     font-size:11px!important;
+    margin-top:auto!important;
   }
   .inv-footer p:first-child{font-size:11px!important;font-weight:700!important;}
-  .inv-footer .powered-by{font-size:9px!important;color:#9CA3AF!important;}
+  .inv-footer p{margin-bottom:2px!important;line-height:1.4!important;}
+  .inv-footer .powered-by{font-size:9px!important;color:#9CA3AF!important;margin-top:4px!important;}
   .inv-footer .powered-by strong{color:#9CA3AF!important;font-weight:500!important;}
 }
 </style>
