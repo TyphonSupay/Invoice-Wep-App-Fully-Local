@@ -522,28 +522,65 @@ body.dark .admin-sidebar .admin-tab.active{background:rgba(249,115,22,.15);color
 .admin-tab-anim .month-chart-wrap:nth-child(1){animation-delay:.18s;}
 .admin-tab-anim .month-chart-wrap:nth-child(2){animation-delay:.26s;}
 
-/* ===== LIQUID GLASS THEME — admin pages only ===== */
-/* Activated by body.liquid-glass — adds a colorful blurred backdrop on the
-   admin page and gives all cards a frosted-glass surface that lets the
-   backdrop tint show through. */
+/* ===== LIQUID GLASS THEME — iOS 26 style ===== */
+/* Apple iOS 26 "Liquid Glass" — true frosted glass with refractive edges,
+   specular highlights, subtle inner glow, and floating aurora blobs behind.
+   Activated by body.liquid-glass on the admin page. */
+
+/* Animated aurora blobs that drift slowly behind glass surfaces — gives the
+   refractive backdrop something colorful to refract through. */
+@keyframes auroraBlob1{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(8vw,-6vh) scale(1.15);}
+  66%{transform:translate(-5vw,10vh) scale(.92);}
+}
+@keyframes auroraBlob2{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(-10vw,8vh) scale(1.2);}
+}
+@keyframes auroraBlob3{
+  0%,100%{transform:translate(0,0) scale(1);}
+  40%{transform:translate(6vw,12vh) scale(1.1);}
+  80%{transform:translate(-8vw,-4vh) scale(.95);}
+}
+
 body.liquid-glass #adminPage{
   position:relative;
-  background:
-    radial-gradient(40rem 30rem at 12% 8%, rgba(249,115,22,.22), transparent 60%),
-    radial-gradient(35rem 28rem at 88% 18%, rgba(59,130,246,.20), transparent 60%),
-    radial-gradient(38rem 32rem at 50% 110%, rgba(139,92,246,.22), transparent 60%),
-    radial-gradient(28rem 24rem at 95% 90%, rgba(236,72,153,.16), transparent 60%),
-    var(--bg);
+  background:#F5F5F7;
+  isolation:isolate;
 }
-body.dark.liquid-glass #adminPage{
+body.dark.liquid-glass #adminPage{background:#000;}
+
+/* Aurora backdrop layer — gives glass something to blur */
+body.liquid-glass #adminPage::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
   background:
-    radial-gradient(40rem 30rem at 12% 8%, rgba(249,115,22,.30), transparent 60%),
-    radial-gradient(35rem 28rem at 88% 18%, rgba(59,130,246,.28), transparent 60%),
-    radial-gradient(38rem 32rem at 50% 110%, rgba(139,92,246,.30), transparent 60%),
-    radial-gradient(28rem 24rem at 95% 90%, rgba(236,72,153,.20), transparent 60%),
-    #000;
+    radial-gradient(45rem 35rem at 8% 5%, rgba(255,138,76,.55), transparent 55%),
+    radial-gradient(40rem 32rem at 92% 12%, rgba(64,156,255,.50), transparent 55%),
+    radial-gradient(42rem 38rem at 50% 95%, rgba(175,82,222,.55), transparent 55%),
+    radial-gradient(36rem 30rem at 95% 80%, rgba(255,55,95,.40), transparent 55%),
+    radial-gradient(34rem 28rem at 5% 75%, rgba(48,209,88,.40), transparent 55%);
+  filter:blur(40px);
+  animation:auroraBlob1 22s ease-in-out infinite;
 }
-/* Glass surface — applies to all key admin containers */
+body.dark.liquid-glass #adminPage::before{
+  background:
+    radial-gradient(45rem 35rem at 8% 5%, rgba(255,138,76,.50), transparent 55%),
+    radial-gradient(40rem 32rem at 92% 12%, rgba(64,156,255,.45), transparent 55%),
+    radial-gradient(42rem 38rem at 50% 95%, rgba(175,82,222,.55), transparent 55%),
+    radial-gradient(36rem 30rem at 95% 80%, rgba(255,55,95,.35), transparent 55%),
+    radial-gradient(34rem 28rem at 5% 75%, rgba(48,209,88,.30), transparent 55%);
+  filter:blur(45px);
+}
+
+/* Ensure admin content sits above the aurora */
+body.liquid-glass #adminPage>*{position:relative;z-index:1;}
+
+/* ===== iOS 26 Liquid Glass surface — applies to all admin containers ===== */
 body.liquid-glass #adminPage .card,
 body.liquid-glass #adminPage .stat-card,
 body.liquid-glass #adminPage .month-chart-wrap,
@@ -552,17 +589,22 @@ body.liquid-glass #adminPage .expense-item,
 body.liquid-glass #adminPage .admin-sidebar,
 body.liquid-glass #adminPage .invoices-table-wrap,
 body.liquid-glass #adminPage .payment-table-wrap{
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(18px) saturate(180%);
-  -webkit-backdrop-filter:blur(18px) saturate(180%);
-  border:1px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.40);
+  backdrop-filter:blur(40px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter:blur(40px) saturate(180%) brightness(1.05);
+  border:0.5px solid rgba(255,255,255,.50);
+  border-radius:20px;
   box-shadow:
-    inset 1.5px 1.5px 0 rgba(255,255,255,.65),
-    inset 0 0 8px rgba(255,255,255,.4),
-    0 10px 30px rgba(0,0,0,.10),
-    0 2px 6px rgba(0,0,0,.06);
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -1px 0 rgba(255,255,255,.20),
+    inset 1px 0 0 rgba(255,255,255,.30),
+    inset -1px 0 0 rgba(255,255,255,.30),
+    0 1px 2px rgba(0,0,0,.04),
+    0 8px 24px rgba(0,0,0,.08),
+    0 20px 60px rgba(0,0,0,.06);
   position:relative;
   isolation:isolate;
+  overflow:hidden;
 }
 body.dark.liquid-glass #adminPage .card,
 body.dark.liquid-glass #adminPage .stat-card,
@@ -572,66 +614,319 @@ body.dark.liquid-glass #adminPage .expense-item,
 body.dark.liquid-glass #adminPage .admin-sidebar,
 body.dark.liquid-glass #adminPage .invoices-table-wrap,
 body.dark.liquid-glass #adminPage .payment-table-wrap{
-  background:rgba(20,20,20,.55);
-  border:1px solid rgba(255,255,255,.10);
+  background:rgba(28,28,30,.55);
+  backdrop-filter:blur(40px) saturate(200%) brightness(1.15);
+  -webkit-backdrop-filter:blur(40px) saturate(200%) brightness(1.15);
+  border:0.5px solid rgba(255,255,255,.14);
   box-shadow:
-    inset 1.5px 1.5px 0 rgba(255,255,255,.10),
-    inset 0 0 8px rgba(255,255,255,.06),
-    0 10px 30px rgba(0,0,0,.35);
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(255,255,255,.04),
+    inset 1px 0 0 rgba(255,255,255,.06),
+    inset -1px 0 0 rgba(255,255,255,.06),
+    0 1px 2px rgba(0,0,0,.30),
+    0 8px 24px rgba(0,0,0,.35),
+    0 20px 60px rgba(0,0,0,.20);
 }
-/* Subtle specular highlight strip on top of each card */
+
+/* Specular highlight — Apple iOS 26 signature gleaming edge */
 body.liquid-glass #adminPage .card::before,
 body.liquid-glass #adminPage .stat-card::before,
 body.liquid-glass #adminPage .month-chart-wrap::before,
 body.liquid-glass #adminPage .customer-card::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 35%);
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,.55) 0%,
+      rgba(255,255,255,.12) 20%,
+      rgba(255,255,255,0) 45%,
+      rgba(255,255,255,0) 70%,
+      rgba(255,255,255,.08) 100%);
   z-index:1;
+  mix-blend-mode:overlay;
 }
+
+/* Second layer: subtle inner glow for depth */
+body.liquid-glass #adminPage .card::after,
+body.liquid-glass #adminPage .stat-card::after,
+body.liquid-glass #adminPage .month-chart-wrap::after,
+body.liquid-glass #adminPage .customer-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:radial-gradient(ellipse at top, rgba(255,255,255,.25) 0%, transparent 60%);
+  z-index:1;
+  opacity:.7;
+}
+
 body.dark.liquid-glass #adminPage .card::before,
 body.dark.liquid-glass #adminPage .stat-card::before,
 body.dark.liquid-glass #adminPage .month-chart-wrap::before,
 body.dark.liquid-glass #adminPage .customer-card::before{
-  background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 40%);
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,.20) 0%,
+      rgba(255,255,255,.05) 20%,
+      rgba(255,255,255,0) 45%,
+      rgba(255,255,255,0) 70%,
+      rgba(255,255,255,.03) 100%);
 }
-/* Make sure card content sits above the specular overlay */
+body.dark.liquid-glass #adminPage .card::after,
+body.dark.liquid-glass #adminPage .stat-card::after,
+body.dark.liquid-glass #adminPage .month-chart-wrap::after,
+body.dark.liquid-glass #adminPage .customer-card::after{
+  background:radial-gradient(ellipse at top, rgba(255,255,255,.08) 0%, transparent 60%);
+}
+
+/* All card content must sit above the specular overlays */
 body.liquid-glass #adminPage .card>*,
 body.liquid-glass #adminPage .stat-card>*,
 body.liquid-glass #adminPage .month-chart-wrap>*,
-body.liquid-glass #adminPage .customer-card>*{position:relative;z-index:2;}
+body.liquid-glass #adminPage .customer-card>*,
+body.liquid-glass #adminPage .expense-item>*,
+body.liquid-glass #adminPage .admin-sidebar>*,
+body.liquid-glass #adminPage .invoices-table-wrap>*,
+body.liquid-glass #adminPage .payment-table-wrap>*{position:relative;z-index:2;}
 
-/* Table rows: keep them legible on glass */
+/* Table rows: keep legible on glass — semi-transparent headers */
 body.liquid-glass #adminPage .invoices-table th,
 body.liquid-glass #adminPage .payment-table th{
   background:rgba(255,255,255,.35)!important;
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
 }
 body.dark.liquid-glass #adminPage .invoices-table th,
 body.dark.liquid-glass #adminPage .payment-table th{
-  background:rgba(40,40,40,.6)!important;
+  background:rgba(40,40,40,.55)!important;
 }
-/* Glass card hover — gentle lift */
-body.liquid-glass #adminPage .stat-card:hover,
-body.liquid-glass #adminPage .customer-card:hover{
-  transform:translateY(-3px);
-  box-shadow:
-    inset 1.5px 1.5px 0 rgba(255,255,255,.75),
-    inset 0 0 10px rgba(255,255,255,.5),
-    0 16px 36px rgba(0,0,0,.18);
+body.liquid-glass #adminPage .invoices-table tr:hover td,
+body.liquid-glass #adminPage .payment-table tr:hover td{
+  background:rgba(255,255,255,.20)!important;
+}
+body.dark.liquid-glass #adminPage .invoices-table tr:hover td,
+body.dark.liquid-glass #adminPage .payment-table tr:hover td{
+  background:rgba(255,255,255,.06)!important;
 }
 
-/* ===== COUNT-UP HELPER (smooth numbers, no wrap) ===== */
-/* white-space:nowrap fixes the issue where "Rs" appeared on its own line
-   above big numbers like "1,999,000.00" when the card was narrow. */
+/* Card-header inside glass: extra subtle separator */
+body.liquid-glass #adminPage .card-header{
+  border-bottom:0.5px solid rgba(255,255,255,.30)!important;
+  background:rgba(255,255,255,.12);
+}
+body.dark.liquid-glass #adminPage .card-header{
+  border-bottom:0.5px solid rgba(255,255,255,.08)!important;
+  background:rgba(255,255,255,.04);
+}
+
+/* iOS 26-style stat-card icon backgrounds — translucent tinted glass */
+body.liquid-glass #adminPage .stat-card .stat-icon{
+  background:rgba(255,255,255,.45)!important;
+  backdrop-filter:blur(10px) saturate(180%);
+  -webkit-backdrop-filter:blur(10px) saturate(180%);
+  border:0.5px solid rgba(255,255,255,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 2px 8px rgba(0,0,0,.05);
+}
+body.dark.liquid-glass #adminPage .stat-card .stat-icon{
+  background:rgba(60,60,67,.50)!important;
+  border:0.5px solid rgba(255,255,255,.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 2px 8px rgba(0,0,0,.20);
+}
+
+/* Glass card hover — gentle lift with sharper specular */
+body.liquid-glass #adminPage .stat-card:hover,
+body.liquid-glass #adminPage .customer-card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(255,255,255,.25),
+    inset 1px 0 0 rgba(255,255,255,.35),
+    inset -1px 0 0 rgba(255,255,255,.35),
+    0 4px 12px rgba(0,0,0,.06),
+    0 16px 48px rgba(0,0,0,.12),
+    0 28px 80px rgba(0,0,0,.08);
+}
+body.dark.liquid-glass #adminPage .stat-card:hover,
+body.dark.liquid-glass #adminPage .customer-card:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -1px 0 rgba(255,255,255,.05),
+    inset 1px 0 0 rgba(255,255,255,.10),
+    inset -1px 0 0 rgba(255,255,255,.10),
+    0 4px 12px rgba(0,0,0,.40),
+    0 16px 48px rgba(0,0,0,.50),
+    0 28px 80px rgba(0,0,0,.30);
+}
+
+/* Settings panel & modal also gets the iOS 26 glass treatment */
+body.liquid-glass #settingsPanel{
+  background:rgba(255,255,255,.65)!important;
+  backdrop-filter:blur(40px) saturate(180%);
+  -webkit-backdrop-filter:blur(40px) saturate(180%);
+  border-left:0.5px solid rgba(255,255,255,.40)!important;
+}
+body.dark.liquid-glass #settingsPanel{
+  background:rgba(28,28,30,.70)!important;
+  border-left:0.5px solid rgba(255,255,255,.10)!important;
+}
+
+/* Navbar on liquid glass — even more frosted */
+body.liquid-glass #navbar{
+  background:rgba(255,255,255,.55)!important;
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border-bottom:0.5px solid rgba(255,255,255,.40);
+}
+body.dark.liquid-glass #navbar{
+  background:rgba(20,20,22,.60)!important;
+  border-bottom:0.5px solid rgba(255,255,255,.10);
+}
+
+/* ============================================================
+   MOBILE LIQUID GLASS — Performance + Layout Fixes
+   On mobile (especially iOS Safari), heavy backdrop-filter causes
+   panels to render on top of each other due to stacking-context
+   bugs. We lighten the blur and enforce strict z-index/isolation.
+   ============================================================ */
+@media(max-width:768px){
+  body.liquid-glass #adminPage{
+    background:#F5F5F7;
+    /* Disable expensive blur backdrop on mobile to prevent overlap & lag */
+  }
+  body.dark.liquid-glass #adminPage{background:#000;}
+  /* Tame aurora on mobile — keep it visible but less expensive */
+  body.liquid-glass #adminPage::before{
+    filter:blur(30px);
+    background:
+      radial-gradient(28rem 22rem at 0% 0%, rgba(255,138,76,.45), transparent 55%),
+      radial-gradient(26rem 20rem at 100% 15%, rgba(64,156,255,.42), transparent 55%),
+      radial-gradient(28rem 24rem at 50% 100%, rgba(175,82,222,.45), transparent 55%);
+  }
+  /* Cards on mobile: lighter blur for perf, but proper spacing + visible separation */
+  body.liquid-glass #adminPage .card,
+  body.liquid-glass #adminPage .stat-card,
+  body.liquid-glass #adminPage .month-chart-wrap,
+  body.liquid-glass #adminPage .customer-card,
+  body.liquid-glass #adminPage .expense-item,
+  body.liquid-glass #adminPage .admin-sidebar,
+  body.liquid-glass #adminPage .invoices-table-wrap,
+  body.liquid-glass #adminPage .payment-table-wrap{
+    background:rgba(255,255,255,.62);
+    backdrop-filter:blur(20px) saturate(170%);
+    -webkit-backdrop-filter:blur(20px) saturate(170%);
+    border-radius:18px;
+    /* CRITICAL: prevent stacking-context bugs that cause overlap on iOS/Android */
+    margin-bottom:0;
+    isolation:isolate;
+    transform:translateZ(0); /* Force GPU layer to isolate */
+    -webkit-transform:translateZ(0);
+    will-change:auto;
+    contain:layout style;
+  }
+  body.dark.liquid-glass #adminPage .card,
+  body.dark.liquid-glass #adminPage .stat-card,
+  body.dark.liquid-glass #adminPage .month-chart-wrap,
+  body.dark.liquid-glass #adminPage .customer-card,
+  body.dark.liquid-glass #adminPage .expense-item,
+  body.dark.liquid-glass #adminPage .admin-sidebar,
+  body.dark.liquid-glass #adminPage .invoices-table-wrap,
+  body.dark.liquid-glass #adminPage .payment-table-wrap{
+    background:rgba(28,28,30,.70);
+  }
+  /* Stats grid: ensure 2-col stacking is enforced and gap respected */
+  body.liquid-glass .stats-grid{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:12px!important;
+    margin-bottom:16px!important;
+  }
+  body.liquid-glass #expSummaryCards,
+  body.liquid-glass #paymentSummaryCards{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:12px!important;
+  }
+  /* Month grid: stack vertically, full gap between cards */
+  body.liquid-glass .month-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    margin-bottom:18px!important;
+  }
+  /* monthHighlight: also force single-col with gap */
+  body.liquid-glass #monthHighlight{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    margin-bottom:18px!important;
+  }
+  /* Admin sidebar tabs on mobile — keep glass but ensure they wrap properly */
+  body.liquid-glass .admin-sidebar{
+    margin-bottom:14px!important;
+    padding:8px!important;
+  }
+  /* Customers grid: ensure proper stacking */
+  body.liquid-glass .customers-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  /* Disable expensive hover lift on touch devices to prevent jank */
+  body.liquid-glass #adminPage .stat-card:hover,
+  body.liquid-glass #adminPage .customer-card:hover{
+    transform:none;
+  }
+  /* Stat icon container should not overlap value text */
+  body.liquid-glass #adminPage .stat-card{
+    padding:14px 12px!important;
+    overflow:hidden;
+    min-width:0;
+  }
+  body.liquid-glass #adminPage .stat-card .stat-icon{
+    margin-bottom:8px;
+    flex-shrink:0;
+  }
+}
+
+/* ===== COUNT-UP HELPER (smooth numbers, fully visible) ===== */
+/* Numbers must remain fully visible — never clip or ellipsis them.
+   Use container queries / fluid font-size so larger amounts shrink to fit. */
 .countup-target{
   display:inline-block;
   font-variant-numeric:tabular-nums;
   white-space:nowrap;
+  max-width:100%;
 }
 .stat-card .stat-value,
 #profitAnalysisBody>div>div>div:first-child{
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  overflow:visible;
+  text-overflow:clip;
+  /* Fluid sizing — shrinks gracefully as the number gets longer/the card gets narrower */
+  font-size:clamp(15px, 2vw, 26px);
+  line-height:1.15;
+  letter-spacing:-0.025em;
+  display:block;
+  width:100%;
+}
+/* Long-number guard: if number is REALLY long, allow it to break to two lines */
+.stat-card .stat-value{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+.stat-card .stat-value .countup-target{
+  white-space:nowrap;
+  display:inline-block;
+  /* Auto-shrink if the number can't fit on one line */
+  font-size:inherit;
 }
 
 /* ===== SETTINGS — mobile responsive ===== */
@@ -640,12 +935,12 @@ body.liquid-glass #adminPage .customer-card:hover{
 }
 
 /* Dashboard */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
-.stat-card{background:var(--surface);border-radius:var(--radius-lg);padding:22px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border-radius:var(--radius-lg);padding:22px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative;overflow:hidden;min-width:0;}
 .stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,.02) 100%);pointer-events:none;}
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
 .stat-card .stat-icon{width:46px;height:46px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
-.stat-card .stat-value{font-size:26px;font-weight:800;margin-bottom:4px;letter-spacing:-0.025em;}
+.stat-card .stat-value{font-size:clamp(16px,1.8vw,26px);font-weight:800;margin-bottom:4px;letter-spacing:-0.025em;min-width:0;}
 .stat-card .stat-label{font-size:13px;color:var(--text-muted);font-weight:500;}
 .stat-card .stat-change{font-size:12px;margin-top:6px;font-weight:500;}
 .stat-orange .stat-icon{background:var(--orange-light);}
@@ -715,8 +1010,10 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 .expense-item .exp-info p{font-size:12px;color:var(--text-muted);}
 .expense-item .exp-amount{font-size:16px;font-weight:700;color:var(--red-dark);}
 
-/* ===== PRINT STYLES — BIGGER CONTENT, HEADER PINNED TOP, FOOTER PINNED BOTTOM ===== */
-/* Tighter professional margins (~18mm) to give more room to bigger content */
+/* ===== PRINT STYLES — MATCH invoice.png REFERENCE ===== */
+/* Clean professional layout — logo left, INVOICE block right with thick underline,
+   company name large below logo, simple items table, right-aligned totals,
+   centered footer with thin top border. */
 @page{size:A4;margin:18mm 18mm;}
 @media print{
   /* Hide UI */
@@ -724,8 +1021,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   #splashCanvas,#welcomeOverlay,.admin-bg-orb,#splashCanvasWrap{display:none!important;}
   #invoicePage,#quotationPage{padding:0!important;}
   .invoice-layout{grid-template-columns:1fr!important;gap:0!important;max-width:none!important;}
-  /* Printable area = 297mm - 2*18mm = 261mm tall.
-     Flex column with header at top, items in middle (flex:1), footer at bottom. */
+  /* Printable area = 297mm - 2*18mm = 261mm tall */
   .invoice-doc{
     box-shadow:none!important;border:none!important;padding:0!important;
     border-radius:0!important;
@@ -734,102 +1030,192 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     display:flex!important;flex-direction:column!important;
     animation:none!important;
     filter:none!important;opacity:1!important;transform:none!important;
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif!important;
   }
   .no-print{display:none!important;}
   .print-only{display:inline!important;}
   body,html{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   body.dark{--bg:#fff!important;--surface:#fff!important;--text:#000!important;--text-muted:#525252!important;--border:#E5E7EB!important;}
+  /* Disable liquid glass on print */
+  body.liquid-glass *{background-image:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
   /* Make inputs in print look like clean text */
   input,select,textarea{border:none!important;background:transparent!important;padding:0!important;width:auto!important;color:#000!important;font-family:inherit!important;}
-  /* Hide the dropdown arrow on select elements in print */
   select{
     appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;
     background-image:none!important;padding-right:0!important;
   }
-  /* Hide the calendar picker icon on date inputs in print */
   input[type="date"]::-webkit-calendar-picker-indicator{display:none!important;-webkit-appearance:none!important;}
   input[type="date"]::-webkit-inner-spin-button,
   input[type="date"]::-webkit-clear-button{display:none!important;-webkit-appearance:none!important;}
   input[type=date]{-webkit-appearance:none;-moz-appearance:textfield;appearance:textfield;}
 
-  /* ===== HEADER — LARGER logo & doc-type, pinned to top ===== */
-  .inv-top-row{margin-bottom:14px!important;flex-shrink:0!important;}
-  .inv-logo{width:150px!important;height:150px!important;}
-  .inv-logo-placeholder{width:150px!important;height:150px!important;font-size:32px!important;}
-  /* Meta layout in print: LARGER Invoice/Date labels */
-  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:6px 14px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:16px!important;}
-  .inv-meta-row strong{font-size:16px!important;font-weight:700!important;}
-  .inv-meta-row .meta-val{text-align:left!important;font-size:16px!important;}
-  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:16px!important;}
-  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:40px!important;margin-bottom:10px!important;padding-bottom:10px!important;border-bottom-width:3px!important;}
-  /* Company name block — LARGER */
-  .inv-company-block{border-bottom-color:#000!important;padding-bottom:18px!important;margin-bottom:24px!important;border-bottom-width:3px!important;flex-shrink:0!important;}
-  .inv-company-block h1{color:#000!important;font-size:38px!important;margin-bottom:6px!important;font-weight:800!important;}
-  .inv-company-block p{color:#525252!important;font-size:15px!important;line-height:1.5!important;}
+  /* ===== HEADER — Logo left, INVOICE right with thick underline ===== */
+  .inv-top-row{
+    margin-bottom:18px!important;
+    flex-shrink:0!important;
+    display:flex!important;
+    justify-content:space-between!important;
+    align-items:flex-start!important;
+    gap:24px!important;
+  }
+  .inv-logo{width:90px!important;height:90px!important;object-fit:contain!important;}
+  .inv-logo-placeholder{width:90px!important;height:90px!important;font-size:22px!important;background:transparent!important;border:none!important;}
 
-  /* Customer details box — LARGER */
-  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:16px 20px!important;margin-bottom:20px!important;font-size:16px!important;}
-  .inv-customer strong.cust-title,.inv-customer span{color:#000!important;}
-  .inv-customer strong.cust-title{font-size:17px!important;margin-bottom:8px!important;font-weight:700!important;}
-  .inv-customer span{font-size:15px!important;margin-bottom:5px!important;line-height:1.5!important;}
-
-  /* Items table — LARGER */
-  .items-table{font-size:15px!important;margin-bottom:18px!important;}
-  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:14px!important;padding:11px 9px!important;font-weight:700!important;}
-  .items-table td{color:#000!important;font-size:15px!important;padding:10px 9px!important;}
-  .items-table input,.items-table select{font-size:15px!important;}
-
-  /* ===== TOTALS — LARGER, BOLD grand-total highlighted ===== */
-  .inv-totals{margin:24px 0!important;}
-  .totals-box{width:380px!important;}
-  .total-row{font-size:15px!important;padding:6px 0!important;}
-  /* Grand total — HIGHLIGHTED — orange border + background, very prominent */
-  .grand-row{
-    font-size:22px!important;
-    font-weight:900!important;
-    padding:16px 20px!important;
-    margin-top:10px!important;
-    background:#FFF7ED!important;
-    border:3px solid #F97316!important;
-    border-radius:8px!important;
+  /* INVOICE title block — right aligned, thick black underline */
+  .inv-meta{min-width:0!important;text-align:right!important;flex-shrink:0!important;}
+  .inv-meta .doc-type{
     color:#000!important;
+    font-size:32px!important;
+    font-weight:800!important;
+    letter-spacing:0.02em!important;
+    margin-bottom:6px!important;
+    padding-bottom:6px!important;
+    border-bottom:3px solid #000!important;
+    display:block!important;
+    text-align:right!important;
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif!important;
+  }
+  .inv-meta-row{
+    display:block!important;
+    text-align:right!important;
+    font-size:12px!important;
+    color:#000!important;
+    margin-bottom:2px!important;
+    line-height:1.5!important;
+  }
+  .inv-meta-row strong{font-weight:700!important;font-size:12px!important;color:#000!important;margin-right:4px!important;}
+  .inv-meta-row .meta-val{text-align:right!important;font-size:12px!important;font-weight:600!important;color:#000!important;display:inline!important;min-width:0!important;}
+  .inv-meta-row .meta-val input{
+    text-align:right!important;width:auto!important;font-weight:600!important;
+    border:none!important;background:transparent!important;font-size:12px!important;
+    display:inline!important;padding:0!important;
+  }
+
+  /* Company name block — large bold, NO border line under it */
+  .inv-company-block{
+    border-bottom:none!important;
+    padding-bottom:0!important;
+    margin-bottom:30px!important;
+    margin-top:0!important;
+    flex-shrink:0!important;
+  }
+  .inv-company-block h1{
+    color:#000!important;font-size:32px!important;margin-bottom:2px!important;
+    font-weight:800!important;letter-spacing:-0.02em!important;
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif!important;
+  }
+  .inv-company-block p{color:#525252!important;font-size:12px!important;line-height:1.5!important;font-weight:400!important;margin:0!important;}
+
+  /* Customer details — clean simple box only when visible */
+  .inv-customer{
+    border:1px solid #CBD5E1!important;background:transparent!important;
+    animation:none!important;color:#000!important;
+    padding:12px 14px!important;margin-bottom:18px!important;font-size:12px!important;
+    border-radius:6px!important;
+  }
+  .inv-customer strong.cust-title,.inv-customer span{color:#000!important;}
+  .inv-customer strong.cust-title{font-size:13px!important;margin-bottom:6px!important;font-weight:700!important;}
+  .inv-customer span{font-size:12px!important;margin-bottom:3px!important;line-height:1.5!important;}
+
+  /* ===== ITEMS TABLE — clean lines like reference ===== */
+  .items-table{
+    font-size:12px!important;
+    margin-bottom:12px!important;
+    border-collapse:collapse!important;
+    width:100%!important;
+  }
+  .items-table th{
+    background:transparent!important;
+    color:#000!important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    font-size:12px!important;
+    padding:10px 6px!important;
+    font-weight:700!important;
+    border-top:1.5px solid #000!important;
+    border-bottom:1.5px solid #000!important;
+    text-align:left!important;
+  }
+  .items-table th:nth-child(2){text-align:center!important;}
+  .items-table th:nth-child(3),.items-table th:nth-child(4){text-align:right!important;}
+  .items-table td{
+    color:#000!important;
+    font-size:12px!important;
+    padding:9px 6px!important;
+    border-bottom:none!important;
+  }
+  .items-table tr:last-child td{border-bottom:1px solid #CBD5E1!important;}
+  .items-table input,.items-table select{font-size:12px!important;color:#000!important;}
+
+  /* ===== TOTALS — right-aligned simple box, NO orange highlight ===== */
+  .inv-totals{
+    margin:8px 0 0!important;
+    display:flex!important;
+    justify-content:flex-end!important;
+  }
+  .totals-box{width:260px!important;max-width:260px!important;}
+  .total-row{
+    font-size:12px!important;
+    padding:7px 0!important;
+    color:#000!important;
+    border-bottom:1px solid #CBD5E1!important;
+    display:flex!important;
+    justify-content:space-between!important;
+    background:transparent!important;
+    border-radius:0!important;
+    border-top:none!important;
+    border-left:none!important;
+    border-right:none!important;
+  }
+  .total-row span:first-child{font-weight:500!important;color:#000!important;}
+  .total-row span:last-child{font-weight:500!important;color:#000!important;}
+  /* Grand total — plain bold, no box, just larger text */
+  .grand-row{
+    font-size:16px!important;
+    font-weight:700!important;
+    padding:10px 0!important;
+    margin-top:0!important;
+    background:transparent!important;
+    border:none!important;
+    border-radius:0!important;
+    color:#000!important;
+    display:flex!important;
+    justify-content:space-between!important;
     -webkit-print-color-adjust:exact!important;
     print-color-adjust:exact!important;
   }
-  .grand-row span:first-child{color:#000!important;font-weight:900!important;font-size:22px!important;}
-  .grand-row span:last-child{color:#EA580C!important;font-weight:900!important;font-size:24px!important;}
+  .grand-row span:first-child{color:#000!important;font-weight:600!important;font-size:15px!important;}
+  .grand-row span:last-child{color:#000!important;font-weight:800!important;font-size:17px!important;}
 
-  /* Notes/Terms — LARGER */
-  .inv-notes{padding:14px 18px!important;margin-bottom:16px!important;font-size:14px!important;}
-  .inv-notes strong{font-size:15px!important;margin-bottom:6px!important;font-weight:700!important;}
-  .inv-notes p{font-size:14px!important;line-height:1.6!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
+  /* Notes/Terms */
+  .inv-notes{padding:10px 14px!important;margin-bottom:12px!important;font-size:11px!important;background:transparent!important;border-left:2px solid #CBD5E1!important;border-radius:0!important;}
+  .inv-notes strong{font-size:12px!important;margin-bottom:4px!important;font-weight:700!important;color:#000!important;}
+  .inv-notes p{font-size:11px!important;line-height:1.5!important;color:#000!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
 
-  /* ===== FOOTER — LARGER, ALWAYS pinned to bottom of page ===== */
+  /* ===== FOOTER — thin black top line, centered text, small powered-by ===== */
   .inv-footer{
-    border-top:2px solid #000!important;
+    border-top:1px solid #000!important;
     color:#000!important;
-    padding-top:18px!important;
-    font-size:14px!important;
-    margin-top:auto!important;  /* push to bottom of flex column */
+    padding-top:12px!important;
+    font-size:11px!important;
+    margin-top:auto!important;
     flex-shrink:0!important;
+    text-align:center!important;
   }
-  .inv-footer p:first-child{color:#000!important;font-size:16px!important;font-weight:700!important;margin-bottom:5px!important;}
-  .inv-footer p{margin-bottom:4px!important;font-size:14px!important;line-height:1.5!important;}
-  .inv-footer .powered-by{font-size:12px!important;margin-top:8px!important;color:#525252!important;}
-  .inv-footer .powered-by strong{color:#EA580C!important;}
+  .inv-footer p:first-child{color:#000!important;font-size:11px!important;font-weight:700!important;margin-bottom:3px!important;}
+  .inv-footer p:first-child strong{font-weight:800!important;}
+  .inv-footer p{margin-bottom:3px!important;font-size:11px!important;line-height:1.5!important;color:#000!important;}
+  .inv-footer .powered-by{font-size:9px!important;margin-top:8px!important;color:#9CA3AF!important;font-weight:400!important;}
+  .inv-footer .powered-by strong{color:#9CA3AF!important;font-weight:500!important;}
 
   /* Disable all transitions & motion effects in print */
   *{transition:none!important;animation:none!important;}
-  /* Totals stay black */
-  .total-row{color:#000!important;}
-  /* Force colors on dark backgrounds (badges etc.) */
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   /* PRINT-MODE: hide date/number INPUTS, show formatted spans */
   .print-mode #invDate,.print-mode #qtnDate,.print-mode #qtnValidDate,
   .print-mode #invNum,.print-mode #qtnNum{display:none!important;}
   .print-mode #invDatePrint,.print-mode #qtnDatePrint,.print-mode #qtnValidDatePrint,
   .print-mode #invNumPrint,.print-mode #qtnNumPrint{
-    display:inline!important;font-weight:700!important;color:#000!important;font-size:16px!important;
+    display:inline!important;font-weight:600!important;color:#000!important;font-size:12px!important;
   }
 }
 
@@ -1175,9 +1561,23 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
   /* ========== STATS GRID (dashboard figures) ========== */
   .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
-  .stat-card{padding:14px 12px;}
+  .stat-card{padding:14px 12px;min-width:0;overflow:hidden;}
   .stat-card .stat-icon{width:38px;height:38px;font-size:18px;margin-bottom:8px;}
-  .stat-card .stat-value{font-size:18px!important;line-height:1.2;}
+  /* Fluid font-size so large numbers always fit inside the card */
+  .stat-card .stat-value{
+    font-size:clamp(13px, 4.5vw, 19px)!important;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    min-width:0;
+    max-width:100%;
+  }
+  .stat-card .stat-value .countup-target{
+    display:inline-block;
+    max-width:100%;
+    white-space:nowrap;
+  }
   .stat-card .stat-label{font-size:11px;}
 
   /* ========== PROFIT ANALYSIS FILTERS (card-header with inline flex+widths) ========== */
@@ -1277,13 +1677,26 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   #monthHighlight .card-header{flex-wrap:wrap;gap:6px;padding:10px 12px;}
   #monthHighlight .card-header span{font-size:13px!important;}
   #monthHighlight .card-body{padding:14px 10px!important;gap:6px!important;}
-  #monthHighlight .card-body>div>div:first-child{font-size:14px!important;}
+  #monthHighlight .card-body>div{min-width:0;overflow:hidden;}
+  #monthHighlight .card-body>div>div:first-child{
+    font-size:clamp(11px,3.5vw,15px)!important;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+  }
   #monthHighlight .card-body>div>div:last-child{font-size:10px!important;}
   /* Generic highlight-cards class (kept for safety) */
   .highlight-cards{grid-template-columns:1fr!important;gap:10px;}
 
   /* ========== PROFIT ANALYSIS GRID ========== */
   #profitAnalysisBody>div{grid-template-columns:1fr 1fr!important;gap:14px!important;}
+  #profitAnalysisBody>div>div{min-width:0;overflow:hidden;}
+  #profitAnalysisBody>div>div>div:first-child{
+    font-size:clamp(13px,4vw,18px)!important;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+  }
 
   /* ========== MODAL ========== */
   .modal-overlay{padding:10px;}
@@ -1339,8 +1752,16 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .nav-link{font-size:12px;padding:11px 2px;}
   .nav-right .btn{padding:6px 10px;font-size:11px;}
   .stats-grid{grid-template-columns:1fr;}
-  .stat-card .stat-value{font-size:22px!important;}
-  .stat-card{padding:18px 16px;}
+  /* Full-width single-col stats card — comfortable size for numbers */
+  .stat-card .stat-value{
+    font-size:clamp(18px, 7vw, 26px)!important;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    max-width:100%;
+  }
+  .stat-card{padding:18px 16px;min-width:0;overflow:hidden;}
   #monthHighlight .card-body{grid-template-columns:1fr 1fr 1fr!important;}
   #profitAnalysisBody>div{grid-template-columns:1fr 1fr!important;}
   .inv-logo,.inv-logo-placeholder{width:60px;height:60px;}
@@ -1359,24 +1780,21 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
 /* ============================================================
    MOBILE-PRINT OVERRIDES — placed LAST so they win the cascade
-   when both @media print and @media(max-width:768px) are active
-   (i.e. when printing from a phone). Restores professional
-   invoice layout matching the desktop print output.
+   when both @media print and @media(max-width:768px) are active.
+   Restores clean invoice layout matching invoice.png reference
+   when printing from a phone.
    ============================================================ */
 @media print{
-  /* ---- FIX A: hide the delete-button column. The TDs carry
-     class="no-print" but our .items-table td rule below has
-     higher specificity than .no-print, so we restate it here
-     with matching specificity to ensure no-print wins. ---- */
+  /* Hide delete-button column */
   .items-table th.no-print,
   .items-table td.no-print{display:none!important;}
 
-  /* ---- FIX B: items table — restore real table layout ---- */
+  /* Items table — restore real table layout from mobile card layout */
   .items-table{
     display:table!important;
     width:100%!important;
     border-collapse:collapse!important;
-    margin-bottom:16px!important;
+    margin-bottom:12px!important;
     table-layout:auto!important;
   }
   .items-table thead{display:table-header-group!important;}
@@ -1395,41 +1813,37 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
   .items-table th,
   .items-table td{
     display:table-cell!important;
-    padding:7px 6px!important;
+    padding:9px 6px!important;
     vertical-align:middle!important;
-    font-size:11px!important;
+    font-size:12px!important;
     color:#000!important;
     gap:0!important;
   }
   .items-table th{
     text-align:left!important;
     font-weight:700!important;
-    background:#F8F9FB!important;
-    border-bottom:1.5px solid #CBD5E1!important;
-    font-size:11px!important;
+    background:transparent!important;
+    border-top:1.5px solid #000!important;
+    border-bottom:1.5px solid #000!important;
+    font-size:12px!important;
   }
   .items-table td{
     border:none!important;
-    border-bottom:1px solid #E5E7EB!important;
-    font-size:11px!important;
+    border-bottom:none!important;
+    font-size:12px!important;
   }
+  .items-table tr:last-child td{border-bottom:1px solid #CBD5E1!important;}
   /* Kill mobile pseudo-labels ("Item:", "Qty:" etc.) */
   .items-table td::before,
   .items-table th::before{display:none!important;content:""!important;}
-  /* Column widths + alignment applied to BOTH th and td so header lines up with values */
+  /* Column widths + alignment */
   .items-table th:nth-child(1),.items-table td:nth-child(1){text-align:left!important;}
-  .items-table th:nth-child(2),.items-table td:nth-child(2){text-align:center!important;width:110px!important;}
-  .items-table th:nth-child(3),.items-table td:nth-child(3){text-align:right!important;width:140px!important;padding-right:28px!important;}
-  .items-table th:nth-child(4),.items-table td:nth-child(4){text-align:right!important;width:130px!important;font-weight:700!important;}
+  .items-table th:nth-child(2),.items-table td:nth-child(2){text-align:center!important;width:100px!important;}
+  .items-table th:nth-child(3),.items-table td:nth-child(3){text-align:right!important;width:120px!important;}
+  .items-table th:nth-child(4),.items-table td:nth-child(4){text-align:right!important;width:110px!important;font-weight:600!important;}
 
-  /* When custom item input is used in print, ↻ button has .no-print so it hides;
-     ensure the input fills the cell cleanly */
   .items-table td input[placeholder="Item name"]{width:100%!important;text-align:left!important;}
-  /* ---- FIX C: inputs inside cells render as plain inline text,
-     inheriting cell alignment. Selector includes [type=number]
-     specifically so we beat the mobile rule
-     ".items-table input[type=number]{text-align:left!important}"
-     which has specificity (0,0,2,1); ours is (0,0,2,2). ---- */
+  /* Inputs render as plain inline text */
   .items-table td input,
   .items-table td select,
   .items-table td input[type=number]{
@@ -1437,37 +1851,37 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     max-width:100%!important;
     display:inline-block!important;
     text-align:inherit!important;
-    font-size:11px!important;
+    font-size:12px!important;
     padding:0!important;
     border:none!important;
     background:transparent!important;
     box-shadow:none!important;
   }
-  /* Explicit per-column text-align inside inputs (belt-and-braces) */
   .items-table td:nth-child(2) input,
   .items-table td:nth-child(2) select{text-align:center!important;}
   .items-table td:nth-child(3) input{text-align:right!important;}
 
-  /* ---- FIX D: totals — right-aligned 260px box, professional size ---- */
-  .inv-totals{display:flex!important;justify-content:flex-end!important;margin:16px 0!important;}
+  /* Totals — right-aligned compact box matching reference */
+  .inv-totals{display:flex!important;justify-content:flex-end!important;margin:8px 0 0!important;}
   .totals-box{width:260px!important;max-width:260px!important;}
-  .total-row{font-size:11px!important;padding:4px 0!important;}
-  .grand-row{font-size:13px!important;padding:7px 0 3px!important;}
+  .total-row{font-size:12px!important;padding:7px 0!important;border-bottom:1px solid #CBD5E1!important;}
+  .grand-row{font-size:16px!important;padding:10px 0!important;border:none!important;background:transparent!important;}
 
-  /* ---- FIX E: professional-size logo (was 135px — now 95px to match desktop) ---- */
-  .inv-logo,.inv-logo-placeholder{width:95px!important;height:95px!important;}
-  .inv-logo-placeholder{font-size:20px!important;}
+  /* Logo size matching reference */
+  .inv-logo,.inv-logo-placeholder{width:90px!important;height:90px!important;}
+  .inv-logo-placeholder{font-size:22px!important;}
 
-  /* ---- FIX F: header row keeps logo+INVOICE on one row ---- */
+  /* Header row: logo+INVOICE on one row */
   .inv-top-row{
     display:flex!important;
     flex-wrap:nowrap!important;
     justify-content:space-between!important;
     align-items:flex-start!important;
-    gap:16px!important;
+    gap:24px!important;
+    margin-bottom:18px!important;
   }
 
-  /* ---- FIX G: shorten the line under "INVOICE" — professional size ---- */
+  /* INVOICE doc-type with thick underline */
   .inv-meta{
     flex:0 0 auto!important;
     min-width:0!important;
@@ -1475,29 +1889,40 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     text-align:right!important;
   }
   .inv-meta .doc-type{
-    font-size:24px!important;
+    font-size:32px!important;
     margin-bottom:6px!important;
     padding-bottom:6px!important;
     display:block!important;
     text-align:right!important;
+    border-bottom:3px solid #000!important;
   }
 
-  /* ---- FIX H: align "Invoice:" and "Date:" rows ---- */
+  /* Invoice: / Date: rows */
   .inv-meta-row{
-    display:grid!important;
-    grid-template-columns:auto auto!important;
-    gap:3px 8px!important;
-    justify-content:end!important;
-    align-items:baseline!important;
+    display:block!important;
+    text-align:right!important;
+    font-size:12px!important;
+    margin-bottom:2px!important;
+  }
+  .inv-meta-row strong{text-align:right!important;font-weight:700!important;font-size:12px!important;}
+  .inv-meta-row .meta-val{text-align:right!important;font-size:12px!important;display:inline!important;}
+  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;font-size:12px!important;}
+
+  /* Company name block */
+  .inv-company-block{margin-bottom:30px!important;border-bottom:none!important;padding-bottom:0!important;}
+  .inv-company-block h1{font-size:32px!important;margin-bottom:2px!important;}
+  .inv-company-block p{font-size:12px!important;}
+
+  /* Footer matching reference */
+  .inv-footer{
+    text-align:center!important;
+    border-top:1px solid #000!important;
+    padding-top:12px!important;
     font-size:11px!important;
   }
-  .inv-meta-row strong{text-align:right!important;font-weight:700!important;font-size:11px!important;}
-  .inv-meta-row .meta-val{text-align:right!important;min-width:110px!important;font-size:11px!important;}
-  .inv-meta-row .meta-val input{text-align:right!important;width:auto!important;font-size:11px!important;}
-
-  /* Company name block — professional smaller size */
-  .inv-company-block h1{font-size:20px!important;}
-  .inv-company-block p{font-size:10px!important;}
+  .inv-footer p:first-child{font-size:11px!important;font-weight:700!important;}
+  .inv-footer .powered-by{font-size:9px!important;color:#9CA3AF!important;}
+  .inv-footer .powered-by strong{color:#9CA3AF!important;font-weight:500!important;}
 }
 </style>
 </head>
@@ -3920,6 +4345,8 @@ function renderDashboard(){
   renderProfitAnalysis(invoices,expenses);
   // Animate dashboard stat-card numbers (also covers the highlight cards if marked)
   if(typeof triggerCountUps==='function')triggerCountUps();
+  // Ensure number values fit cleanly inside their cards
+  if(typeof autoFitStatValues==='function')requestAnimationFrame(autoFitStatValues);
 }
 
 function renderProfitAnalysis(invoices,expenses){
@@ -4417,10 +4844,40 @@ function applyAllSettings(){
   setupSettingsListeners();
 }
 
-// ===================== LIQUID GLASS THEME =====================
+// ===================== LIQUID GLASS THEME (iOS 26 style) =====================
 function applyLiquidGlass(enabled){
   document.body.classList.toggle('liquid-glass',!!enabled);
+  // Ensure dashboard re-fits its numbers after the glass surfaces alter layout widths
+  if(typeof autoFitStatValues==='function')requestAnimationFrame(autoFitStatValues);
 }
+
+// ===================== AUTO-FIT STAT VALUES =====================
+// Detects when a stat-card's value text overflows its container and shrinks
+// the font-size until it fits. Runs after every dashboard render, on resize,
+// and whenever the liquid glass theme is toggled.
+function autoFitStatValues(){
+  const cards=document.querySelectorAll('.stat-card');
+  cards.forEach(card=>{
+    const val=card.querySelector('.stat-value');
+    if(!val)return;
+    // Reset to baseline before measuring
+    val.style.fontSize='';
+    const cardWidth=card.clientWidth - 28; // minus padding allowance
+    if(cardWidth<=0)return;
+    let fs=parseFloat(getComputedStyle(val).fontSize)||22;
+    let safety=20;
+    while(val.scrollWidth>cardWidth && fs>10 && safety-->0){
+      fs-=0.75;
+      val.style.fontSize=fs+'px';
+    }
+  });
+}
+// Re-fit when window resizes (debounced)
+let _autoFitTimer=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(_autoFitTimer);
+  _autoFitTimer=setTimeout(autoFitStatValues,120);
+});
 
 // ===================== ADMIN TAB LOADING MOTION =====================
 // Restarts the CSS animation on whichever admin sub-tab is currently visible.
@@ -4482,10 +4939,14 @@ function triggerCountUps(){
       } else {
         el._countUpAnimating=null;
         el.textContent=formatNum(to);
+        // Final auto-fit pass once the real text is in place
+        if(typeof autoFitStatValues==='function')autoFitStatValues();
       }
     };
     el._countUpAnimating=requestAnimationFrame(step);
   });
+  // Initial pass right away too (covers no-animation path and immediate render)
+  if(typeof autoFitStatValues==='function')requestAnimationFrame(autoFitStatValues);
 }
 
 // ===================== BLUR-TEXT (vanilla port of BlurText React) =====================
