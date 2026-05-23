@@ -178,65 +178,16 @@ body.dark #navbar{background:rgba(10,10,10,.85);}
 body.dark .nav-link.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .nav-right{display:flex;gap:8px;align-items:center;}
 
-/* ===== LOGIN — Antigravity-style animated mesh with interactive parallax ===== */
+/* ===== LOGIN — Clean minimal dark background (no orbs / aurora / sparkles) ===== */
 #loginScreen{height:100vh;height:100dvh;max-height:100dvh;min-height:100dvh;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
-/* Animated mesh gradient orbs — using will-change for smooth GPU acceleration */
-#loginScreen::before,#loginScreen::after{
-  content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;will-change:transform;
-}
-#loginScreen::before{
-  width:600px;height:600px;
-  background:radial-gradient(circle,#F97316 0%,#EA580C 40%,transparent 70%);
-  top:-200px;left:-100px;
-  animation:orbDrift1 18s ease-in-out infinite;
-}
-#loginScreen::after{
-  width:550px;height:550px;
-  background:radial-gradient(circle,#8B5CF6 0%,#6D28D9 40%,transparent 70%);
-  bottom:-150px;right:-100px;
-  animation:orbDrift2 22s ease-in-out infinite;
-}
-/* Multiple drifting orbs for richer interactive feel */
-.login-orb-blue{position:absolute;width:480px;height:480px;border-radius:50%;filter:blur(90px);opacity:.4;
-  background:radial-gradient(circle,#3B82F6 0%,#1E40AF 40%,transparent 70%);
-  top:30%;left:40%;animation:orbDrift3 25s ease-in-out infinite;pointer-events:none;will-change:transform;}
-.login-orb-pink{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(85px);opacity:.35;
-  background:radial-gradient(circle,#EC4899 0%,#BE185D 40%,transparent 70%);
-  top:60%;left:10%;animation:orbDrift1 28s ease-in-out infinite reverse;pointer-events:none;will-change:transform;}
-.login-orb-cyan{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(85px);opacity:.32;
-  background:radial-gradient(circle,#06B6D4 0%,#0E7490 40%,transparent 70%);
-  top:10%;right:15%;animation:orbDrift2 32s ease-in-out infinite;pointer-events:none;will-change:transform;}
-
-/* Mouse-parallax wrapper — orbs respond to cursor movement */
-.login-parallax{position:absolute;inset:0;pointer-events:none;transition:transform .8s cubic-bezier(.22,1,.36,1);will-change:transform;}
-
-/* Floating sparkle particles */
-.login-sparkle{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 10px rgba(255,255,255,.8);pointer-events:none;animation:sparkle 3s ease-in-out infinite;}
-
-/* Subtle grain overlay */
-.login-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;pointer-events:none;}
-
-/* Aurora light streaks at top */
-.login-aurora{position:absolute;top:0;left:0;right:0;height:200px;pointer-events:none;background:linear-gradient(180deg,rgba(249,115,22,.15) 0%,transparent 100%);filter:blur(20px);}
 
 .login-card{
   position:relative;z-index:2;
-  background:rgba(10,10,10,.65);
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
+  background:rgba(15,15,15,.9);
   border:1px solid rgba(255,255,255,.08);
   padding:56px 48px;border-radius:24px;width:100%;max-width:440px;
   box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03) inset;
-  animation:cardLift 1s var(--ease) both;
-  transform-style:preserve-3d;
-  transition:transform .3s var(--ease);
-}
-/* Subtle shimmer line across the card on initial reveal */
-.login-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),rgba(139,92,246,.6),transparent);
-  animation:shimmerLine 3s ease-in-out infinite;
-  pointer-events:none;
+  animation:cardLift .8s var(--ease) both;
 }
 .login-logo{width:140px;height:140px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;animation:float 6s ease-in-out infinite;position:relative;}
 .login-logo::after{
@@ -424,67 +375,142 @@ body.dark .items-table th{color:#fff;background:#0F0F0F;border-bottom-color:#374
 body.dark .admin-sidebar .admin-tab.active{background:rgba(249,115,22,.15);color:#FFAB66;}
 .admin-content{min-width:0;}
 
-/* ====== Admin themed background (toggleable) ====== */
+/* ===== ADMIN PAGE — clean, no themed orbs ===== */
 #adminPage{position:relative;}
-/* Background mesh orbs — hidden by default, shown when body.admin-themed */
-.admin-bg-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0;transition:opacity .8s var(--ease);will-change:transform;}
-body.admin-themed #adminPage .admin-bg-orb{opacity:.25;}
-body.dark.admin-themed #adminPage .admin-bg-orb{opacity:.35;}
-.admin-bg-orb.orb1{width:600px;height:600px;background:radial-gradient(circle,#F97316 0%,transparent 70%);top:-200px;left:-150px;}
-.admin-bg-orb.orb2{width:550px;height:550px;background:radial-gradient(circle,#3B82F6 0%,transparent 70%);bottom:-150px;right:-150px;}
-.admin-bg-orb.orb3{width:480px;height:480px;background:radial-gradient(circle,#8B5CF6 0%,transparent 70%);top:40%;left:40%;}
-/* When animations are on AND theme is on, orbs drift */
-body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb1{animation:orbDrift1 22s ease-in-out infinite;}
-body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb2{animation:orbDrift2 26s ease-in-out infinite;}
-body.admin-themed.admin-animated #adminPage .admin-bg-orb.orb3{animation:orbDrift3 30s ease-in-out infinite;}
-/* When admin-themed: surfaces become slightly translucent so orbs show through */
-body.admin-themed #adminPage .card,
-body.admin-themed #adminPage .stat-card,
-body.admin-themed #adminPage .month-chart-wrap,
-body.admin-themed #adminPage .customer-card,
-body.admin-themed #adminPage .expense-item,
-body.admin-themed #adminPage .admin-sidebar,
-body.admin-themed #adminPage .invoices-table-wrap,
-body.admin-themed #adminPage .payment-table-wrap{
-  background:rgba(255,255,255,.78);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+.admin-bg-orb{display:none!important;}
+
+/* ===== SETTINGS GEAR BUTTON & PANEL ===== */
+#settingsBtn{
+  background:transparent;border:1.5px solid var(--border);cursor:pointer;
+  width:38px;height:38px;border-radius:var(--radius);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--text-muted);
+  transition:all .25s var(--ease);
 }
-body.admin-themed.dark #adminPage .card,
-body.admin-themed.dark #adminPage .stat-card,
-body.admin-themed.dark #adminPage .month-chart-wrap,
-body.admin-themed.dark #adminPage .customer-card,
-body.admin-themed.dark #adminPage .expense-item,
-body.admin-themed.dark #adminPage .admin-sidebar,
-body.admin-themed.dark #adminPage .invoices-table-wrap,
-body.admin-themed.dark #adminPage .payment-table-wrap{
-  background:rgba(10,10,10,.72);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+#settingsBtn:hover{transform:rotate(45deg);border-color:var(--orange);color:var(--orange);}
+
+#settingsBackdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  z-index:9998;opacity:0;transition:opacity .25s var(--ease);pointer-events:none;
+}
+#settingsBackdrop.open{opacity:1;pointer-events:auto;}
+
+#settingsPanel{
+  position:fixed;top:0;right:0;height:100vh;height:100dvh;
+  width:360px;max-width:90vw;
+  background:var(--surface);border-left:1px solid var(--border);
+  z-index:9999;
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .35s var(--ease-spring);
+  box-shadow:-12px 0 32px rgba(0,0,0,.18);
+}
+#settingsPanel.open{transform:translateX(0);}
+.settings-header{
+  padding:18px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.settings-header h3{font-size:18px;font-weight:700;letter-spacing:-0.01em;}
+.settings-body{
+  padding:14px 18px;overflow-y:auto;flex:1;
+  display:flex;flex-direction:column;gap:6px;
+}
+.setting-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:14px 12px;border-radius:var(--radius);
+  transition:background .2s var(--ease);
+}
+.setting-row:hover{background:var(--bg);}
+.setting-label{font-size:14px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+.setting-desc{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.setting-row select,.setting-row input[type=color]{
+  border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:6px 10px;font-size:13px;background:var(--surface);color:var(--text);
+  font-family:inherit;cursor:pointer;
+}
+.setting-row input[type=color]{
+  width:48px;height:34px;padding:2px;cursor:pointer;
 }
 
-/* ====== Admin animations (toggleable) ====== */
-/* When admin-animated: cards have lift animation, smoother hover */
-body.admin-animated #adminPage .stat-card{animation:cardLift .6s var(--ease) both;}
-body.admin-animated #adminPage .stat-card:nth-child(1){animation-delay:.05s;}
-body.admin-animated #adminPage .stat-card:nth-child(2){animation-delay:.1s;}
-body.admin-animated #adminPage .stat-card:nth-child(3){animation-delay:.15s;}
-body.admin-animated #adminPage .stat-card:nth-child(4){animation-delay:.2s;}
-body.admin-animated #adminPage .stat-card:nth-child(5){animation-delay:.25s;}
-body.admin-animated #adminPage .stat-card:nth-child(6){animation-delay:.3s;}
-body.admin-animated #adminPage .stat-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--shadow-lg);}
-body.admin-animated #adminPage .stat-card .stat-icon{transition:transform .4s var(--ease-spring);}
-body.admin-animated #adminPage .stat-card:hover .stat-icon{transform:scale(1.15) rotate(-5deg);}
-body.admin-animated #adminPage .card{animation:cardLift .5s var(--ease) both;}
-body.admin-animated #adminPage .month-chart-wrap{animation:cardLift .6s var(--ease) both;}
-body.admin-animated #adminPage .customer-card:hover{transform:translateY(-6px) scale(1.02);}
-body.admin-animated #adminPage .invoices-table tr:hover td,
-body.admin-animated #adminPage .payment-table tr:hover td{background:var(--bg);transform:scale(1.005);}
-body.admin-animated #adminPage .month-bar-inner{animation:shimmer 3s ease-in-out infinite;background-size:200% 100%!important;}
+/* Toggle switch */
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{
+  position:absolute;cursor:pointer;inset:0;
+  background:var(--border);border-radius:34px;
+  transition:.3s var(--ease);
+}
+.slider:before{
+  position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;
+  transition:.3s var(--ease-spring);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+.switch input:checked + .slider{background:var(--orange);}
+.switch input:checked + .slider:before{transform:translateX(20px);}
 
-/* Mode-toggle pill buttons in navbar */
-.mode-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--radius);background:transparent;border:1.5px solid var(--border);cursor:pointer;font-size:12px;font-weight:600;color:var(--text-muted);transition:all .25s var(--ease);}
-.mode-toggle:hover{border-color:var(--text-light);color:var(--text);transform:translateY(-1px);}
-.mode-toggle.on{background:var(--orange-light);border-color:var(--orange);color:var(--orange-dark);box-shadow:0 1px 2px rgba(249,115,22,.15);}
-body.dark .mode-toggle.on{background:rgba(249,115,22,.15);color:#FFAB66;}
-.mode-toggle .dot{width:8px;height:8px;border-radius:50%;background:var(--text-light);transition:all .25s var(--ease);}
-.mode-toggle.on .dot{background:var(--orange);box-shadow:0 0 8px rgba(249,115,22,.5);}
+/* ===== SPLASH CURSOR CANVAS ===== */
+#splashCanvasWrap{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  pointer-events:none;z-index:50;
+}
+#splashCanvas{
+  width:100%;height:100%;display:block;
+}
+
+/* ===== WELCOME OVERLAY (after login) ===== */
+#welcomeOverlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:10000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s var(--ease);
+  padding:24px;
+}
+#welcomeOverlay.show{opacity:1;pointer-events:auto;}
+.welcome-content{
+  text-align:center;color:#fff;max-width:600px;
+}
+.welcome-content .welcome-greet{
+  font-size:46px;font-weight:800;letter-spacing:-0.03em;margin-bottom:14px;
+  background:linear-gradient(135deg,#fff 0%,#FFAB66 50%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  min-height:60px;
+}
+.welcome-content .welcome-typing{
+  font-size:22px;color:rgba(255,255,255,.85);min-height:34px;font-weight:500;
+}
+.welcome-content .welcome-typing .text-type__cursor{
+  margin-left:4px;display:inline-block;color:var(--orange);font-weight:300;
+}
+
+/* ===== BLUR TEXT — page-transition heading ===== */
+.blur-text{display:inline-flex;flex-wrap:wrap;}
+.blur-text-segment{
+  display:inline-block;
+  filter:blur(10px);opacity:0;transform:translateY(-20px);
+  transition:filter .6s ease,opacity .6s ease,transform .6s ease;
+  will-change:filter,opacity,transform;
+}
+.blur-text-segment.in{filter:blur(0);opacity:1;transform:translateY(0);}
+
+/* ===== PAGE TRANSITION ===== */
+.page-transitioning{
+  filter:blur(10px);opacity:.3;transform:translateY(8px);
+}
+.page{
+  transition:filter .35s var(--ease),opacity .35s var(--ease),transform .35s var(--ease);
+}
+
+/* ===== COUNT-UP HELPER (smooth numbers) ===== */
+.countup-target{display:inline-block;font-variant-numeric:tabular-nums;}
+
+/* ===== SETTINGS — mobile responsive ===== */
+@media(max-width:600px){
+  #settingsPanel{width:100%;max-width:100%;}
+}
 
 /* Dashboard */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
@@ -562,79 +588,119 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 .expense-item .exp-info p{font-size:12px;color:var(--text-muted);}
 .expense-item .exp-amount{font-size:16px;font-weight:700;color:var(--red-dark);}
 
-/* ===== PRINT STYLES ===== */
-@page{size:A4;margin:8mm 8mm;}
+/* ===== PRINT STYLES — PROFESSIONAL LETTER LAYOUT ===== */
+/* Professional letter margins ~25mm (1 inch) all around */
+@page{size:A4;margin:25mm 25mm;}
 @media print{
   /* Hide UI */
-  #navbar,.inv-sidebar,.action-bar,#toast-container{display:none!important;}
+  #navbar,.inv-sidebar,.action-bar,#toast-container,#settingsPanel,#settingsBackdrop,
+  #splashCanvas,#welcomeOverlay,.admin-bg-orb{display:none!important;}
   #invoicePage,#quotationPage{padding:0!important;}
   .invoice-layout{grid-template-columns:1fr!important;gap:0!important;max-width:none!important;}
-  .invoice-doc{box-shadow:none!important;border:none!important;padding:0!important;border-radius:0!important;min-height:275mm!important;height:275mm!important;background:#fff!important;display:flex!important;flex-direction:column!important;animation:none!important;}
+  /* The full printable area is 297mm - 2*25mm = 247mm tall.
+     Flex column with header at top, items in middle (flex:1), footer at bottom. */
+  .invoice-doc{
+    box-shadow:none!important;border:none!important;padding:0!important;
+    border-radius:0!important;
+    min-height:247mm!important;height:247mm!important;
+    background:#fff!important;
+    display:flex!important;flex-direction:column!important;
+    animation:none!important;
+  }
   .no-print{display:none!important;}
   .print-only{display:inline!important;}
   body,html{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   body.dark{--bg:#fff!important;--surface:#fff!important;--text:#000!important;--text-muted:#525252!important;--border:#E5E7EB!important;}
   /* Make inputs in print look like clean text */
   input,select,textarea{border:none!important;background:transparent!important;padding:0!important;width:auto!important;color:#000!important;font-family:inherit!important;}
-  /* FIX #12: Hide the dropdown arrow on select elements in print */
+  /* Hide the dropdown arrow on select elements in print */
   select{
     appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;
     background-image:none!important;padding-right:0!important;
   }
-  /* FIX #5: Hide the calendar picker icon on date inputs in print */
+  /* Hide the calendar picker icon on date inputs in print */
   input[type="date"]::-webkit-calendar-picker-indicator{display:none!important;-webkit-appearance:none!important;}
   input[type="date"]::-webkit-inner-spin-button,
   input[type="date"]::-webkit-clear-button{display:none!important;-webkit-appearance:none!important;}
   input[type=date]{-webkit-appearance:none;-moz-appearance:textfield;appearance:textfield;}
-  /* Force professional logo size in print (smaller, neater) */
-  .inv-logo{width:95px!important;height:95px!important;}
-  .inv-logo-placeholder{width:95px!important;height:95px!important;font-size:20px!important;}
-  /* Meta layout in print: keep grid alignment between Invoice/Date labels */
-  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:3px 10px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:11px!important;}
-  .inv-meta-row strong{font-size:11px!important;}
-  .inv-meta-row .meta-val{text-align:left!important;font-size:11px!important;}
-  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:11px!important;}
-  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:24px!important;margin-bottom:6px!important;padding-bottom:6px!important;}
-  .inv-company-block{border-bottom-color:#000!important;padding-bottom:10px!important;margin-bottom:16px!important;}
-  .inv-company-block h1{color:#000!important;font-size:20px!important;margin-bottom:2px!important;}
-  .inv-company-block p{color:#525252!important;font-size:10px!important;}
-  /* Customer details box keep its border in print — smaller font */
-  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:10px 14px!important;margin-bottom:16px!important;font-size:11px!important;}
+
+  /* ===== HEADER — Bigger logo & company name ===== */
+  .inv-top-row{margin-bottom:10px!important;}
+  .inv-logo{width:120px!important;height:120px!important;}
+  .inv-logo-placeholder{width:120px!important;height:120px!important;font-size:26px!important;}
+  /* Meta layout in print: bigger Invoice/Date labels */
+  .inv-meta-row{display:grid!important;grid-template-columns:auto auto!important;gap:4px 12px!important;justify-content:end!important;align-items:baseline!important;color:#000!important;font-size:13px!important;}
+  .inv-meta-row strong{font-size:13px!important;}
+  .inv-meta-row .meta-val{text-align:left!important;font-size:13px!important;}
+  .inv-meta input{text-align:left!important;width:auto!important;font-weight:700!important;border:none!important;background:transparent!important;font-size:13px!important;}
+  .inv-meta .doc-type{color:#000!important;border-bottom-color:#000!important;font-size:30px!important;margin-bottom:8px!important;padding-bottom:8px!important;}
+  /* Company name block — bigger */
+  .inv-company-block{border-bottom-color:#000!important;padding-bottom:14px!important;margin-bottom:20px!important;border-bottom-width:3px!important;}
+  .inv-company-block h1{color:#000!important;font-size:28px!important;margin-bottom:4px!important;}
+  .inv-company-block p{color:#525252!important;font-size:12px!important;}
+
+  /* Customer details box — bigger */
+  .inv-customer{border:1.5px solid #94A3B8!important;background:transparent!important;animation:none!important;color:#000!important;padding:12px 16px!important;margin-bottom:18px!important;font-size:13px!important;}
   .inv-customer strong.cust-title,.inv-customer span{color:#000!important;}
-  .inv-customer strong.cust-title{font-size:12px!important;margin-bottom:5px!important;}
-  .inv-customer span{font-size:11px!important;margin-bottom:2px!important;}
-  /* Items table — keep header background visible in print, no animations, professional size */
-  .items-table{font-size:11px!important;margin-bottom:12px!important;}
-  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:11px!important;padding:8px 6px!important;}
-  .items-table td{color:#000!important;font-size:11px!important;padding:7px 6px!important;}
-  .items-table input,.items-table select{font-size:11px!important;}
-  /* Totals — professional size */
-  .inv-totals{margin:16px 0!important;}
-  .total-row{font-size:11px!important;padding:4px 0!important;}
-  .grand-row{font-size:13px!important;padding:7px 0 3px!important;margin-top:4px!important;}
-  /* Notes/Terms — smaller in print with proper wrapping */
-  .inv-notes{padding:10px 12px!important;margin-bottom:12px!important;font-size:10.5px!important;}
-  .inv-notes strong{font-size:11px!important;margin-bottom:4px!important;}
-  .inv-notes p{font-size:10.5px!important;line-height:1.5!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
-  /* Footer line stays — small professional size */
-  .inv-footer{border-top:1px solid #94A3B8!important;color:#525252!important;padding-top:10px!important;font-size:9.5px!important;}
-  .inv-footer p:first-child{color:#000!important;font-size:10px!important;}
-  .inv-footer p{margin-bottom:2px!important;}
-  .inv-footer .powered-by{font-size:9px!important;margin-top:4px!important;}
-  /* Invoice document — reduce padding for print */
-  .invoice-doc{padding:18mm 14mm!important;}
+  .inv-customer strong.cust-title{font-size:14px!important;margin-bottom:6px!important;}
+  .inv-customer span{font-size:12.5px!important;margin-bottom:3px!important;}
+
+  /* Items table — bigger */
+  .items-table{font-size:12.5px!important;margin-bottom:14px!important;}
+  .items-table th{background:#F8F9FB!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:12px!important;padding:9px 7px!important;}
+  .items-table td{color:#000!important;font-size:12.5px!important;padding:8px 7px!important;}
+  .items-table input,.items-table select{font-size:12.5px!important;}
+
+  /* ===== TOTALS — Bigger and highlighted ===== */
+  .inv-totals{margin:18px 0!important;}
+  .totals-box{width:340px!important;}
+  .total-row{font-size:12.5px!important;padding:5px 0!important;}
+  /* Grand total — HIGHLIGHTED — orange/dark border, larger, bold */
+  .grand-row{
+    font-size:18px!important;
+    font-weight:900!important;
+    padding:12px 14px!important;
+    margin-top:8px!important;
+    background:#FFF7ED!important;
+    border:2px solid #F97316!important;
+    border-radius:6px!important;
+    color:#000!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  .grand-row span:first-child{color:#000!important;font-weight:900!important;}
+  .grand-row span:last-child{color:#EA580C!important;font-weight:900!important;font-size:19px!important;}
+
+  /* Notes/Terms — bigger with proper wrapping */
+  .inv-notes{padding:12px 14px!important;margin-bottom:14px!important;font-size:12px!important;}
+  .inv-notes strong{font-size:12.5px!important;margin-bottom:5px!important;}
+  .inv-notes p{font-size:12px!important;line-height:1.55!important;word-wrap:break-word!important;overflow-wrap:break-word!important;word-break:break-word!important;white-space:pre-wrap!important;}
+
+  /* ===== FOOTER — bigger & ALWAYS at bottom of page ===== */
+  .inv-footer{
+    border-top:1.5px solid #000!important;
+    color:#000!important;
+    padding-top:14px!important;
+    font-size:11.5px!important;
+    margin-top:auto!important;  /* push to bottom of flex column */
+  }
+  .inv-footer p:first-child{color:#000!important;font-size:13px!important;font-weight:600!important;}
+  .inv-footer p{margin-bottom:3px!important;font-size:11.5px!important;}
+  .inv-footer .powered-by{font-size:10.5px!important;margin-top:6px!important;color:#525252!important;}
+  .inv-footer .powered-by strong{color:#EA580C!important;}
+
   /* Disable all transitions in print */
   *{transition:none!important;animation:none!important;}
   /* Totals stay black */
-  .total-row,.grand-row{color:#000!important;}
+  .total-row{color:#000!important;}
   /* Force colors on dark backgrounds (badges etc.) */
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  /* PRINT-MODE: hide date/number INPUTS, show formatted spans (no calendar icons) */
+  /* PRINT-MODE: hide date/number INPUTS, show formatted spans */
   .print-mode #invDate,.print-mode #qtnDate,.print-mode #qtnValidDate,
   .print-mode #invNum,.print-mode #qtnNum{display:none!important;}
   .print-mode #invDatePrint,.print-mode #qtnDatePrint,.print-mode #qtnValidDatePrint,
   .print-mode #invNumPrint,.print-mode #qtnNumPrint{
-    display:inline!important;font-weight:700!important;color:#000!important;
+    display:inline!important;font-weight:700!important;color:#000!important;font-size:13px!important;
   }
 }
 
@@ -694,6 +760,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
     gap:6px;
   }
   .nav-right .btn{padding:7px 12px;font-size:12px;min-height:36px;}
+  .nav-right #settingsBtn{width:36px;height:36px;font-size:16px;}
   /* Row 2: nav-links span the FULL width — 3 equal tabs, no scroll */
   .nav-links{
     order:3;
@@ -1310,23 +1377,96 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 <!-- TOAST CONTAINER -->
 <div id="toast-container"></div>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-  <div class="login-aurora"></div>
-  <div class="login-parallax" id="loginParallax">
-    <div class="login-orb-blue"></div>
-    <div class="login-orb-pink"></div>
-    <div class="login-orb-cyan"></div>
+<!-- ===== SPLASH CURSOR CANVAS (only enabled via Settings) ===== -->
+<div id="splashCanvasWrap" style="display:none;"><canvas id="splashCanvas"></canvas></div>
+
+<!-- ===== WELCOME OVERLAY (shown after login when enabled) ===== -->
+<div id="welcomeOverlay">
+  <div class="welcome-content">
+    <div class="welcome-greet" id="welcomeGreet">Welcome back!</div>
+    <div class="welcome-typing">
+      <span id="welcomeTyping"></span><span class="text-type__cursor" id="welcomeCursor">|</span>
+    </div>
   </div>
-  <div class="login-grain"></div>
-  <!-- Floating sparkle particles -->
-  <div class="login-sparkle" style="top:15%;left:20%;animation-delay:0s;"></div>
-  <div class="login-sparkle" style="top:25%;right:25%;animation-delay:.7s;"></div>
-  <div class="login-sparkle" style="top:65%;left:15%;animation-delay:1.4s;"></div>
-  <div class="login-sparkle" style="top:80%;right:30%;animation-delay:2.1s;"></div>
-  <div class="login-sparkle" style="top:40%;left:80%;animation-delay:.3s;"></div>
-  <div class="login-sparkle" style="top:55%;right:10%;animation-delay:1.8s;"></div>
-  <div class="login-sparkle" style="top:10%;left:50%;animation-delay:2.5s;"></div>
+</div>
+
+<!-- ===== SETTINGS PANEL ===== -->
+<div id="settingsBackdrop" onclick="toggleSettings(false)"></div>
+<aside id="settingsPanel" aria-hidden="true">
+  <div class="settings-header">
+    <h3>⚙️ Settings</h3>
+    <button class="modal-close" onclick="toggleSettings(false)">×</button>
+  </div>
+  <div class="settings-body">
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">🌙 Dark Mode</div>
+        <div class="setting-desc">Toggle dark theme</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setDark"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">✨ Page Transitions</div>
+        <div class="setting-desc">Smooth blur on page change</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setTransitions"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">👋 Welcome Message</div>
+        <div class="setting-desc">Show typing animation on login</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setWelcome"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">🔢 Count-Up Numbers</div>
+        <div class="setting-desc">Animated counters on dashboard</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setCountUp"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row" id="countUpSpeedRow">
+      <div>
+        <div class="setting-label">⚡ Count-Up Speed</div>
+        <div class="setting-desc">Animation duration</div>
+      </div>
+      <select id="setCountUpSpeed">
+        <option value="0.8">Fast</option>
+        <option value="1.5">Normal</option>
+        <option value="2.5">Slow</option>
+      </select>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">💧 Splash Cursor</div>
+        <div class="setting-desc">Fluid trail effect</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="setSplash"><span class="slider"></span></label>
+    </div>
+
+    <div class="setting-row" id="splashColorRow">
+      <div>
+        <div class="setting-label">🎨 Splash Color</div>
+        <div class="setting-desc">Cursor effect color</div>
+      </div>
+      <input type="color" id="setSplashColor" value="#F59E0B">
+    </div>
+
+    <div style="margin-top:14px;padding:14px 12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);text-align:center;">
+      Settings save automatically.
+    </div>
+  </div>
+</aside>
+
+<!-- LOGIN SCREEN — clean minimal -->
+<div id="loginScreen">
   <div class="login-card" id="loginCard">
     <div class="login-logo"><img src="logo.png" alt="Logo" onerror="this.parentElement.innerHTML='<div class=login-logo-placeholder>AP</div>'"></div>
     <h1>A P Trading</h1>
@@ -1385,9 +1525,7 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
       <button class="nav-link" id="navAdmin" onclick="navigate('admin')">🛠️ Admin</button>
     </div>
     <div class="nav-right">
-      <button class="mode-toggle hidden" id="themeToggleBtn" onclick="toggleAdminTheme()" title="Toggle admin theme"><span class="dot"></span>Theme</button>
-      <button class="mode-toggle hidden" id="animToggleBtn" onclick="toggleAdminAnim()" title="Toggle admin animations"><span class="dot"></span>Motion</button>
-      <button class="btn btn-ghost btn-sm" onclick="toggleDark()" id="darkBtn">🌙</button>
+      <button id="settingsBtn" onclick="toggleSettings()" title="Settings">⚙️</button>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
     </div>
   </nav>
@@ -1654,10 +1792,6 @@ body.dark .highlight-month{background:rgba(249,115,22,.1)!important;}
 
   <!-- ===================== ADMIN PAGE ===================== -->
   <div id="adminPage" class="page">
-    <!-- Background animated orbs (toggleable via Theme button) -->
-    <div class="admin-bg-orb orb1"></div>
-    <div class="admin-bg-orb orb2"></div>
-    <div class="admin-bg-orb orb3"></div>
     <div class="admin-layout">
       <!-- Vertical sidebar tabs -->
       <div class="admin-sidebar">
@@ -2124,11 +2258,9 @@ window.onload=()=>{
   updateTermsDisplay('quotation');
   // NEW: wire up dirty-state listeners so Save button shows/hides automatically
   installDirtyListeners();
-  if(localStorage.getItem('ap_dark')==='1'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
-  // NEW: Restore admin theme / animation preferences
-  initAdminTogglePrefs();
-  // NEW: Initialize the interactive parallax effect on the login screen
-  initLoginParallax();
+  if(localStorage.getItem('ap_dark')==='1'){document.body.classList.add('dark');}
+  // Apply all user settings (defined in settings module at bottom of script)
+  if(typeof applyAllSettings==='function')applyAllSettings();
 };
 
 // FIX #10: genDocNum uses max existing number instead of array.length+1 to avoid collisions on delete
@@ -2152,6 +2284,10 @@ function doLogin(){
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('modeScreen').classList.remove('hidden');
     document.getElementById('loginErr').classList.add('hidden');
+    // NEW: Show welcome message if enabled
+    if(localStorage.getItem('ap_welcomeMsg')!=='0' && typeof showWelcomeMessage==='function'){
+      showWelcomeMessage();
+    }
   } else {
     document.getElementById('loginErr').classList.remove('hidden');
     const c=document.getElementById('loginCard');
@@ -2210,22 +2346,37 @@ function goToModeSelect(){
 
 // ===================== NAVIGATION =====================
 function navigate(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-  document.getElementById(page+'Page').classList.add('active');
-  const navEl=document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1));
-  if(navEl)navEl.classList.add('active');
-  // NEW: show theme/motion toggle buttons only on admin page
-  updateNavToggleVisibility(page);
-  if(page==='admin'){renderDashboard();renderInvoicesList();renderQtnList();renderCustomers();renderPayments();renderExpenses();populateCustomerFilters();}
+  const wrap=document.getElementById('appWrapper');
+  const transitionsOn=localStorage.getItem('ap_pageTransitions')!=='0'; // default ON
+  const doSwap=()=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+    const target=document.getElementById(page+'Page');
+    if(target)target.classList.add('active');
+    const navEl=document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1));
+    if(navEl)navEl.classList.add('active');
+    if(page==='admin'){renderDashboard();renderInvoicesList();renderQtnList();renderCustomers();renderPayments();renderExpenses();populateCustomerFilters();}
+    // Re-apply blur-text intro on page titles when transitions on
+    if(transitionsOn && typeof animateBlurTitles==='function')requestAnimationFrame(animateBlurTitles);
+  };
+  if(transitionsOn && wrap){
+    wrap.classList.add('page-transitioning');
+    setTimeout(()=>{
+      doSwap();
+      requestAnimationFrame(()=>wrap.classList.remove('page-transitioning'));
+    },180);
+  } else {
+    doSwap();
+  }
 }
 
 // ===================== DARK MODE =====================
 function toggleDark(){
   document.body.classList.toggle('dark');
   const isDark=document.body.classList.contains('dark');
-  document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
   localStorage.setItem('ap_dark',isDark?'1':'0');
+  // Sync settings checkbox if open
+  const cb=document.getElementById('setDark');if(cb)cb.checked=isDark;
 }
 
 // ===================== TOAST =====================
@@ -3561,11 +3712,11 @@ function renderDashboard(){
   const netProfit=totalProfit-totalExp;
 
   document.getElementById('dashStats').innerHTML=`
-    <div class="stat-card stat-orange"><div class="stat-icon">💰</div><div class="stat-value">${fmtRs(totalRev)}</div><div class="stat-label">Total Revenue</div></div>
-    <div class="stat-card stat-green"><div class="stat-icon">📈</div><div class="stat-value">${fmtRs(totalProfit)}</div><div class="stat-label">Gross Profit</div></div>
-    <div class="stat-card stat-red"><div class="stat-icon">📉</div><div class="stat-value">${fmtRs(totalExp)}</div><div class="stat-label">Total Expenses</div></div>
-    <div class="stat-card stat-blue"><div class="stat-icon">🏦</div><div class="stat-value" style="color:${netProfit>=0?'var(--green-dark)':'var(--red-dark)'};">${fmtRs(netProfit)}</div><div class="stat-label">Net Profit</div></div>
-    <div class="stat-card stat-purple"><div class="stat-icon">🔴</div><div class="stat-value">${fmtRs(totalDue)}</div><div class="stat-label">Outstanding Due</div></div>`;
+    <div class="stat-card stat-orange"><div class="stat-icon">💰</div><div class="stat-value"><span class="countup-target" data-to="${totalRev}" data-prefix="Rs " data-decimals="2">${fmtRs(totalRev)}</span></div><div class="stat-label">Total Revenue</div></div>
+    <div class="stat-card stat-green"><div class="stat-icon">📈</div><div class="stat-value"><span class="countup-target" data-to="${totalProfit}" data-prefix="Rs " data-decimals="2">${fmtRs(totalProfit)}</span></div><div class="stat-label">Gross Profit</div></div>
+    <div class="stat-card stat-red"><div class="stat-icon">📉</div><div class="stat-value"><span class="countup-target" data-to="${totalExp}" data-prefix="Rs " data-decimals="2">${fmtRs(totalExp)}</span></div><div class="stat-label">Total Expenses</div></div>
+    <div class="stat-card stat-blue"><div class="stat-icon">🏦</div><div class="stat-value" style="color:${netProfit>=0?'var(--green-dark)':'var(--red-dark)'};"><span class="countup-target" data-to="${netProfit}" data-prefix="Rs " data-decimals="2">${fmtRs(netProfit)}</span></div><div class="stat-label">Net Profit</div></div>
+    <div class="stat-card stat-purple"><div class="stat-icon">🔴</div><div class="stat-value"><span class="countup-target" data-to="${totalDue}" data-prefix="Rs " data-decimals="2">${fmtRs(totalDue)}</span></div><div class="stat-label">Outstanding Due</div></div>`;
 
   const monthlyMap={};
   invoices.forEach(inv=>{
@@ -3638,6 +3789,8 @@ function renderDashboard(){
   };
   highlight.innerHTML=buildHighCard(lastMonth,'Last Month')+buildHighCard(thisMonth,'This Month');
   renderProfitAnalysis(invoices,expenses);
+  // Animate dashboard stat-card numbers (also covers the highlight cards if marked)
+  if(typeof triggerCountUps==='function')triggerCountUps();
 }
 
 function renderProfitAnalysis(invoices,expenses){
@@ -3660,13 +3813,15 @@ function renderProfitAnalysis(invoices,expenses){
   const gross=rev-cogs;const net=gross-exp;const margin=rev>0?net/rev*100:0;
   document.getElementById('profitAnalysisBody').innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--orange-dark);">${fmtRs(rev)}</div><div style="font-size:13px;color:var(--text-muted);">Revenue</div></div>
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--blue-dark);">${fmtRs(cogs)}</div><div style="font-size:13px;color:var(--text-muted);">Cost of Goods</div></div>
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--green-dark);">${fmtRs(gross)}</div><div style="font-size:13px;color:var(--text-muted);">Gross Profit</div></div>
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--red-dark);">${fmtRs(exp)}</div><div style="font-size:13px;color:var(--text-muted);">Expenses</div></div>
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:${net>=0?'var(--green-dark)':'var(--red-dark)'};">${fmtRs(net)}</div><div style="font-size:13px;color:var(--text-muted);">Net Profit</div></div>
-      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:${margin>=0?'var(--green-dark)':'var(--red-dark)'};">${margin.toFixed(1)}%</div><div style="font-size:13px;color:var(--text-muted);">Margin</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--orange-dark);"><span class="countup-target" data-to="${rev}" data-prefix="Rs " data-decimals="2">${fmtRs(rev)}</span></div><div style="font-size:13px;color:var(--text-muted);">Revenue</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--blue-dark);"><span class="countup-target" data-to="${cogs}" data-prefix="Rs " data-decimals="2">${fmtRs(cogs)}</span></div><div style="font-size:13px;color:var(--text-muted);">Cost of Goods</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--green-dark);"><span class="countup-target" data-to="${gross}" data-prefix="Rs " data-decimals="2">${fmtRs(gross)}</span></div><div style="font-size:13px;color:var(--text-muted);">Gross Profit</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--red-dark);"><span class="countup-target" data-to="${exp}" data-prefix="Rs " data-decimals="2">${fmtRs(exp)}</span></div><div style="font-size:13px;color:var(--text-muted);">Expenses</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:${net>=0?'var(--green-dark)':'var(--red-dark)'};"><span class="countup-target" data-to="${net}" data-prefix="Rs " data-decimals="2">${fmtRs(net)}</span></div><div style="font-size:13px;color:var(--text-muted);">Net Profit</div></div>
+      <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:${margin>=0?'var(--green-dark)':'var(--red-dark)'};"><span class="countup-target" data-to="${margin}" data-suffix="%" data-decimals="1">${margin.toFixed(1)}%</span></div><div style="font-size:13px;color:var(--text-muted);">Margin</div></div>
     </div>`;
+  // Trigger count-up animation (if enabled in settings)
+  if(typeof triggerCountUps==='function')triggerCountUps();
 }
 
 function clearProfitFilters(){
@@ -3822,6 +3977,43 @@ function switchAdminTab(tab,btn){
 }
 
 // ===================== ITEM NAMES MANAGER (admin) =====================
+// LIVE SYNC: when items list changes, rebuild every <tr> in invoice & quotation tables
+// so the dropdowns reflect current ITEM_OPTIONS immediately, without losing values.
+function syncItemRowsAfterOptionsChanged(){
+  ['invoice','quotation'].forEach(type=>{
+    const tbody=document.getElementById(type==='invoice'?'invItemsBody':'qtnItemsBody');
+    if(!tbody)return;
+    // Collect current item data from each row, preserving id/qty/price/buyPrice/etc.
+    const rows=Array.from(tbody.querySelectorAll('tr'));
+    const items=getItemsFromTable(type);
+    // Capture buy prices for invoice
+    const buyMap={};
+    if(type==='invoice'){
+      items.forEach(it=>{
+        const inp=document.getElementById('buy-'+it.id);
+        if(inp&&inp.value)buyMap[it.id]=parseFloat(inp.value)||0;
+      });
+    }
+    tbody.innerHTML='';
+    items.forEach(it=>{
+      // If item name no longer exists in ITEM_OPTIONS and not custom, switch to custom mode
+      if(!it.isCustom && it.name && !ITEM_OPTIONS.includes(it.name)){
+        it.isCustom=true;
+      }
+      tbody.appendChild(buildItemRow(it,type));
+    });
+    // Restore buy prices
+    if(type==='invoice'){
+      Object.keys(buyMap).forEach(id=>{
+        const inp=document.getElementById('buy-'+id);
+        if(inp)inp.value=buyMap[id];
+      });
+    }
+    calcTotals(type);
+    if(type==='invoice'){updateBuyPriceTable();updateProfitRow();}
+  });
+}
+
 function renderItemNamesList(){
   const list=document.getElementById('itemNamesList');
   if(!list)return;
@@ -3856,6 +4048,7 @@ function addItemName(){
   saveItemOptions();
   inp.value='';
   renderItemNamesList();
+  syncItemRowsAfterOptionsChanged(); // LIVE SYNC
   toast('Added: '+name);
 }
 window.editItemName=function(idx){
@@ -3875,6 +4068,12 @@ window.editItemName=function(idx){
   if(realIdx>=0)ITEM_OPTIONS[realIdx]=nm;
   saveItemOptions();
   renderItemNamesList();
+  // Update existing rows that referenced the OLD name to keep them in sync
+  ['invoice','quotation'].forEach(type=>{
+    const items=getItemsFromTable(type);
+    items.forEach(it=>{ if(it.name===current) it.name=nm; });
+  });
+  syncItemRowsAfterOptionsChanged(); // LIVE SYNC
   toast('Renamed to: '+nm);
 };
 window.deleteItemName=function(idx){
@@ -3885,6 +4084,7 @@ window.deleteItemName=function(idx){
   ITEM_OPTIONS=ITEM_OPTIONS.filter(x=>x!==target);
   saveItemOptions();
   renderItemNamesList();
+  syncItemRowsAfterOptionsChanged(); // LIVE SYNC
   toast('Deleted: '+target);
 };
 function resetItemNames(){
@@ -3892,94 +4092,19 @@ function resetItemNames(){
   ITEM_OPTIONS=[...DEFAULT_ITEM_OPTIONS,'Other'];
   saveItemOptions();
   renderItemNamesList();
+  syncItemRowsAfterOptionsChanged(); // LIVE SYNC
   toast('Items reset to defaults.');
 }
 
-// ===================== ADMIN THEME & ANIMATION TOGGLES =====================
-function toggleAdminTheme(){
-  const on=!document.body.classList.contains('admin-themed');
-  document.body.classList.toggle('admin-themed',on);
-  localStorage.setItem('ap_admin_theme',on?'1':'0');
-  const btn=document.getElementById('themeToggleBtn');
-  if(btn)btn.classList.toggle('on',on);
-  toast(on?'Theme: ON':'Theme: OFF');
-}
-function toggleAdminAnim(){
-  const on=!document.body.classList.contains('admin-animated');
-  document.body.classList.toggle('admin-animated',on);
-  localStorage.setItem('ap_admin_anim',on?'1':'0');
-  const btn=document.getElementById('animToggleBtn');
-  if(btn)btn.classList.toggle('on',on);
-  toast(on?'Motion: ON':'Motion: OFF');
-}
-function initAdminTogglePrefs(){
-  // Default: theme ON, animation ON for fresh visit
-  const themeOn=localStorage.getItem('ap_admin_theme');
-  const animOn=localStorage.getItem('ap_admin_anim');
-  const themeShouldBeOn=themeOn===null?true:themeOn==='1';
-  const animShouldBeOn=animOn===null?true:animOn==='1';
-  document.body.classList.toggle('admin-themed',themeShouldBeOn);
-  document.body.classList.toggle('admin-animated',animShouldBeOn);
-  const tBtn=document.getElementById('themeToggleBtn');
-  const aBtn=document.getElementById('animToggleBtn');
-  if(tBtn)tBtn.classList.toggle('on',themeShouldBeOn);
-  if(aBtn)aBtn.classList.toggle('on',animShouldBeOn);
-}
-
-// Show/hide theme & anim toggles based on current page (only on admin)
-function updateNavToggleVisibility(page){
-  const tBtn=document.getElementById('themeToggleBtn');
-  const aBtn=document.getElementById('animToggleBtn');
-  if(page==='admin'){
-    if(tBtn)tBtn.classList.remove('hidden');
-    if(aBtn)aBtn.classList.remove('hidden');
-  } else {
-    if(tBtn)tBtn.classList.add('hidden');
-    if(aBtn)aBtn.classList.add('hidden');
-  }
-}
-
-// ===================== LOGIN PARALLAX (Antigravity-style mouse-follow) =====================
-function initLoginParallax(){
-  const parallax=document.getElementById('loginParallax');
-  if(!parallax)return;
-  const loginScreen=document.getElementById('loginScreen');
-  if(!loginScreen)return;
-  let rafId=null;
-  let targetX=0,targetY=0,currentX=0,currentY=0;
-  const handleMove=(e)=>{
-    const rect=loginScreen.getBoundingClientRect();
-    const x=(e.clientX-rect.left)/rect.width-0.5;
-    const y=(e.clientY-rect.top)/rect.height-0.5;
-    targetX=x*40;targetY=y*40; // max offset 40px
-  };
-  const animate=()=>{
-    // Smooth easing toward target
-    currentX+=(targetX-currentX)*0.08;
-    currentY+=(targetY-currentY)*0.08;
-    parallax.style.transform=`translate3d(${currentX}px,${currentY}px,0)`;
-    rafId=requestAnimationFrame(animate);
-  };
-  loginScreen.addEventListener('mousemove',handleMove,{passive:true});
-  // Touch support (move based on touch position)
-  loginScreen.addEventListener('touchmove',(e)=>{
-    if(e.touches.length){
-      const t=e.touches[0];
-      handleMove({clientX:t.clientX,clientY:t.clientY});
-    }
-  },{passive:true});
-  // Subtle device-orientation parallax on mobile (when permission allows)
-  if(window.DeviceOrientationEvent){
-    window.addEventListener('deviceorientation',(e)=>{
-      if(e.gamma==null||e.beta==null)return;
-      // Map -45..45° → -1..1
-      const x=Math.max(-1,Math.min(1,(e.gamma||0)/45));
-      const y=Math.max(-1,Math.min(1,((e.beta||0)-45)/45));
-      targetX=x*30;targetY=y*30;
-    },{passive:true});
-  }
-  animate();
-}
+// ===================== LEGACY ADMIN TOGGLES (removed) =====================
+// These functions used to toggle the admin background theme and motion effects,
+// plus a login-screen mouse parallax. The user requested these be removed.
+// Empty stubs are kept so any stray reference in older saved data is harmless.
+function toggleAdminTheme(){}
+function toggleAdminAnim(){}
+function initAdminTogglePrefs(){}
+function updateNavToggleVisibility(){}
+function initLoginParallax(){}
 
 // ===================== BACKUP =====================
 function exportBackup(){
@@ -4021,6 +4146,971 @@ function importBackup(input){
   input.value='';
 }
 
+// ============================================================================
+// =====     NEW FEATURES: SETTINGS / COUNT-UP / BLUR-TEXT / WELCOME /     =====
+// =====              SPLASH CURSOR — vanilla JS port                      =====
+// ============================================================================
+
+// ===================== SETTINGS STORAGE KEYS =====================
+const SETTINGS_KEYS = {
+  dark:'ap_dark',
+  transitions:'ap_pageTransitions',
+  welcome:'ap_welcomeMsg',
+  countUp:'ap_countUp',
+  countUpSpeed:'ap_countUpSpeed',
+  splash:'ap_splashCursor',
+  splashColor:'ap_splashColor'
+};
+// Default ON (transitions/welcome/countUp), default OFF (splash)
+const SETTINGS_DEFAULTS = {
+  dark:'0',
+  transitions:'1',
+  welcome:'1',
+  countUp:'1',
+  countUpSpeed:'1.5',
+  splash:'0',
+  splashColor:'#F59E0B'  // yellow per spec
+};
+function getSetting(name){
+  const v=localStorage.getItem(SETTINGS_KEYS[name]);
+  return v===null?SETTINGS_DEFAULTS[name]:v;
+}
+function setSetting(name,value){
+  localStorage.setItem(SETTINGS_KEYS[name],value);
+}
+
+// ===================== SETTINGS PANEL =====================
+function toggleSettings(open){
+  const panel=document.getElementById('settingsPanel');
+  const back=document.getElementById('settingsBackdrop');
+  if(!panel||!back)return;
+  const isOpen=panel.classList.contains('open');
+  const shouldOpen=(typeof open==='boolean')?open:!isOpen;
+  panel.classList.toggle('open',shouldOpen);
+  back.classList.toggle('open',shouldOpen);
+  panel.setAttribute('aria-hidden',shouldOpen?'false':'true');
+  // Sync controls with current settings whenever opening
+  if(shouldOpen)syncSettingsControls();
+}
+
+function syncSettingsControls(){
+  const dark=document.getElementById('setDark');
+  if(dark)dark.checked=document.body.classList.contains('dark');
+  const tr=document.getElementById('setTransitions');
+  if(tr)tr.checked=getSetting('transitions')==='1';
+  const w=document.getElementById('setWelcome');
+  if(w)w.checked=getSetting('welcome')==='1';
+  const cu=document.getElementById('setCountUp');
+  if(cu)cu.checked=getSetting('countUp')==='1';
+  const cus=document.getElementById('setCountUpSpeed');
+  if(cus)cus.value=getSetting('countUpSpeed');
+  const sp=document.getElementById('setSplash');
+  if(sp)sp.checked=getSetting('splash')==='1';
+  const spc=document.getElementById('setSplashColor');
+  if(spc)spc.value=getSetting('splashColor');
+}
+
+function setupSettingsListeners(){
+  // Dark mode
+  const dark=document.getElementById('setDark');
+  if(dark)dark.addEventListener('change',()=>{
+    if(dark.checked!==document.body.classList.contains('dark'))toggleDark();
+  });
+  // Page transitions
+  const tr=document.getElementById('setTransitions');
+  if(tr)tr.addEventListener('change',()=>{
+    setSetting('transitions',tr.checked?'1':'0');
+    toast('Page transitions: '+(tr.checked?'ON':'OFF'));
+  });
+  // Welcome message
+  const w=document.getElementById('setWelcome');
+  if(w)w.addEventListener('change',()=>{
+    setSetting('welcome',w.checked?'1':'0');
+    toast('Welcome message: '+(w.checked?'ON':'OFF'));
+  });
+  // CountUp
+  const cu=document.getElementById('setCountUp');
+  if(cu)cu.addEventListener('change',()=>{
+    setSetting('countUp',cu.checked?'1':'0');
+    toast('Count-up: '+(cu.checked?'ON':'OFF'));
+    // Re-render dashboard so values either animate or jump to final
+    if(document.getElementById('adminPage')?.classList.contains('active'))renderDashboard();
+  });
+  // CountUp speed
+  const cus=document.getElementById('setCountUpSpeed');
+  if(cus)cus.addEventListener('change',()=>{
+    setSetting('countUpSpeed',cus.value);
+  });
+  // Splash cursor
+  const sp=document.getElementById('setSplash');
+  if(sp)sp.addEventListener('change',()=>{
+    setSetting('splash',sp.checked?'1':'0');
+    if(sp.checked)startSplashCursor();else stopSplashCursor();
+    toast('Splash cursor: '+(sp.checked?'ON':'OFF'));
+  });
+  // Splash color
+  const spc=document.getElementById('setSplashColor');
+  if(spc)spc.addEventListener('input',()=>{
+    setSetting('splashColor',spc.value);
+    // Live update color of active splash cursor
+    if(window._splashCursorAPI)window._splashCursorAPI.setColor(spc.value);
+  });
+}
+
+// Master init — called once from window.onload
+function applyAllSettings(){
+  // 1. Dark mode (already applied by main init, but make sure body class matches storage)
+  if(getSetting('dark')==='1')document.body.classList.add('dark');
+  // 2. Splash cursor: only start if explicitly enabled
+  if(getSetting('splash')==='1')startSplashCursor();
+  // 3. Sync UI controls
+  syncSettingsControls();
+  // 4. Wire up listeners (once)
+  setupSettingsListeners();
+}
+
+// ===================== COUNT-UP ANIMATION (vanilla port of CountUp) =====================
+// Animates every .countup-target span on the page (typically dashboard cards).
+// Reads data-to (target number), data-prefix, data-suffix, data-decimals.
+// Uses a smooth ease-out cubic so numbers feel like the React spring version.
+function triggerCountUps(){
+  const enabled=getSetting('countUp')==='1';
+  const duration=parseFloat(getSetting('countUpSpeed'))*1000; // ms
+  const targets=document.querySelectorAll('.countup-target');
+  targets.forEach(el=>{
+    if(el._countUpAnimating)cancelAnimationFrame(el._countUpAnimating);
+    const to=parseFloat(el.dataset.to)||0;
+    const prefix=el.dataset.prefix||'';
+    const suffix=el.dataset.suffix||'';
+    const decimals=parseInt(el.dataset.decimals)||0;
+    const formatNum=(n)=>{
+      const opts={minimumFractionDigits:decimals,maximumFractionDigits:decimals};
+      return prefix + Number(n).toLocaleString('en-LK',opts) + suffix;
+    };
+    if(!enabled){
+      // No animation: just display final value
+      el.textContent=formatNum(to);
+      return;
+    }
+    const from=0;
+    const start=performance.now();
+    const step=(now)=>{
+      const elapsed=now-start;
+      const t=Math.min(1,elapsed/duration);
+      // Ease-out cubic — mimics the React spring decay
+      const eased=1-Math.pow(1-t,3);
+      const current=from + (to - from)*eased;
+      el.textContent=formatNum(current);
+      if(t<1){
+        el._countUpAnimating=requestAnimationFrame(step);
+      } else {
+        el._countUpAnimating=null;
+        el.textContent=formatNum(to);
+      }
+    };
+    el._countUpAnimating=requestAnimationFrame(step);
+  });
+}
+
+// ===================== BLUR-TEXT (vanilla port of BlurText React) =====================
+// Splits each visible h1/h2/h3 on the freshly-shown page into word-spans,
+// each starting blurred + translated, then animates them in with stagger.
+function applyBlurText(element){
+  if(!element || element.dataset.blurApplied==='1')return;
+  const original=element.textContent;
+  if(!original.trim())return;
+  // Preserve original for later restoration if needed
+  element.dataset.blurOrig=original;
+  element.dataset.blurApplied='1';
+  // Build word-segments
+  const words=original.split(' ');
+  element.classList.add('blur-text');
+  element.innerHTML='';
+  words.forEach((word,i)=>{
+    const span=document.createElement('span');
+    span.className='blur-text-segment';
+    span.textContent=word + (i<words.length-1?'\u00A0':'');
+    span.style.transitionDelay=(i*60)+'ms';
+    element.appendChild(span);
+  });
+  // Trigger in next frame so transition runs
+  requestAnimationFrame(()=>{
+    element.querySelectorAll('.blur-text-segment').forEach(s=>s.classList.add('in'));
+  });
+}
+
+function animateBlurTitles(){
+  // If transitions disabled, do nothing
+  if(getSetting('transitions')!=='1')return;
+  // Find the currently-active page and animate its top-level visible heading(s)
+  const activePage=document.querySelector('.page.active');
+  if(!activePage)return;
+  // Pick the first 1–2 visible headings as page titles
+  const headings=Array.from(activePage.querySelectorAll('h1,h2,h3')).filter(h=>{
+    // Skip headings inside hidden tabs
+    let n=h;
+    while(n && n!==activePage){
+      if(n.classList && n.classList.contains('hidden'))return false;
+      n=n.parentElement;
+    }
+    // Only the first heading per card-header is enough — skip nested duplicates
+    return h.offsetParent !== null;
+  }).slice(0,3);
+  headings.forEach(h=>{
+    // Reset for re-animation
+    h.dataset.blurApplied='';
+    // Re-set original text in case previous animation left spans
+    if(h.dataset.blurOrig){h.textContent=h.dataset.blurOrig;}
+    applyBlurText(h);
+  });
+}
+
+// ===================== WELCOME MESSAGE (vanilla port of TextType React) =====================
+// Shows the welcome overlay then types greetings using the TextType pattern.
+function typeText(target,texts,opts){
+  opts=opts||{};
+  const typingSpeed=opts.typingSpeed||60;
+  const deletingSpeed=opts.deletingSpeed||30;
+  const pauseDuration=opts.pauseDuration||1500;
+  const loop=opts.loop===true;
+  const onComplete=opts.onComplete||(()=>{});
+  let idx=0,charIdx=0,deleting=false;
+  let stop=false;
+  const tick=()=>{
+    if(stop)return;
+    const current=texts[idx];
+    if(!deleting){
+      if(charIdx<current.length){
+        target.textContent=current.slice(0,charIdx+1);
+        charIdx++;
+        setTimeout(tick,typingSpeed);
+      } else {
+        // Finished typing this phrase
+        if(idx===texts.length-1 && !loop){
+          onComplete();
+          return;
+        }
+        setTimeout(()=>{deleting=true;tick();},pauseDuration);
+      }
+    } else {
+      if(charIdx>0){
+        target.textContent=current.slice(0,charIdx-1);
+        charIdx--;
+        setTimeout(tick,deletingSpeed);
+      } else {
+        deleting=false;
+        idx=(idx+1)%texts.length;
+        setTimeout(tick,200);
+      }
+    }
+  };
+  tick();
+  return ()=>{stop=true;};
+}
+
+function showWelcomeMessage(){
+  const overlay=document.getElementById('welcomeOverlay');
+  const typing=document.getElementById('welcomeTyping');
+  const cursor=document.getElementById('welcomeCursor');
+  const greet=document.getElementById('welcomeGreet');
+  if(!overlay||!typing)return;
+  // Time-of-day greeting
+  const hr=new Date().getHours();
+  let timeGreet='Welcome back!';
+  if(hr<12)timeGreet='Good morning!';
+  else if(hr<17)timeGreet='Good afternoon!';
+  else timeGreet='Good evening!';
+  if(greet)greet.textContent=timeGreet;
+  // Phrases to type out
+  const phrases=[
+    'Ready to make sales today?',
+    'Quality safety gear, delivered.',
+    'Your business, organized.',
+    'Let\u2019s get to work.'
+  ];
+  typing.textContent='';
+  if(cursor){
+    // Blinking cursor (CSS animation via inline style)
+    cursor.style.animation='pulse 1s ease-in-out infinite';
+  }
+  overlay.classList.add('show');
+  // Start typing
+  const stopFn=typeText(typing,phrases,{typingSpeed:55,deletingSpeed:25,pauseDuration:1300,loop:false,
+    onComplete:()=>{
+      // Fade out shortly after
+      setTimeout(()=>{
+        overlay.classList.remove('show');
+      },1200);
+    }
+  });
+  // Click anywhere to dismiss early
+  const dismiss=(e)=>{
+    if(e&&e.target.closest('.welcome-content')&&e.target.tagName!=='DIV')return;
+    stopFn();
+    overlay.classList.remove('show');
+    overlay.removeEventListener('click',dismiss);
+  };
+  overlay.addEventListener('click',dismiss);
+  // Auto-hide hard cap at 7 seconds
+  setTimeout(()=>{
+    stopFn();
+    overlay.classList.remove('show');
+  },7000);
+}
+
+// ============================================================================
+// =====    SPLASH CURSOR — vanilla port of React WebGL fluid simulation   =====
+// ============================================================================
+// This is a vanilla-JS adaptation of the SplashCursor component. The original
+// React useEffect body runs once when the canvas is mounted; we extract that
+// same logic into startSplashCursor() and store cleanup in window._splashCursorAPI.
+function startSplashCursor(){
+  // If already running, stop first so we restart with current color
+  if(window._splashCursorAPI && window._splashCursorAPI.cleanup){
+    window._splashCursorAPI.cleanup();
+  }
+  const canvasWrap=document.getElementById('splashCanvasWrap');
+  const canvas=document.getElementById('splashCanvas');
+  if(!canvas||!canvasWrap)return;
+  canvasWrap.style.display='block';
+
+  // === Config (defaults from React props) ===
+  let COLOR = getSetting('splashColor') || '#F59E0B';
+  const config = {
+    SIM_RESOLUTION: 128,
+    DYE_RESOLUTION: 1024, // Reduced from 1440 for mobile perf
+    CAPTURE_RESOLUTION: 512,
+    DENSITY_DISSIPATION: 3.5,
+    VELOCITY_DISSIPATION: 2,
+    PRESSURE: 0.1,
+    PRESSURE_ITERATIONS: 20,
+    CURL: 3,
+    SPLAT_RADIUS: 0.2,
+    SPLAT_FORCE: 6000,
+    SHADING: true,
+    COLOR_UPDATE_SPEED: 10,
+    PAUSED: false,
+    BACK_COLOR: { r: 0.5, g: 0, b: 0 },
+    TRANSPARENT: true,
+    RAINBOW_MODE: false, // user-controlled single color
+    COLOR: COLOR
+  };
+
+  let isActive=true;
+  let animationFrameId=null;
+
+  function pointerPrototype(){
+    this.id=-1;this.texcoordX=0;this.texcoordY=0;
+    this.prevTexcoordX=0;this.prevTexcoordY=0;
+    this.deltaX=0;this.deltaY=0;this.down=false;this.moved=false;this.color=[0,0,0];
+  }
+  let pointers=[new pointerPrototype()];
+
+  // === WebGL context ===
+  const ctxRes=getWebGLContext(canvas);
+  const gl=ctxRes.gl;
+  const ext=ctxRes.ext;
+  if(!gl){
+    // No WebGL support — silently disable
+    canvasWrap.style.display='none';
+    return;
+  }
+  if(!ext.supportLinearFiltering){
+    config.DYE_RESOLUTION=256;
+    config.SHADING=false;
+  }
+
+  function getWebGLContext(canvas){
+    const params={alpha:true,depth:false,stencil:false,antialias:false,preserveDrawingBuffer:false};
+    let gl=canvas.getContext('webgl2',params);
+    const isWebGL2=!!gl;
+    if(!isWebGL2)gl=canvas.getContext('webgl',params)||canvas.getContext('experimental-webgl',params);
+    if(!gl)return{gl:null,ext:null};
+    let halfFloat,supportLinearFiltering;
+    if(isWebGL2){
+      gl.getExtension('EXT_color_buffer_float');
+      supportLinearFiltering=gl.getExtension('OES_texture_float_linear');
+    } else {
+      halfFloat=gl.getExtension('OES_texture_half_float');
+      supportLinearFiltering=gl.getExtension('OES_texture_half_float_linear');
+    }
+    gl.clearColor(0,0,0,1);
+    const halfFloatTexType=isWebGL2?gl.HALF_FLOAT:halfFloat&&halfFloat.HALF_FLOAT_OES;
+    let formatRGBA,formatRG,formatR;
+    if(isWebGL2){
+      formatRGBA=getSupportedFormat(gl,gl.RGBA16F,gl.RGBA,halfFloatTexType);
+      formatRG=getSupportedFormat(gl,gl.RG16F,gl.RG,halfFloatTexType);
+      formatR=getSupportedFormat(gl,gl.R16F,gl.RED,halfFloatTexType);
+    } else {
+      formatRGBA=getSupportedFormat(gl,gl.RGBA,gl.RGBA,halfFloatTexType);
+      formatRG=getSupportedFormat(gl,gl.RGBA,gl.RGBA,halfFloatTexType);
+      formatR=getSupportedFormat(gl,gl.RGBA,gl.RGBA,halfFloatTexType);
+    }
+    return{gl,ext:{formatRGBA,formatRG,formatR,halfFloatTexType,supportLinearFiltering}};
+  }
+  function getSupportedFormat(gl,internalFormat,format,type){
+    if(!supportRenderTextureFormat(gl,internalFormat,format,type)){
+      switch(internalFormat){
+        case gl.R16F:return getSupportedFormat(gl,gl.RG16F,gl.RG,type);
+        case gl.RG16F:return getSupportedFormat(gl,gl.RGBA16F,gl.RGBA,type);
+        default:return null;
+      }
+    }
+    return{internalFormat,format};
+  }
+  function supportRenderTextureFormat(gl,internalFormat,format,type){
+    const texture=gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D,texture);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D,0,internalFormat,4,4,0,format,type,null);
+    const fbo=gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,texture,0);
+    return gl.checkFramebufferStatus(gl.FRAMEBUFFER)===gl.FRAMEBUFFER_COMPLETE;
+  }
+
+  // === Material / Program classes ===
+  class Material{
+    constructor(vertexShader,fragmentShaderSource){
+      this.vertexShader=vertexShader;
+      this.fragmentShaderSource=fragmentShaderSource;
+      this.programs=[];this.activeProgram=null;this.uniforms=[];
+    }
+    setKeywords(keywords){
+      let hash=0;
+      for(let i=0;i<keywords.length;i++)hash+=hashCode(keywords[i]);
+      let program=this.programs[hash];
+      if(program==null){
+        const fragmentShader=compileShader(gl.FRAGMENT_SHADER,this.fragmentShaderSource,keywords);
+        program=createProgram(this.vertexShader,fragmentShader);
+        this.programs[hash]=program;
+      }
+      if(program===this.activeProgram)return;
+      this.uniforms=getUniforms(program);
+      this.activeProgram=program;
+    }
+    bind(){gl.useProgram(this.activeProgram);}
+  }
+  class Program{
+    constructor(vertexShader,fragmentShader){
+      this.uniforms={};
+      this.program=createProgram(vertexShader,fragmentShader);
+      this.uniforms=getUniforms(this.program);
+    }
+    bind(){gl.useProgram(this.program);}
+  }
+  function createProgram(vertexShader,fragmentShader){
+    const program=gl.createProgram();
+    gl.attachShader(program,vertexShader);
+    gl.attachShader(program,fragmentShader);
+    gl.linkProgram(program);
+    return program;
+  }
+  function getUniforms(program){
+    const uniforms=[];
+    const uniformCount=gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);
+    for(let i=0;i<uniformCount;i++){
+      const uniformName=gl.getActiveUniform(program,i).name;
+      uniforms[uniformName]=gl.getUniformLocation(program,uniformName);
+    }
+    return uniforms;
+  }
+  function compileShader(type,source,keywords){
+    source=addKeywords(source,keywords);
+    const shader=gl.createShader(type);
+    gl.shaderSource(shader,source);
+    gl.compileShader(shader);
+    return shader;
+  }
+  function addKeywords(source,keywords){
+    if(!keywords)return source;
+    let keywordsString='';
+    keywords.forEach(k=>{keywordsString+='#define '+k+'\n';});
+    return keywordsString+source;
+  }
+  function hashCode(s){
+    if(s.length===0)return 0;
+    let hash=0;
+    for(let i=0;i<s.length;i++){hash=(hash<<5)-hash+s.charCodeAt(i);hash|=0;}
+    return hash;
+  }
+
+  // === Shaders ===
+  const baseVertexShader=compileShader(gl.VERTEX_SHADER,`
+    precision highp float;
+    attribute vec2 aPosition;
+    varying vec2 vUv;varying vec2 vL;varying vec2 vR;varying vec2 vT;varying vec2 vB;
+    uniform vec2 texelSize;
+    void main(){
+      vUv=aPosition*0.5+0.5;
+      vL=vUv-vec2(texelSize.x,0.0);vR=vUv+vec2(texelSize.x,0.0);
+      vT=vUv+vec2(0.0,texelSize.y);vB=vUv-vec2(0.0,texelSize.y);
+      gl_Position=vec4(aPosition,0.0,1.0);
+    }`);
+  const copyShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;uniform sampler2D uTexture;
+    void main(){gl_FragColor=texture2D(uTexture,vUv);}`);
+  const clearShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;uniform sampler2D uTexture;uniform float value;
+    void main(){gl_FragColor=value*texture2D(uTexture,vUv);}`);
+  const displayShaderSource=`
+    precision highp float;precision highp sampler2D;
+    varying vec2 vUv;varying vec2 vL;varying vec2 vR;varying vec2 vT;varying vec2 vB;
+    uniform sampler2D uTexture;uniform vec2 texelSize;
+    void main(){
+      vec3 c=texture2D(uTexture,vUv).rgb;
+      #ifdef SHADING
+        vec3 lc=texture2D(uTexture,vL).rgb;vec3 rc=texture2D(uTexture,vR).rgb;
+        vec3 tc=texture2D(uTexture,vT).rgb;vec3 bc=texture2D(uTexture,vB).rgb;
+        float dx=length(rc)-length(lc);float dy=length(tc)-length(bc);
+        vec3 n=normalize(vec3(dx,dy,length(texelSize)));vec3 l=vec3(0.0,0.0,1.0);
+        float diffuse=clamp(dot(n,l)+0.7,0.7,1.0);c*=diffuse;
+      #endif
+      float a=max(c.r,max(c.g,c.b));
+      gl_FragColor=vec4(c,a);
+    }`;
+  const splatShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision highp float;precision highp sampler2D;
+    varying vec2 vUv;uniform sampler2D uTarget;uniform float aspectRatio;
+    uniform vec3 color;uniform vec2 point;uniform float radius;
+    void main(){
+      vec2 p=vUv-point.xy;p.x*=aspectRatio;
+      vec3 splat=exp(-dot(p,p)/radius)*color;
+      vec3 base=texture2D(uTarget,vUv).xyz;
+      gl_FragColor=vec4(base+splat,1.0);
+    }`);
+  const advectionShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision highp float;precision highp sampler2D;
+    varying vec2 vUv;uniform sampler2D uVelocity;uniform sampler2D uSource;
+    uniform vec2 texelSize;uniform vec2 dyeTexelSize;
+    uniform float dt;uniform float dissipation;
+    vec4 bilerp(sampler2D sam,vec2 uv,vec2 tsize){
+      vec2 st=uv/tsize-0.5;vec2 iuv=floor(st);vec2 fuv=fract(st);
+      vec4 a=texture2D(sam,(iuv+vec2(0.5,0.5))*tsize);
+      vec4 b=texture2D(sam,(iuv+vec2(1.5,0.5))*tsize);
+      vec4 c=texture2D(sam,(iuv+vec2(0.5,1.5))*tsize);
+      vec4 d=texture2D(sam,(iuv+vec2(1.5,1.5))*tsize);
+      return mix(mix(a,b,fuv.x),mix(c,d,fuv.x),fuv.y);
+    }
+    void main(){
+      #ifdef MANUAL_FILTERING
+        vec2 coord=vUv-dt*bilerp(uVelocity,vUv,texelSize).xy*texelSize;
+        vec4 result=bilerp(uSource,coord,dyeTexelSize);
+      #else
+        vec2 coord=vUv-dt*texture2D(uVelocity,vUv).xy*texelSize;
+        vec4 result=texture2D(uSource,coord);
+      #endif
+      float decay=1.0+dissipation*dt;
+      gl_FragColor=result/decay;
+    }`,ext.supportLinearFiltering?null:['MANUAL_FILTERING']);
+  const divergenceShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;
+    varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uVelocity;
+    void main(){
+      float L=texture2D(uVelocity,vL).x;float R=texture2D(uVelocity,vR).x;
+      float T=texture2D(uVelocity,vT).y;float B=texture2D(uVelocity,vB).y;
+      vec2 C=texture2D(uVelocity,vUv).xy;
+      if(vL.x<0.0){L=-C.x;}if(vR.x>1.0){R=-C.x;}
+      if(vT.y>1.0){T=-C.y;}if(vB.y<0.0){B=-C.y;}
+      float div=0.5*(R-L+T-B);
+      gl_FragColor=vec4(div,0.0,0.0,1.0);
+    }`);
+  const curlShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;
+    varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uVelocity;
+    void main(){
+      float L=texture2D(uVelocity,vL).y;float R=texture2D(uVelocity,vR).y;
+      float T=texture2D(uVelocity,vT).x;float B=texture2D(uVelocity,vB).x;
+      float vorticity=R-L-T+B;
+      gl_FragColor=vec4(0.5*vorticity,0.0,0.0,1.0);
+    }`);
+  const vorticityShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision highp float;precision highp sampler2D;
+    varying vec2 vUv;varying vec2 vL;varying vec2 vR;varying vec2 vT;varying vec2 vB;
+    uniform sampler2D uVelocity;uniform sampler2D uCurl;uniform float curl;uniform float dt;
+    void main(){
+      float L=texture2D(uCurl,vL).x;float R=texture2D(uCurl,vR).x;
+      float T=texture2D(uCurl,vT).x;float B=texture2D(uCurl,vB).x;
+      float C=texture2D(uCurl,vUv).x;
+      vec2 force=0.5*vec2(abs(T)-abs(B),abs(R)-abs(L));
+      force/=length(force)+0.0001;force*=curl*C;force.y*=-1.0;
+      vec2 velocity=texture2D(uVelocity,vUv).xy;
+      velocity+=force*dt;velocity=min(max(velocity,-1000.0),1000.0);
+      gl_FragColor=vec4(velocity,0.0,1.0);
+    }`);
+  const pressureShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;
+    varying highp vec2 vT;varying highp vec2 vB;
+    uniform sampler2D uPressure;uniform sampler2D uDivergence;
+    void main(){
+      float L=texture2D(uPressure,vL).x;float R=texture2D(uPressure,vR).x;
+      float T=texture2D(uPressure,vT).x;float B=texture2D(uPressure,vB).x;
+      float divergence=texture2D(uDivergence,vUv).x;
+      float pressure=(L+R+B+T-divergence)*0.25;
+      gl_FragColor=vec4(pressure,0.0,0.0,1.0);
+    }`);
+  const gradientSubtractShader=compileShader(gl.FRAGMENT_SHADER,`
+    precision mediump float;precision mediump sampler2D;
+    varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;
+    varying highp vec2 vT;varying highp vec2 vB;
+    uniform sampler2D uPressure;uniform sampler2D uVelocity;
+    void main(){
+      float L=texture2D(uPressure,vL).x;float R=texture2D(uPressure,vR).x;
+      float T=texture2D(uPressure,vT).x;float B=texture2D(uPressure,vB).x;
+      vec2 velocity=texture2D(uVelocity,vUv).xy;
+      velocity.xy-=vec2(R-L,T-B);
+      gl_FragColor=vec4(velocity,0.0,1.0);
+    }`);
+
+  // === Blit (full-screen quad helper) ===
+  const blit=(()=>{
+    gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,-1,1,1,1,1,-1]),gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,gl.createBuffer());
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array([0,1,2,0,2,3]),gl.STATIC_DRAW);
+    gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(0);
+    return (target,clear=false)=>{
+      if(target==null){
+        gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);
+        gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+      } else {
+        gl.viewport(0,0,target.width,target.height);
+        gl.bindFramebuffer(gl.FRAMEBUFFER,target.fbo);
+      }
+      if(clear){gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);}
+      gl.drawElements(gl.TRIANGLES,6,gl.UNSIGNED_SHORT,0);
+    };
+  })();
+
+  let dye,velocity,divergence,curl,pressure;
+  const copyProgram=new Program(baseVertexShader,copyShader);
+  const clearProgram=new Program(baseVertexShader,clearShader);
+  const splatProgram=new Program(baseVertexShader,splatShader);
+  const advectionProgram=new Program(baseVertexShader,advectionShader);
+  const divergenceProgram=new Program(baseVertexShader,divergenceShader);
+  const curlProgram=new Program(baseVertexShader,curlShader);
+  const vorticityProgram=new Program(baseVertexShader,vorticityShader);
+  const pressureProgram=new Program(baseVertexShader,pressureShader);
+  const gradienSubtractProgram=new Program(baseVertexShader,gradientSubtractShader);
+  const displayMaterial=new Material(baseVertexShader,displayShaderSource);
+
+  function initFramebuffers(){
+    const simRes=getResolution(config.SIM_RESOLUTION);
+    const dyeRes=getResolution(config.DYE_RESOLUTION);
+    const texType=ext.halfFloatTexType;
+    const rgba=ext.formatRGBA;const rg=ext.formatRG;const r=ext.formatR;
+    const filtering=ext.supportLinearFiltering?gl.LINEAR:gl.NEAREST;
+    gl.disable(gl.BLEND);
+    if(!dye)dye=createDoubleFBO(dyeRes.width,dyeRes.height,rgba.internalFormat,rgba.format,texType,filtering);
+    else dye=resizeDoubleFBO(dye,dyeRes.width,dyeRes.height,rgba.internalFormat,rgba.format,texType,filtering);
+    if(!velocity)velocity=createDoubleFBO(simRes.width,simRes.height,rg.internalFormat,rg.format,texType,filtering);
+    else velocity=resizeDoubleFBO(velocity,simRes.width,simRes.height,rg.internalFormat,rg.format,texType,filtering);
+    divergence=createFBO(simRes.width,simRes.height,r.internalFormat,r.format,texType,gl.NEAREST);
+    curl=createFBO(simRes.width,simRes.height,r.internalFormat,r.format,texType,gl.NEAREST);
+    pressure=createDoubleFBO(simRes.width,simRes.height,r.internalFormat,r.format,texType,gl.NEAREST);
+  }
+  function createFBO(w,h,internalFormat,format,type,param){
+    gl.activeTexture(gl.TEXTURE0);
+    const texture=gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D,texture);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,param);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,param);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D,0,internalFormat,w,h,0,format,type,null);
+    const fbo=gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,texture,0);
+    gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT);
+    return{texture,fbo,width:w,height:h,texelSizeX:1/w,texelSizeY:1/h,
+      attach(id){gl.activeTexture(gl.TEXTURE0+id);gl.bindTexture(gl.TEXTURE_2D,texture);return id;}};
+  }
+  function createDoubleFBO(w,h,internalFormat,format,type,param){
+    let fbo1=createFBO(w,h,internalFormat,format,type,param);
+    let fbo2=createFBO(w,h,internalFormat,format,type,param);
+    return{width:w,height:h,texelSizeX:fbo1.texelSizeX,texelSizeY:fbo1.texelSizeY,
+      get read(){return fbo1;},set read(v){fbo1=v;},
+      get write(){return fbo2;},set write(v){fbo2=v;},
+      swap(){const t=fbo1;fbo1=fbo2;fbo2=t;}};
+  }
+  function resizeFBO(target,w,h,internalFormat,format,type,param){
+    const newFBO=createFBO(w,h,internalFormat,format,type,param);
+    copyProgram.bind();
+    gl.uniform1i(copyProgram.uniforms.uTexture,target.attach(0));
+    blit(newFBO);
+    return newFBO;
+  }
+  function resizeDoubleFBO(target,w,h,internalFormat,format,type,param){
+    if(target.width===w&&target.height===h)return target;
+    target.read=resizeFBO(target.read,w,h,internalFormat,format,type,param);
+    target.write=createFBO(w,h,internalFormat,format,type,param);
+    target.width=w;target.height=h;
+    target.texelSizeX=1/w;target.texelSizeY=1/h;
+    return target;
+  }
+  function updateKeywords(){
+    const keywords=[];
+    if(config.SHADING)keywords.push('SHADING');
+    displayMaterial.setKeywords(keywords);
+  }
+  updateKeywords();
+  initFramebuffers();
+
+  let lastUpdateTime=Date.now();
+  let colorUpdateTimer=0;
+
+  function updateFrame(){
+    if(!isActive)return;
+    const dt=calcDeltaTime();
+    if(resizeCanvas())initFramebuffers();
+    updateColors(dt);
+    applyInputs();
+    step(dt);
+    render(null);
+    animationFrameId=requestAnimationFrame(updateFrame);
+  }
+  function calcDeltaTime(){
+    const now=Date.now();let dt=(now-lastUpdateTime)/1000;
+    dt=Math.min(dt,0.016666);lastUpdateTime=now;return dt;
+  }
+  function resizeCanvas(){
+    const w=scaleByPixelRatio(canvas.clientWidth);
+    const h=scaleByPixelRatio(canvas.clientHeight);
+    if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;return true;}
+    return false;
+  }
+  function updateColors(dt){
+    colorUpdateTimer+=dt*config.COLOR_UPDATE_SPEED;
+    if(colorUpdateTimer>=1){
+      colorUpdateTimer=wrap(colorUpdateTimer,0,1);
+      pointers.forEach(p=>{p.color=generateColor();});
+    }
+  }
+  function applyInputs(){
+    pointers.forEach(p=>{if(p.moved){p.moved=false;splatPointer(p);}});
+  }
+  function step(dt){
+    gl.disable(gl.BLEND);
+    curlProgram.bind();
+    gl.uniform2f(curlProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    gl.uniform1i(curlProgram.uniforms.uVelocity,velocity.read.attach(0));
+    blit(curl);
+
+    vorticityProgram.bind();
+    gl.uniform2f(vorticityProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    gl.uniform1i(vorticityProgram.uniforms.uVelocity,velocity.read.attach(0));
+    gl.uniform1i(vorticityProgram.uniforms.uCurl,curl.attach(1));
+    gl.uniform1f(vorticityProgram.uniforms.curl,config.CURL);
+    gl.uniform1f(vorticityProgram.uniforms.dt,dt);
+    blit(velocity.write);velocity.swap();
+
+    divergenceProgram.bind();
+    gl.uniform2f(divergenceProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    gl.uniform1i(divergenceProgram.uniforms.uVelocity,velocity.read.attach(0));
+    blit(divergence);
+
+    clearProgram.bind();
+    gl.uniform1i(clearProgram.uniforms.uTexture,pressure.read.attach(0));
+    gl.uniform1f(clearProgram.uniforms.value,config.PRESSURE);
+    blit(pressure.write);pressure.swap();
+
+    pressureProgram.bind();
+    gl.uniform2f(pressureProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    gl.uniform1i(pressureProgram.uniforms.uDivergence,divergence.attach(0));
+    for(let i=0;i<config.PRESSURE_ITERATIONS;i++){
+      gl.uniform1i(pressureProgram.uniforms.uPressure,pressure.read.attach(1));
+      blit(pressure.write);pressure.swap();
+    }
+
+    gradienSubtractProgram.bind();
+    gl.uniform2f(gradienSubtractProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    gl.uniform1i(gradienSubtractProgram.uniforms.uPressure,pressure.read.attach(0));
+    gl.uniform1i(gradienSubtractProgram.uniforms.uVelocity,velocity.read.attach(1));
+    blit(velocity.write);velocity.swap();
+
+    advectionProgram.bind();
+    gl.uniform2f(advectionProgram.uniforms.texelSize,velocity.texelSizeX,velocity.texelSizeY);
+    if(!ext.supportLinearFiltering)gl.uniform2f(advectionProgram.uniforms.dyeTexelSize,velocity.texelSizeX,velocity.texelSizeY);
+    const velocityId=velocity.read.attach(0);
+    gl.uniform1i(advectionProgram.uniforms.uVelocity,velocityId);
+    gl.uniform1i(advectionProgram.uniforms.uSource,velocityId);
+    gl.uniform1f(advectionProgram.uniforms.dt,dt);
+    gl.uniform1f(advectionProgram.uniforms.dissipation,config.VELOCITY_DISSIPATION);
+    blit(velocity.write);velocity.swap();
+
+    if(!ext.supportLinearFiltering)gl.uniform2f(advectionProgram.uniforms.dyeTexelSize,dye.texelSizeX,dye.texelSizeY);
+    gl.uniform1i(advectionProgram.uniforms.uVelocity,velocity.read.attach(0));
+    gl.uniform1i(advectionProgram.uniforms.uSource,dye.read.attach(1));
+    gl.uniform1f(advectionProgram.uniforms.dissipation,config.DENSITY_DISSIPATION);
+    blit(dye.write);dye.swap();
+  }
+  function render(target){
+    gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+    gl.enable(gl.BLEND);
+    drawDisplay(target);
+  }
+  function drawDisplay(target){
+    const w=target==null?gl.drawingBufferWidth:target.width;
+    const h=target==null?gl.drawingBufferHeight:target.height;
+    displayMaterial.bind();
+    if(config.SHADING)gl.uniform2f(displayMaterial.uniforms.texelSize,1/w,1/h);
+    gl.uniform1i(displayMaterial.uniforms.uTexture,dye.read.attach(0));
+    blit(target);
+  }
+  function splatPointer(p){
+    const dx=p.deltaX*config.SPLAT_FORCE;
+    const dy=p.deltaY*config.SPLAT_FORCE;
+    splat(p.texcoordX,p.texcoordY,dx,dy,p.color);
+  }
+  function clickSplat(p){
+    const c=generateColor();c.r*=10;c.g*=10;c.b*=10;
+    const dx=10*(Math.random()-0.5);const dy=30*(Math.random()-0.5);
+    splat(p.texcoordX,p.texcoordY,dx,dy,c);
+  }
+  function splat(x,y,dx,dy,color){
+    splatProgram.bind();
+    gl.uniform1i(splatProgram.uniforms.uTarget,velocity.read.attach(0));
+    gl.uniform1f(splatProgram.uniforms.aspectRatio,canvas.width/canvas.height);
+    gl.uniform2f(splatProgram.uniforms.point,x,y);
+    gl.uniform3f(splatProgram.uniforms.color,dx,dy,0);
+    gl.uniform1f(splatProgram.uniforms.radius,correctRadius(config.SPLAT_RADIUS/100));
+    blit(velocity.write);velocity.swap();
+    gl.uniform1i(splatProgram.uniforms.uTarget,dye.read.attach(0));
+    gl.uniform3f(splatProgram.uniforms.color,color.r,color.g,color.b);
+    blit(dye.write);dye.swap();
+  }
+  function correctRadius(r){
+    const a=canvas.width/canvas.height;
+    if(a>1)r*=a;return r;
+  }
+  function updatePointerDownData(p,id,posX,posY){
+    p.id=id;p.down=true;p.moved=false;
+    p.texcoordX=posX/canvas.width;p.texcoordY=1-posY/canvas.height;
+    p.prevTexcoordX=p.texcoordX;p.prevTexcoordY=p.texcoordY;
+    p.deltaX=0;p.deltaY=0;p.color=generateColor();
+  }
+  function updatePointerMoveData(p,posX,posY,color){
+    p.prevTexcoordX=p.texcoordX;p.prevTexcoordY=p.texcoordY;
+    p.texcoordX=posX/canvas.width;p.texcoordY=1-posY/canvas.height;
+    p.deltaX=correctDeltaX(p.texcoordX-p.prevTexcoordX);
+    p.deltaY=correctDeltaY(p.texcoordY-p.prevTexcoordY);
+    p.moved=Math.abs(p.deltaX)>0||Math.abs(p.deltaY)>0;
+    p.color=color;
+  }
+  function correctDeltaX(d){const a=canvas.width/canvas.height;if(a<1)d*=a;return d;}
+  function correctDeltaY(d){const a=canvas.width/canvas.height;if(a>1)d/=a;return d;}
+  function hexToRGB(hex){
+    let val=hex.replace('#','');
+    if(val.length===3)val=val[0]+val[0]+val[1]+val[1]+val[2]+val[2];
+    const r=parseInt(val.slice(0,2),16)/255;
+    const g=parseInt(val.slice(2,4),16)/255;
+    const b=parseInt(val.slice(4,6),16)/255;
+    return{r:r*0.15,g:g*0.15,b:b*0.15};
+  }
+  function generateColor(){
+    if(!config.RAINBOW_MODE)return hexToRGB(config.COLOR);
+    const c=HSVtoRGB(Math.random(),1,1);
+    c.r*=0.15;c.g*=0.15;c.b*=0.15;return c;
+  }
+  function HSVtoRGB(h,s,v){
+    let r,g,b;
+    const i=Math.floor(h*6);const f=h*6-i;
+    const p=v*(1-s);const q=v*(1-f*s);const t=v*(1-(1-f)*s);
+    switch(i%6){
+      case 0:r=v;g=t;b=p;break;
+      case 1:r=q;g=v;b=p;break;
+      case 2:r=p;g=v;b=t;break;
+      case 3:r=p;g=q;b=v;break;
+      case 4:r=t;g=p;b=v;break;
+      case 5:r=v;g=p;b=q;break;
+    }
+    return{r,g,b};
+  }
+  function wrap(value,min,max){const r=max-min;if(r===0)return min;return((value-min)%r)+min;}
+  function getResolution(resolution){
+    let a=gl.drawingBufferWidth/gl.drawingBufferHeight;
+    if(a<1)a=1/a;
+    const min=Math.round(resolution);const max=Math.round(resolution*a);
+    if(gl.drawingBufferWidth>gl.drawingBufferHeight)return{width:max,height:min};
+    return{width:min,height:max};
+  }
+  function scaleByPixelRatio(input){
+    const r=window.devicePixelRatio||1;
+    return Math.floor(input*r);
+  }
+
+  // === Event handlers ===
+  function handleMouseDown(e){
+    const p=pointers[0];
+    updatePointerDownData(p,-1,scaleByPixelRatio(e.clientX),scaleByPixelRatio(e.clientY));
+    clickSplat(p);
+  }
+  let firstMouseMoveHandled=false;
+  function handleMouseMove(e){
+    const p=pointers[0];
+    const posX=scaleByPixelRatio(e.clientX);const posY=scaleByPixelRatio(e.clientY);
+    if(!firstMouseMoveHandled){
+      const color=generateColor();
+      updatePointerMoveData(p,posX,posY,color);
+      firstMouseMoveHandled=true;
+    } else {
+      updatePointerMoveData(p,posX,posY,p.color);
+    }
+  }
+  function handleTouchStart(e){
+    const touches=e.targetTouches;const p=pointers[0];
+    for(let i=0;i<touches.length;i++){
+      updatePointerDownData(p,touches[i].identifier,
+        scaleByPixelRatio(touches[i].clientX),scaleByPixelRatio(touches[i].clientY));
+    }
+  }
+  function handleTouchMove(e){
+    const touches=e.targetTouches;const p=pointers[0];
+    for(let i=0;i<touches.length;i++){
+      updatePointerMoveData(p,
+        scaleByPixelRatio(touches[i].clientX),
+        scaleByPixelRatio(touches[i].clientY),p.color);
+    }
+  }
+  window.addEventListener('mousedown',handleMouseDown);
+  window.addEventListener('mousemove',handleMouseMove);
+  window.addEventListener('touchstart',handleTouchStart,{passive:true});
+  window.addEventListener('touchmove',handleTouchMove,{passive:true});
+
+  updateFrame();
+
+  // Expose API for color change + cleanup
+  window._splashCursorAPI={
+    setColor(hex){config.COLOR=hex;COLOR=hex;},
+    cleanup(){
+      isActive=false;
+      if(animationFrameId)cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('mousedown',handleMouseDown);
+      window.removeEventListener('mousemove',handleMouseMove);
+      window.removeEventListener('touchstart',handleTouchStart);
+      window.removeEventListener('touchmove',handleTouchMove);
+    }
+  };
+}
+
+function stopSplashCursor(){
+  if(window._splashCursorAPI&&window._splashCursorAPI.cleanup){
+    window._splashCursorAPI.cleanup();
+    window._splashCursorAPI=null;
+  }
+  const wrap=document.getElementById('splashCanvasWrap');
+  if(wrap)wrap.style.display='none';
+}
+
 // FIX #8: Cross-tab sync — refresh admin views when localStorage is updated from another tab
 window.addEventListener('storage',e=>{
   const adminActive=document.getElementById('adminPage')?.classList.contains('active');
@@ -4032,6 +5122,23 @@ window.addEventListener('storage',e=>{
     renderPayments();
     renderExpenses();
     populateCustomerFilters();
+  }
+  // If item options changed in another tab, sync rows
+  if(e.key===ITEM_OPTIONS_KEY){
+    ITEM_OPTIONS=loadItemOptions();
+    if(typeof syncItemRowsAfterOptionsChanged==='function')syncItemRowsAfterOptionsChanged();
+    if(document.getElementById('tab-itemnames')?.classList.contains('active')||
+       !document.getElementById('tab-itemnames')?.classList.contains('hidden')){
+      renderItemNamesList();
+    }
+  }
+});
+
+// Close settings panel on Escape key
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const panel=document.getElementById('settingsPanel');
+    if(panel&&panel.classList.contains('open'))toggleSettings(false);
   }
 });
 </script>
